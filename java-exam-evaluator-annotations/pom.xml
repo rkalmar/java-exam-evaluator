@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>java-exam-evaluator-api</artifactId>
+    <artifactId>java-exam-evaluator-annotations</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>

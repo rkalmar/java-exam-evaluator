@@ -16,8 +16,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import static java.lang.String.format;
-
 @Slf4j
 @UtilityClass
 public class ArgumentsUtil {
@@ -29,7 +27,7 @@ public class ArgumentsUtil {
     public static final String EXAM_CLASS_ARG = "examPackage";
     public static final String SOLUTION_CLASS_ARG = "solutionPackage";
 
-    final Map<String, Set<String>> ARG_DEPENDENCIES = new HashMap<>();
+    static final Map<String, Set<String>> ARG_DEPENDENCIES = new HashMap<>();
 
     static {
         ARG_DEPENDENCIES.put(EVALUATE_ARG, Set.of(EXAM_CLASS_ARG, SOLUTION_CLASS_ARG));
@@ -44,18 +42,18 @@ public class ArgumentsUtil {
 
             Set<String> tasks = ARG_DEPENDENCIES.keySet();
             if (!commandLine.hasOption(TASK_ARG) && !tasks.contains(commandLine.getOptionValue(TASK_ARG))) {
-                throw new MissingArgumentsException(format("Exactly one of the main arguments should be set. \"%s\" \"%s\"", TASK_ARG, tasks));
+                throw new MissingArgumentsException(String.format("Exactly one of the main arguments should be set. \"%s\" \"%s\"", TASK_ARG, tasks));
             }
             String selectedTask = commandLine.getOptionValue(TASK_ARG);
             if (!tasks.contains(selectedTask)) {
-                throw new InvalidArgumentException(format("Invalid argument for \"%s\" param: \"%s\"", TASK_ARG, selectedTask));
+                throw new InvalidArgumentException(String.format("Invalid argument for \"%s\" param: \"%s\"", TASK_ARG, selectedTask));
             }
 
             log.info("Selected task {}", selectedTask);
             Set<String> subArgs = ARG_DEPENDENCIES.get(selectedTask);
             boolean hasAllDependencies = subArgs.stream().allMatch(commandLine::hasOption);
             if (!hasAllDependencies) {
-                throw new MissingArgumentsException(format("Following arguments are required for task %s: %s", selectedTask, subArgs));
+                throw new MissingArgumentsException(String.format("Following arguments are required for task %s: %s", selectedTask, subArgs));
             }
 
             return new TaskArgument(TaskType.taskTypeByArg(VALIDATE_ARG), null, null); // TODO packages

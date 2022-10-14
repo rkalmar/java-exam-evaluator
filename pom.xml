@@ -9,9 +9,9 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>java-exam-evaluator-main</module>
         <module>java-exam-evaluator-annotations</module>
         <module>java-exams</module>
+        <module>java-exam-evaluator-main</module>
     </modules>
 
     <properties>
@@ -23,6 +23,7 @@
         <maven.sevntu-checkstyle-check.checkstyle.version>
             10.0
         </maven.sevntu-checkstyle-check.checkstyle.version>
+        <junit-jupiter-version>5.8.2</junit-jupiter-version>
     </properties>
 
     <dependencyManagement>
@@ -41,6 +42,18 @@
                 <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-slf4j-impl</artifactId>
                 <version>2.7</version>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-api</artifactId>
+                <version>${junit-jupiter-version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-engine</artifactId>
+                <version>${junit-jupiter-version}</version>
+                <scope>compile</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -61,7 +74,7 @@
                 <executions>
                     <execution>
                         <id>verify-style</id>
-                        <phase>compile</phase>
+                        <phase>test</phase>
                         <goals>
                             <goal>check</goal>
                         </goals>

@@ -16,7 +16,7 @@ public class Main {
     public static void main(String[] args) {
         TaskArgument taskArgument;
         try {
-             taskArgument = ArgumentsUtil.parseArguments(args);
+            taskArgument = ArgumentsUtil.parseArguments(args);
         } catch (MissingArgumentsException | IllegalArgumentException | InvalidArgumentException e) {
             log.error("Argument error: {}", e.getMessage(), e);
             return;
