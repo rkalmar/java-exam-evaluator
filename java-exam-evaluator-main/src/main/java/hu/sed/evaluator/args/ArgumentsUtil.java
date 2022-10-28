@@ -1,7 +1,7 @@
 package hu.sed.evaluator.args;
 
-import hu.sed.evaluator.task.TaskArgument;
-import hu.sed.evaluator.task.TaskType;
+import hu.sed.evaluator.task.executor.TaskArgument;
+import hu.sed.evaluator.task.executor.TaskType;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.cli.CommandLine;

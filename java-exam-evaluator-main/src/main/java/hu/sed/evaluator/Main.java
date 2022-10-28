@@ -3,7 +3,7 @@ package hu.sed.evaluator;
 import hu.sed.evaluator.args.ArgumentsUtil;
 import hu.sed.evaluator.args.InvalidArgumentException;
 import hu.sed.evaluator.args.MissingArgumentsException;
-import hu.sed.evaluator.task.TaskArgument;
+import hu.sed.evaluator.task.executor.TaskArgument;
 import lombok.extern.slf4j.Slf4j;
 
 

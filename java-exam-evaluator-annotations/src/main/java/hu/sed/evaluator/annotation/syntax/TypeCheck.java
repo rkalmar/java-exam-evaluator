@@ -18,8 +18,7 @@ import java.lang.annotation.Target;
  * @TypeCheck(checkParentClazz = true,
  *      checkInterfaces = true,
  *      checkModifiers = true,
- *      checkAnnotations = true,
- *      maxPoints = 5)
+ *      maxPoints = 4)
  * @EClass
  * public abstract class MyClass extends ClassBase implements IClass {......}
  * <p>
@@ -28,17 +27,16 @@ import java.lang.annotation.Target;
  * - checkParentClazz = true, so if class extends ClassBase: +1 point
  * - checkInterfaces = true, so if class implements IClass: +1 point
  * - checkModifiers = true, so if modifiers (public, abstract) are added: +1 point
- * - checkAnnotations = true, so if annotation is added (@EClass): +1 point
  *
  * <p>
- * In this case there is 5 checked items, so each item's value is calculated by the following formula:
- * itemPoint = maxPoint / checkedItemCounts = 5 / 5 = 1
+ * In this case there is 4 checked items, so each item's value is calculated by the following formula:
+ * itemPoint = maxPoint / checkedItemCounts = 4 / 4 = 1
  *
  * Besides,
  *   - each method worth points defined by pointsPerMethod and
  *   - each field worth points defined by pointsPerField
  *
- * So if first three conditions are met, then the item worth 3 points, if maxPoint is 5.
+ * So if first three conditions are met, then the item worth 3 points, if maxPoint is 4.
  * + (properly implemented method * pointsPerMethod) + (properly implemented fields * pointsPerField)
  */
 @SyntaxCheck
@@ -62,12 +60,7 @@ public @interface TypeCheck {
     boolean checkModifiers() default true;
 
     /**
-     * @return true if check needs to validate type annotations
-     */
-    boolean checkAnnotations() default false;
-
-    /**
-     * If true, check will validate each class method one by one (including constructor methods)
+     * If true, check will validate each class method one by one (including constructors)
      *
      * Note:
      *  - checks only those methods which does not have method specific checks (MethodCheck) or is not skipped (SkipCheck)

@@ -9,7 +9,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Checks if the method is implemented correctly. Applicable on Methods and Constructors too.
+ * Checks if the method is implemented correctly. Applicable on Methods.
  * Checks modifiers, annotations, overrides (if any).
  * <p>
  * Note:
@@ -19,7 +19,6 @@ import java.lang.annotation.Target;
  * Example:
  *
  * @MethodCheck(checkModifiers = true,
- * checkAnnotations = true,
  * checkOverride = true,
  * checkExceptions = true,
  * maxPoint = 1)
@@ -28,17 +27,16 @@ import java.lang.annotation.Target;
  * Check will calculate in the following way:
  * - if return type, method name and args types are correct: +1 point
  * - checkModifiers = true, so if modifiers (public, static) are added: +1 point
- * - checkAnnotations = true, so if annotation is added (@Override): +1 point
- * - checkOverride = true, so if annotation is a real override from an abstract class or an interface: +1 point
+ * - checkOverride = true, so if method is a real override from an abstract class or an interface: +1 point
  * - checkExceptions = true, so if exception is added (@IllegalArgumentException): +1 point
  * <p>
- * In this case there is 5 checked items, so each item's value is calculated by the following formula:
- * itemPoint = maxPoint / checkedItemCounts = 1 / 5
+ * In this case there is 4 checked items, so each item's value is calculated by the following formula:
+ * itemPoint = maxPoint / checkedItemCounts = 1 / 4 = 0.25
  * <p>
- * So if first three conditions are met, then the item worth 0.6 points, if maxPoint is 1.
+ * So if first three conditions are met, then the item worth 0.75 points, if maxPoint is 1.
  */
 @SyntaxCheck
-@Target({ElementType.METHOD, ElementType.CONSTRUCTOR})
+@Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @Repeatable(RepeatableMethodCheck.class)
 public @interface MethodCheck {
@@ -49,19 +47,14 @@ public @interface MethodCheck {
     boolean checkModifiers() default true;
 
     /**
-     * @return true if check needs to validate method annotations
-     */
-    boolean checkAnnotations() default false;
-
-    /**
      * @return true if check needs to validate, if method is an override
      */
-    boolean checkOverride() default false;
+    boolean checkOverride() default true;
 
     /**
      * @return true if check needs to validate checked exceptions to be thrown
      */
-    boolean checkExceptions() default false;
+    boolean checkExceptions() default true;
 
     /**
      * Defines the maximum possible point.
