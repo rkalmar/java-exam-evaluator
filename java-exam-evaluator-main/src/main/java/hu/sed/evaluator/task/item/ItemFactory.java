@@ -20,10 +20,19 @@ import java.util.List;
 public final class ItemFactory {
 
     public TypeItem createTypeItem(TypeCheck check, java.lang.reflect.Type type) {
+        if (!(type instanceof Class)) {
+            throw new IllegalArgumentException("Cannot create TypeItem from class: " + type.getTypeName());
+        }
+        Class<?> clazz = (Class<?>) type;
         return TypeItem.builder()
                 .checkModifiers(check.checkModifiers())
-                .checkInterfaces(check.checkInterfaces())
+                .modifiers(clazz.getModifiers())
+                .name(clazz.getSuperclass().getCanonicalName())
                 .checkParentClazz(check.checkParentClazz())
+                .parentClazz(clazz.getSuperclass().getCanonicalName())
+                .checkInterfaces(check.checkInterfaces())
+                .implementedInterfaces(Arrays.stream(clazz.getInterfaces()).map(Class::getCanonicalName).toArray(String[]::new))
+                .points(check.maxPoint())
                 .build();
     }
 

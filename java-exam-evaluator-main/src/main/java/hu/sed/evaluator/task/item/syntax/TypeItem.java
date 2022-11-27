@@ -14,11 +14,6 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class TypeItem extends BaseItem {
 
-    /**
-     * Fully qualified name of class
-     */
-    String clazz;
-
     List<Item> childItems;
 
     boolean checkParentClazz;

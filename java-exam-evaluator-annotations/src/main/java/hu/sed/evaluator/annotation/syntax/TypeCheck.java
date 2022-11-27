@@ -74,7 +74,7 @@ public @interface TypeCheck {
     boolean checkMethods() default false;
 
     /**
-     * If checkMethods is true, and a given method does not have specific MethodCheck, then it defines points per method
+     * It defines points per method (if checkMethods is true) for methods which does not have specific MethodCheck
      *
      * @return maximum point per method
      */
@@ -95,7 +95,7 @@ public @interface TypeCheck {
     boolean checkFields() default false;
 
     /**
-     * If checkFields is true, and a given field does not have specific FieldCheck, then it defines points per field
+     * It defines points per field (if checkFields is true) for fields which does not have specific FieldCheck
      *
      * @return maximum point per method
      */
