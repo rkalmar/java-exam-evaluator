@@ -1,6 +1,6 @@
 package hu.sed.evaluator.task.item.syntax;
 
-import hu.sed.evaluator.task.item.BaseItem;
+import hu.sed.evaluator.task.item.BaseSyntaxItem;
 import hu.sed.evaluator.task.item.Item;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @SuperBuilder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class TypeItem extends BaseItem {
+public class TypeItem extends BaseSyntaxItem {
 
     List<Item> childItems;
 

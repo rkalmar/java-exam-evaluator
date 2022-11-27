@@ -13,5 +13,9 @@ public class TestItem extends BaseItem {
 
     private static final String ALL_TEST_METHOD = "all";
 
-    String testMethod;
+    String testClass;
+
+    String[] testMethods;
+
+    String description;
 }

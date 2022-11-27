@@ -45,6 +45,7 @@ public class MethodItemFactoryTest {
         assertThat(methodItem.isCheckExceptions()).isFalse();
         assertThat(methodItem.getPoints()).isEqualTo(8);
         assertThat(methodItem.isConstructor()).isFalse();
+        assertThat(methodItem.getContainerClass()).isEqualTo("hu.sed.evaluator.task.item.MethodItemFactoryTest");
 
         // exceptions
         assertThat(methodItem.getExceptions()).isEmpty();
@@ -85,6 +86,7 @@ public class MethodItemFactoryTest {
         assertThat(methodItem.isCheckExceptions()).isTrue();
         assertThat(methodItem.getPoints()).isEqualTo(1);
         assertThat(methodItem.isConstructor()).isFalse();
+        assertThat(methodItem.getContainerClass()).isEqualTo("hu.sed.evaluator.task.item.MethodItemFactoryTest");
 
         // exceptions
         assertThat(methodItem.getExceptions().length).isEqualTo(1);
@@ -131,6 +133,7 @@ public class MethodItemFactoryTest {
         assertThat(constructorMethod.isCheckExceptions()).isTrue();
         assertThat(constructorMethod.getPoints()).isEqualTo(1);
         assertThat(constructorMethod.isConstructor()).isTrue();
+        assertThat(constructorMethod.getContainerClass()).isEqualTo("hu.sed.evaluator.task.item.MethodItemFactoryTest");
 
         // exceptions
         assertThat(constructorMethod.getExceptions().length).isEqualTo(1);

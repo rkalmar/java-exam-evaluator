@@ -1,6 +1,6 @@
 package hu.sed.evaluator.task.item.syntax;
 
-import hu.sed.evaluator.task.item.BaseItem;
+import hu.sed.evaluator.task.item.BaseSyntaxItem;
 import hu.sed.evaluator.task.item.element.Type;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -13,7 +13,9 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @EqualsAndHashCode
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class FieldItem extends BaseItem {
+public class FieldItem extends BaseSyntaxItem {
+
+    String containerClass;
 
     Type type;
 

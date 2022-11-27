@@ -1,10 +1,12 @@
 package hu.sed.evaluator.task.item;
 
+import hu.sed.evaluator.annotation.semantic.CustomTest;
 import hu.sed.evaluator.annotation.syntax.ConstructorCheck;
 import hu.sed.evaluator.annotation.syntax.FieldCheck;
 import hu.sed.evaluator.annotation.syntax.MethodCheck;
 import hu.sed.evaluator.annotation.syntax.TypeCheck;
 import hu.sed.evaluator.task.item.element.Type;
+import hu.sed.evaluator.task.item.semantic.TestItem;
 import hu.sed.evaluator.task.item.syntax.FieldItem;
 import hu.sed.evaluator.task.item.syntax.MethodItem;
 import hu.sed.evaluator.task.item.syntax.TypeItem;
@@ -20,10 +22,9 @@ import java.util.List;
 public final class ItemFactory {
 
     public TypeItem createTypeItem(TypeCheck check, java.lang.reflect.Type type) {
-        if (!(type instanceof Class)) {
+        if (!(type instanceof Class<?> clazz)) {
             throw new IllegalArgumentException("Cannot create TypeItem from class: " + type.getTypeName());
         }
-        Class<?> clazz = (Class<?>) type;
         return TypeItem.builder()
                 .checkModifiers(check.checkModifiers())
                 .modifiers(clazz.getModifiers())
@@ -36,7 +37,7 @@ public final class ItemFactory {
                 .build();
     }
 
-    public MethodItem createConstructorItem(ConstructorCheck constructorCheck, Constructor constructor) {
+    public MethodItem createConstructorItem(ConstructorCheck constructorCheck, Constructor<?> constructor) {
         return MethodItem.builder()
                 .parameters(buildParameterizedTypeFromList(Arrays.asList(constructor.getGenericParameterTypes())))
                 .exceptions(buildParameterizedTypeFromList(Arrays.asList(constructor.getGenericExceptionTypes())))
@@ -44,6 +45,7 @@ public final class ItemFactory {
                 .checkModifiers(constructorCheck.checkModifiers())
                 .checkExceptions(constructorCheck.checkExceptions())
                 .constructor(true)
+                .containerClass(constructor.getDeclaringClass().getCanonicalName())
                 .points(constructorCheck.maxPoint())
                 .build();
     }
@@ -63,6 +65,7 @@ public final class ItemFactory {
                 .checkModifiers(methodCheck.checkModifiers())
                 .checkExceptions(methodCheck.checkExceptions())
                 .checkOverride(methodCheck.checkOverride())
+                .containerClass(method.getDeclaringClass().getCanonicalName())
                 .points(methodCheck.maxPoint())
                 .build();
     }
@@ -80,6 +83,15 @@ public final class ItemFactory {
                 .modifiers(field.getModifiers())
                 .checkModifiers(fieldCheck.checkModifiers())
                 .points(fieldCheck.maxPoint())
+                .build();
+    }
+
+    public TestItem createTestItem(CustomTest customTest) {
+        return TestItem.builder()
+                .testClass(customTest.testClass().getCanonicalName())
+                .testMethods(customTest.method())
+                .description(customTest.description())
+                .points(customTest.maxPoint())
                 .build();
     }
 

@@ -1,17 +1,18 @@
 package hu.sed.evaluator.task.item;
 
-import hu.sed.evaluator.task.item.syntax.TypeItem;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Singular;
 import lombok.experimental.FieldDefaults;
 
 import java.util.List;
 
+@Builder
 @Data
-@NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RootItem implements Item {
 
-    List<TypeItem> classItems;
+    @Singular
+    List<BaseItem> items;
 }
