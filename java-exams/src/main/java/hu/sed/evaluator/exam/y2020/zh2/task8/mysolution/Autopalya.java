@@ -1,5 +1,8 @@
 package hu.sed.evaluator.exam.y2020.zh2.task8.mysolution;
 
+import hu.sed.evaluator.annotation.semantic.CustomTest;
+import hu.sed.evaluator.annotation.syntax.MethodCheck;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -11,12 +14,13 @@ public final class Autopalya {
     public String nev;
     public List<Jarmu> jarmuvek;
 
-
+    @CustomTest(testClass = Autopalya.class)
     public Autopalya(String nev) {
         this.nev = nev;
         this.jarmuvek = new ArrayList<>();
     }
 
+    @MethodCheck
     public boolean felhajt(Jarmu jarmu) {
         if (jarmuvek.contains(jarmu) || jarmu.getSebesseg() < 90) {
             return false;

@@ -1,5 +1,6 @@
-package hu.sed.evaluator.task.item;
+package hu.sed.evaluator.item.syntax;
 
+import hu.sed.evaluator.item.BaseItem;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -13,7 +14,7 @@ import java.lang.reflect.Modifier;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public abstract class BaseSyntaxItem extends BaseItem {
 
-    int points;
+    String containerClass;
 
     int modifiers;
 
@@ -28,7 +29,7 @@ public abstract class BaseSyntaxItem extends BaseItem {
 
     @Override
     public String toString() {
-        return " points=" + points +
+        return " points=" + getPoints() +
                 ", name=" + name +
                 ", modifiers=" + getReadableModifiers() +
                 ", checkModifiers=" + checkModifiers;

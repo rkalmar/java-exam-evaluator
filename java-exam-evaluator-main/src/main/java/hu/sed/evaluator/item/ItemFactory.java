@@ -1,15 +1,15 @@
-package hu.sed.evaluator.task.item;
+package hu.sed.evaluator.item;
 
 import hu.sed.evaluator.annotation.semantic.CustomTest;
 import hu.sed.evaluator.annotation.syntax.ConstructorCheck;
 import hu.sed.evaluator.annotation.syntax.FieldCheck;
 import hu.sed.evaluator.annotation.syntax.MethodCheck;
 import hu.sed.evaluator.annotation.syntax.TypeCheck;
-import hu.sed.evaluator.task.item.element.Type;
-import hu.sed.evaluator.task.item.semantic.TestItem;
-import hu.sed.evaluator.task.item.syntax.FieldItem;
-import hu.sed.evaluator.task.item.syntax.MethodItem;
-import hu.sed.evaluator.task.item.syntax.TypeItem;
+import hu.sed.evaluator.item.element.Type;
+import hu.sed.evaluator.item.semantic.TestItem;
+import hu.sed.evaluator.item.syntax.FieldItem;
+import hu.sed.evaluator.item.syntax.MethodItem;
+import hu.sed.evaluator.item.syntax.TypeItem;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -21,15 +21,12 @@ import java.util.List;
 
 public final class ItemFactory {
 
-    public TypeItem createTypeItem(TypeCheck check, java.lang.reflect.Type type) {
-        if (!(type instanceof Class<?> clazz)) {
-            throw new IllegalArgumentException("Cannot create TypeItem from class: " + type.getTypeName());
-        }
+    public TypeItem createItem(TypeCheck check, Class<?> clazz) {
         return TypeItem.builder()
                 .checkModifiers(check.checkModifiers())
                 .modifiers(clazz.getModifiers())
-                .name(clazz.getSuperclass().getCanonicalName())
-                .checkParentClazz(check.checkParentClazz())
+                .name(clazz.getSuperclass() == null ? null : clazz.getSuperclass().getCanonicalName())
+                .checkParentClazz(clazz.getSuperclass() == null && check.checkParentClazz())
                 .parentClazz(clazz.getSuperclass().getCanonicalName())
                 .checkInterfaces(check.checkInterfaces())
                 .implementedInterfaces(Arrays.stream(clazz.getInterfaces()).map(Class::getCanonicalName).toArray(String[]::new))
@@ -37,7 +34,7 @@ public final class ItemFactory {
                 .build();
     }
 
-    public MethodItem createConstructorItem(ConstructorCheck constructorCheck, Constructor<?> constructor) {
+    public MethodItem createItem(ConstructorCheck constructorCheck, Constructor<?> constructor) {
         return MethodItem.builder()
                 .parameters(buildParameterizedTypeFromList(Arrays.asList(constructor.getGenericParameterTypes())))
                 .exceptions(buildParameterizedTypeFromList(Arrays.asList(constructor.getGenericExceptionTypes())))
@@ -50,7 +47,7 @@ public final class ItemFactory {
                 .build();
     }
 
-    public MethodItem createMethodItem(MethodCheck methodCheck, Method method) {
+    public MethodItem createItem(MethodCheck methodCheck, Method method) {
         return MethodItem.builder()
                 .name(method.getName())
                 .returnType(
@@ -71,7 +68,7 @@ public final class ItemFactory {
     }
 
 
-    public FieldItem createFieldItem(FieldCheck fieldCheck, Field field) {
+    public FieldItem createItem(FieldCheck fieldCheck, Field field) {
         return FieldItem.builder()
                 .name(field.getName())
                 .type(
@@ -83,6 +80,7 @@ public final class ItemFactory {
                 .modifiers(field.getModifiers())
                 .checkModifiers(fieldCheck.checkModifiers())
                 .points(fieldCheck.maxPoint())
+                .containerClass(field.getDeclaringClass().getCanonicalName())
                 .build();
     }
 

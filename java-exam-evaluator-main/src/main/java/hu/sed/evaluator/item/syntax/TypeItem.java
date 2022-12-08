@@ -1,7 +1,7 @@
-package hu.sed.evaluator.task.item.syntax;
+package hu.sed.evaluator.item.syntax;
 
-import hu.sed.evaluator.task.item.BaseSyntaxItem;
-import hu.sed.evaluator.task.item.Item;
+import hu.sed.evaluator.item.Item;
+import hu.sed.evaluator.item.container.ItemContainer;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -12,9 +12,9 @@ import java.util.List;
 @Data
 @SuperBuilder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class TypeItem extends BaseSyntaxItem {
+public class TypeItem extends BaseSyntaxItem implements ItemContainer {
 
-    List<Item> childItems;
+    List<Item> items;
 
     boolean checkParentClazz;
 
@@ -29,4 +29,6 @@ public class TypeItem extends BaseSyntaxItem {
      * Array of fully qualified name of interfaces
      */
     String[] implementedInterfaces;
+
+    boolean checkMethods;
 }

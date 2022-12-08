@@ -1,7 +1,8 @@
 package hu.sed.evaluator.task.item;
 
 import hu.sed.evaluator.annotation.syntax.TypeCheck;
-import hu.sed.evaluator.task.item.syntax.TypeItem;
+import hu.sed.evaluator.item.ItemFactory;
+import hu.sed.evaluator.item.syntax.TypeItem;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -19,7 +20,7 @@ public class TypeItemFactoryTest {
         Class<?> aClass = getClassByName(clazzName);
 
         // WHEN
-        TypeItem typeItem = itemFactory.createTypeItem(aClass.getAnnotation(TypeCheck.class), aClass);
+        TypeItem typeItem = itemFactory.createItem(aClass.getAnnotation(TypeCheck.class), aClass);
 
         // THEN
         assertThat(typeItem.getReadableModifiers()).isEqualTo("private static");
@@ -29,7 +30,7 @@ public class TypeItemFactoryTest {
         assertThat(typeItem.getPoints()).isEqualTo(5);
         assertThat(typeItem.getParentClazz()).isEqualTo("java.lang.Object");
         assertThat(typeItem.getImplementedInterfaces()).isEmpty();
-        assertThat(typeItem.getChildItems()).isNull();
+        assertThat(typeItem.getItems()).isNull();
     }
 
     @Test
@@ -39,7 +40,7 @@ public class TypeItemFactoryTest {
         Class<?> aClass = getClassByName(clazzName);
 
         // WHEN
-        TypeItem typeItem = itemFactory.createTypeItem(aClass.getAnnotation(TypeCheck.class), aClass);
+        TypeItem typeItem = itemFactory.createItem(aClass.getAnnotation(TypeCheck.class), aClass);
 
         // THEN
         assertThat(typeItem.getReadableModifiers()).isEqualTo("private abstract static");
@@ -51,7 +52,7 @@ public class TypeItemFactoryTest {
         assertThat(typeItem.getImplementedInterfaces()).isNotNull();
         assertThat(typeItem.getImplementedInterfaces().length).isEqualTo(1);
         assertThat(typeItem.getImplementedInterfaces()[0]).isEqualTo("hu.sed.evaluator.task.item.TypeItemFactoryTest.TestInterface");
-        assertThat(typeItem.getChildItems()).isNull();
+        assertThat(typeItem.getItems()).isNull();
     }
 
     @Test
@@ -61,7 +62,7 @@ public class TypeItemFactoryTest {
         Class<?> aClass = getClassByName(clazzName);
 
         // WHEN
-        TypeItem typeItem = itemFactory.createTypeItem(aClass.getAnnotation(TypeCheck.class), aClass);
+        TypeItem typeItem = itemFactory.createItem(aClass.getAnnotation(TypeCheck.class), aClass);
 
         // THEN
         assertThat(typeItem.getReadableModifiers()).isEqualTo("private static");
@@ -72,7 +73,7 @@ public class TypeItemFactoryTest {
         assertThat(typeItem.getParentClazz()).isEqualTo("hu.sed.evaluator.task.item.TypeItemFactoryTest.AbstractTestClass");
         assertThat(typeItem.getImplementedInterfaces()).isNotNull();
         assertThat(typeItem.getImplementedInterfaces()).isEmpty();
-        assertThat(typeItem.getChildItems()).isNull();
+        assertThat(typeItem.getItems()).isNull();
     }
 
     private Class<?> getClassByName(String clazzName) {

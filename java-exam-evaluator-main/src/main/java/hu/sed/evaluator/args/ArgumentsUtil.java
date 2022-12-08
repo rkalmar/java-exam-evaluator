@@ -1,7 +1,7 @@
 package hu.sed.evaluator.args;
 
-import hu.sed.evaluator.task.executor.TaskArgument;
-import hu.sed.evaluator.task.executor.TaskType;
+import hu.sed.evaluator.task.TaskArgument;
+import hu.sed.evaluator.task.TaskType;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.cli.CommandLine;
@@ -56,7 +56,8 @@ public class ArgumentsUtil {
                 throw new MissingArgumentsException(String.format("Following arguments are required for task %s: %s", selectedTask, subArgs));
             }
 
-            return new TaskArgument(TaskType.taskTypeByArg(VALIDATE_ARG), null, null); // TODO packages
+            //return new TaskArgument(TaskType.taskTypeByArg(VALIDATE_ARG)); // TODO packages
+            return null;
 
         } catch (UnrecognizedOptionException e) {
             throw new InvalidArgumentException(e.getMessage());

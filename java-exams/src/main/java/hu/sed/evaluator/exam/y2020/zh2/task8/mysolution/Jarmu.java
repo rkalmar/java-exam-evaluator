@@ -1,5 +1,6 @@
 package hu.sed.evaluator.exam.y2020.zh2.task8.mysolution;
 
+import hu.sed.evaluator.annotation.syntax.MethodCheck;
 import hu.sed.evaluator.annotation.syntax.TypeCheck;
 
 @TypeCheck(maxPoint = 5)
@@ -45,6 +46,7 @@ public abstract class Jarmu {
         return min;
     }
 
+    @MethodCheck
     public boolean muszaki() {
         if (gyartasiEv >= 2000) {
             return true;

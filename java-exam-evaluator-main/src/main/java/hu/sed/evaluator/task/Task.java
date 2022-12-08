@@ -1,4 +1,4 @@
-package hu.sed.evaluator.task.executor;
+package hu.sed.evaluator.task;
 
 public interface Task {
 

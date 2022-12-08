@@ -1,4 +1,4 @@
-package hu.sed.evaluator.task.executor;
+package hu.sed.evaluator.task;
 
 import hu.sed.evaluator.args.ArgumentsUtil;
 import lombok.AllArgsConstructor;
@@ -9,6 +9,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public enum TaskType {
     EXAM_EVALUATOR(ArgumentsUtil.EVALUATE_ARG),
+    GENERATE_EXAM_ITEMS(ArgumentsUtil.EVALUATE_ARG),
     EXAM_VALIDATOR(ArgumentsUtil.VALIDATE_ARG),
     UML_GENERATOR(ArgumentsUtil.UML_ARG);
 

@@ -1,4 +1,4 @@
-package hu.sed.evaluator.task.item;
+package hu.sed.evaluator.item;
 
 import java.io.Serializable;
 

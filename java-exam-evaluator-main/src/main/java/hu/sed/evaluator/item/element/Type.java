@@ -1,4 +1,4 @@
-package hu.sed.evaluator.task.item.element;
+package hu.sed.evaluator.item.element;
 
 import lombok.Builder;
 import lombok.Data;

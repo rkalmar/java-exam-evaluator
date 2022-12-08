@@ -1,6 +1,6 @@
-package hu.sed.evaluator.task.item.semantic;
+package hu.sed.evaluator.item.semantic;
 
-import hu.sed.evaluator.task.item.BaseItem;
+import hu.sed.evaluator.item.BaseItem;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;

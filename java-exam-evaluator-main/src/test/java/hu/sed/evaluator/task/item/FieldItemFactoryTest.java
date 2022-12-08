@@ -1,8 +1,9 @@
 package hu.sed.evaluator.task.item;
 
 import hu.sed.evaluator.annotation.syntax.FieldCheck;
-import hu.sed.evaluator.task.item.element.Type;
-import hu.sed.evaluator.task.item.syntax.FieldItem;
+import hu.sed.evaluator.item.ItemFactory;
+import hu.sed.evaluator.item.element.Type;
+import hu.sed.evaluator.item.syntax.FieldItem;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 
@@ -27,7 +28,7 @@ public class FieldItemFactoryTest {
         Field condition = TestClass.class.getDeclaredField(fieldName);
 
         // WHEN
-        FieldItem fieldItem = itemFactory.createFieldItem(condition.getAnnotation(FieldCheck.class), condition);
+        FieldItem fieldItem = itemFactory.createItem(condition.getAnnotation(FieldCheck.class), condition);
 
         // THEN
         assertEquals(fieldName, fieldItem.getName());
@@ -48,7 +49,7 @@ public class FieldItemFactoryTest {
         Field textField = TestClass.class.getDeclaredField(fieldName);
 
         // WHEN
-        FieldItem fieldItem = itemFactory.createFieldItem(textField.getAnnotation(FieldCheck.class), textField);
+        FieldItem fieldItem = itemFactory.createItem(textField.getAnnotation(FieldCheck.class), textField);
 
         // THEN
         assertThat(fieldItem.getName()).isEqualTo(fieldName);
@@ -68,7 +69,7 @@ public class FieldItemFactoryTest {
         Field genericField = TestClass.class.getDeclaredField(fieldName);
 
         // WHEN
-        FieldItem fieldItem = itemFactory.createFieldItem(genericField.getAnnotation(FieldCheck.class), genericField);
+        FieldItem fieldItem = itemFactory.createItem(genericField.getAnnotation(FieldCheck.class), genericField);
 
         // THEN
         assertThat(fieldItem.getName()).isEqualTo(fieldName);
@@ -91,7 +92,7 @@ public class FieldItemFactoryTest {
         Field genericField = TestClass.class.getDeclaredField(fieldName);
 
         // WHEN
-        FieldItem fieldItem = itemFactory.createFieldItem(genericField.getAnnotation(FieldCheck.class), genericField);
+        FieldItem fieldItem = itemFactory.createItem(genericField.getAnnotation(FieldCheck.class), genericField);
 
         // THEN
         assertThat(fieldItem.getName()).isEqualTo(fieldName);
@@ -119,7 +120,7 @@ public class FieldItemFactoryTest {
         Field genericField = TestClass.class.getDeclaredField(fieldName);
 
         // WHEN
-        FieldItem fieldItem = itemFactory.createFieldItem(genericField.getAnnotation(FieldCheck.class), genericField);
+        FieldItem fieldItem = itemFactory.createItem(genericField.getAnnotation(FieldCheck.class), genericField);
 
         // THEN
         Type type = fieldItem.getType();
@@ -144,9 +145,9 @@ public class FieldItemFactoryTest {
         Field mapField2 = TestClass.class.getDeclaredField("testMap2");
 
         // WHEN
-        FieldItem mapFieldItem1 = itemFactory.createFieldItem(mapField1.getAnnotation(FieldCheck.class), mapField1);
-        FieldItem mapFieldItem1a = itemFactory.createFieldItem(mapField1.getAnnotation(FieldCheck.class), mapField1);
-        FieldItem mapFieldItem2 = itemFactory.createFieldItem(mapField2.getAnnotation(FieldCheck.class), mapField2);
+        FieldItem mapFieldItem1 = itemFactory.createItem(mapField1.getAnnotation(FieldCheck.class), mapField1);
+        FieldItem mapFieldItem1a = itemFactory.createItem(mapField1.getAnnotation(FieldCheck.class), mapField1);
+        FieldItem mapFieldItem2 = itemFactory.createItem(mapField2.getAnnotation(FieldCheck.class), mapField2);
 
         // THEN
         assertThat(mapFieldItem1).isNotEqualTo(mapFieldItem2);

@@ -2,8 +2,9 @@ package hu.sed.evaluator.task.item;
 
 import hu.sed.evaluator.annotation.syntax.ConstructorCheck;
 import hu.sed.evaluator.annotation.syntax.MethodCheck;
-import hu.sed.evaluator.task.item.element.Type;
-import hu.sed.evaluator.task.item.syntax.MethodItem;
+import hu.sed.evaluator.item.ItemFactory;
+import hu.sed.evaluator.item.element.Type;
+import hu.sed.evaluator.item.syntax.MethodItem;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.DisplayName;
@@ -35,7 +36,7 @@ public class MethodItemFactoryTest {
         Method method = getMethodByName(methodName);
 
         // WHEN
-        MethodItem methodItem = itemFactory.createMethodItem(method.getAnnotation(MethodCheck.class), method);
+        MethodItem methodItem = itemFactory.createItem(method.getAnnotation(MethodCheck.class), method);
 
         // THEN
         assertThat(methodItem.getReadableModifiers()).isEqualTo("public static");
@@ -76,7 +77,7 @@ public class MethodItemFactoryTest {
         Method method = getMethodByName(methodName);
 
         // WHEN
-        MethodItem methodItem = itemFactory.createMethodItem(method.getAnnotation(MethodCheck.class), method);
+        MethodItem methodItem = itemFactory.createItem(method.getAnnotation(MethodCheck.class), method);
 
         // THEN
         assertThat(methodItem.getReadableModifiers()).isEqualTo("private final");
@@ -124,7 +125,7 @@ public class MethodItemFactoryTest {
                 .orElseThrow();
 
         // WHEN
-        MethodItem constructorMethod = itemFactory.createConstructorItem(constructor.getAnnotation(ConstructorCheck.class), constructor);
+        MethodItem constructorMethod = itemFactory.createItem(constructor.getAnnotation(ConstructorCheck.class), constructor);
 
         // THEN
         assertThat(constructorMethod.getReadableModifiers()).isEqualTo("public");

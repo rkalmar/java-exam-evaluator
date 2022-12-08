@@ -1,7 +1,8 @@
 package hu.sed.evaluator.task.item;
 
 import hu.sed.evaluator.annotation.semantic.CustomTest;
-import hu.sed.evaluator.task.item.semantic.TestItem;
+import hu.sed.evaluator.item.ItemFactory;
+import hu.sed.evaluator.item.semantic.TestItem;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
