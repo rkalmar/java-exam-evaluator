@@ -1,5 +1,6 @@
 package hu.sed.evaluator.item;
 
+import com.google.inject.Singleton;
 import hu.sed.evaluator.annotation.semantic.CustomTest;
 import hu.sed.evaluator.annotation.syntax.ConstructorCheck;
 import hu.sed.evaluator.annotation.syntax.FieldCheck;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@Singleton
 public final class ItemFactory {
 
     public TypeItem createItem(TypeCheck check, Class<?> clazz) {
@@ -122,6 +124,4 @@ public final class ItemFactory {
         return type instanceof ParameterizedType parameterizedType1 ?
                 parameterizedType1.getRawType().getTypeName() : ((Class) type).getCanonicalName();
     }
-
-
 }

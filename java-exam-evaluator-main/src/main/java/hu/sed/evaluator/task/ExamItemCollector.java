@@ -1,5 +1,7 @@
 package hu.sed.evaluator.task;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import hu.sed.evaluator.ReflectionUtils;
 import hu.sed.evaluator.annotation.syntax.TypeCheck;
 import hu.sed.evaluator.item.container.ItemContainer;
@@ -23,12 +25,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+@Singleton
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor = @__(@Inject))
 public class ExamItemCollector implements Task {
 
-    ItemFactory itemFactory = new ItemFactory(); // TODO dependency injection
+    @Inject
+    ItemFactory itemFactory;
 
     @Override
     public void execute(TaskArgument argument) {
