@@ -11,7 +11,7 @@ import hu.sed.evaluator.item.container.ItemContainer;
 import hu.sed.evaluator.item.container.ListItemContainer;
 import hu.sed.evaluator.item.container.RootItem;
 import hu.sed.evaluator.task.collectors.ConstructorItemCollector;
-import hu.sed.evaluator.task.collectors.CustomTestCollector;
+import hu.sed.evaluator.task.collectors.CustomTestItemCollector;
 import hu.sed.evaluator.task.collectors.FieldItemCollector;
 import hu.sed.evaluator.task.collectors.MethodItemCollector;
 import lombok.AccessLevel;
@@ -47,7 +47,7 @@ public class ExamItemCollector implements Task {
     ConstructorItemCollector constructorItemCollector;
 
     @Inject
-    CustomTestCollector customTestCollector;
+    CustomTestItemCollector customTestItemCollector;
 
     @SneakyThrows
     @Override
@@ -110,7 +110,7 @@ public class ExamItemCollector implements Task {
 
         // add custom tests
         subItems.addAll(
-                customTestCollector.collectItems(clazz)
+                customTestItemCollector.collectItems(clazz)
         );
 
         // todo implement subclass..

@@ -16,7 +16,7 @@ import java.util.List;
 @Singleton
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor(onConstructor = @__(@Inject))
-public final class CustomTestCollector {
+public final class CustomTestItemCollector {
 
     @Inject
     ItemFactory itemFactory;

@@ -26,7 +26,7 @@ public class TypeItemFactoryTest {
         assertThat(typeItem.getReadableModifiers()).isEqualTo("private static");
         assertThat(typeItem.isCheckModifiers()).isTrue();
         assertThat(typeItem.isCheckInterfaces()).isFalse();
-        assertThat(typeItem.isCheckParentClazz()).isFalse();
+        assertThat(typeItem.isCheckParentClazz()).isTrue();
         assertThat(typeItem.getScore()).isEqualTo(5);
         assertThat(typeItem.getParentClazz()).isEqualTo("java.lang.Object");
         assertThat(typeItem.getImplementedInterfaces()).isEmpty();
@@ -86,7 +86,7 @@ public class TypeItemFactoryTest {
     private interface TestInterface {
     }
 
-    @TypeCheck(checkInterfaces = false, checkParentClazz = false, score = 5)
+    @TypeCheck(checkInterfaces = false, score = 5)
     private static class JustAClass {
     }
 

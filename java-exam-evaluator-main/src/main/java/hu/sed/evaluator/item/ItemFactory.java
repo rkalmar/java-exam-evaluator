@@ -22,7 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Singleton
-public final class ItemFactory {
+public class ItemFactory {
 
     public TypeItem createItem(TypeCheck check, Class<?> clazz) {
         boolean checkParentClazz = clazz.getSuperclass() != null && check.checkParentClazz();

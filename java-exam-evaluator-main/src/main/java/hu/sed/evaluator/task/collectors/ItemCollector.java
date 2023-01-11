@@ -15,11 +15,11 @@ import java.util.function.Predicate;
 public abstract class ItemCollector<T extends Item, R extends AccessibleObject> {
 
     public List<T> collectItems(Class<?> clazz, boolean needUnannotatedItems, int scorePerUnannotatedItem) {
-        R[] declaredFields = getElements(clazz);
-        List<T> subItems = new ArrayList<>(this.getAnnotatedItems(declaredFields));
+        R[] elements = getElements(clazz);
+        List<T> subItems = new ArrayList<>(this.getAnnotatedItems(elements));
         if (needUnannotatedItems) {
             subItems.addAll(
-                    this.getUnannotatedItems(declaredFields, scorePerUnannotatedItem)
+                    this.getUnannotatedItems(elements, scorePerUnannotatedItem)
             );
         }
         return subItems;

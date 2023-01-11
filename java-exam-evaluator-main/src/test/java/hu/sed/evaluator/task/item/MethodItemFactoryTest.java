@@ -73,7 +73,7 @@ public class MethodItemFactoryTest {
     @Test
     public void testMethod2() {
         // GIVEN
-        String methodName = "testMethod2";
+        String methodName = "testMethodCheck2";
         Method method = getMethodByName(methodName);
 
         // WHEN
@@ -132,7 +132,7 @@ public class MethodItemFactoryTest {
         assertThat(constructorMethod.isCheckOverride()).isFalse();
         assertThat(constructorMethod.isCheckExceptions()).isTrue();
         assertThat(constructorMethod.getScore()).isEqualTo(1);
-        assertThat(constructorMethod.getContainerClass()).isEqualTo("hu.sed.evaluator.task.item.MethodItemFactoryTest");
+        assertThat(constructorMethod.getContainerClass()).isEqualTo("hu.sed.evaluator.task.item.MethodItemFactoryTest.TestClass");
 
         // exceptions
         assertThat(constructorMethod.getExceptions().length).isEqualTo(1);
@@ -156,7 +156,7 @@ public class MethodItemFactoryTest {
     }
 
     @MethodCheck
-    private final List<String> testMethod2(List<String> param) throws TestException {
+    private final List<String> testMethodCheck2(List<String> param) throws TestException {
         throw new TestException();
     }
 
