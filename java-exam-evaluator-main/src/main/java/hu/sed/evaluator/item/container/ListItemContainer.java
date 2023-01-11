@@ -1,5 +1,6 @@
 package hu.sed.evaluator.item.container;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import hu.sed.evaluator.item.Item;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -20,4 +21,9 @@ public class ListItemContainer implements ItemContainer, Item {
     String containerName;
 
     List<Item> items;
+
+    @JsonIgnore
+    public boolean isEmpty() {
+        return items == null || items.isEmpty();
+    }
 }

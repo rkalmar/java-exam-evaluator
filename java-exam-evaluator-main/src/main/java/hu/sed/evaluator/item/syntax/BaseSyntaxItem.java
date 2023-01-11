@@ -33,7 +33,7 @@ public abstract class BaseSyntaxItem extends BaseItem {
 
     @Override
     public String toString() {
-        return " points=" + getPoints() +
+        return " score=" + this.getScore() +
                 ", name=" + name +
                 ", modifiers=" + getReadableModifiers() +
                 ", checkModifiers=" + checkModifiers;

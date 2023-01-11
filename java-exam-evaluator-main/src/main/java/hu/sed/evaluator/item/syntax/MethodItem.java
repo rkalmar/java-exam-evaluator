@@ -24,6 +24,4 @@ public class MethodItem extends BaseSyntaxItem {
     boolean checkOverride;
 
     boolean checkExceptions;
-
-    boolean constructor;
 }

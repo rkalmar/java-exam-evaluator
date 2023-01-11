@@ -17,7 +17,7 @@ public class TestItemFactoryTest {
     public static final String MY_TEST_METHOD = "myTestMethod";
     public static final String MY_TEST_METHOD_2 = "myTestMethod2";
 
-    @CustomTest(testClass = TestItemFactoryTest.class, maxPoint = 5, description = MY_DESC)
+    @CustomTest(testClass = TestItemFactoryTest.class, score = 5, description = MY_DESC)
     private static String strField;
 
     ItemFactory itemFactory = new ItemFactory();
@@ -36,7 +36,7 @@ public class TestItemFactoryTest {
         TestItem testItem = itemFactory.createTestItem(field.getAnnotation(CustomTest.class));
 
         // THEN
-        assertThat(testItem.getPoints()).isEqualTo(5);
+        assertThat(testItem.getScore()).isEqualTo(5);
         assertThat(testItem.getTestClass()).isEqualTo("hu.sed.evaluator.task.item.TestItemFactoryTest");
         assertThat(testItem.getTestMethods()).isNotEmpty();
         assertThat(testItem.getTestMethods().length).isEqualTo(1);
@@ -57,7 +57,7 @@ public class TestItemFactoryTest {
         TestItem testItem = itemFactory.createTestItem(method.getAnnotation(CustomTest.class));
 
         // THEN
-        assertThat(testItem.getPoints()).isEqualTo(1);
+        assertThat(testItem.getScore()).isEqualTo(1);
         assertThat(testItem.getTestClass()).isEqualTo("hu.sed.evaluator.task.item.TestItemFactoryTest");
         assertThat(testItem.getTestMethods()).isNotEmpty();
         assertThat(testItem.getTestMethods().length).isEqualTo(2);

@@ -8,6 +8,7 @@ import hu.sed.evaluator.annotation.syntax.MethodCheck;
 import hu.sed.evaluator.annotation.syntax.TypeCheck;
 import hu.sed.evaluator.item.element.TypeDefinition;
 import hu.sed.evaluator.item.semantic.TestItem;
+import hu.sed.evaluator.item.syntax.ConstructorItem;
 import hu.sed.evaluator.item.syntax.FieldItem;
 import hu.sed.evaluator.item.syntax.MethodItem;
 import hu.sed.evaluator.item.syntax.TypeItem;
@@ -33,20 +34,19 @@ public final class ItemFactory {
                 .parentClazz(checkParentClazz ? clazz.getSuperclass().getCanonicalName() : null)
                 .checkInterfaces(check.checkInterfaces())
                 .implementedInterfaces(Arrays.stream(clazz.getInterfaces()).map(Class::getCanonicalName).toArray(String[]::new))
-                .points(check.maxPoint())
+                .score(check.score())
                 .build();
     }
 
-    public MethodItem createItem(ConstructorCheck constructorCheck, Constructor<?> constructor) {
-        return MethodItem.builder()
+    public ConstructorItem createItem(ConstructorCheck constructorCheck, Constructor<?> constructor) {
+        return ConstructorItem.builder()
                 .parameters(buildParameterizedTypeFromList(Arrays.asList(constructor.getGenericParameterTypes())))
                 .exceptions(buildParameterizedTypeFromList(Arrays.asList(constructor.getGenericExceptionTypes())))
                 .modifiers(constructor.getModifiers())
                 .checkModifiers(constructorCheck.checkModifiers())
                 .checkExceptions(constructorCheck.checkExceptions())
-                .constructor(true)
                 .containerClass(constructor.getDeclaringClass().getCanonicalName())
-                .points(constructorCheck.maxPoint())
+                .score(constructorCheck.score())
                 .build();
     }
 
@@ -66,7 +66,7 @@ public final class ItemFactory {
                 .checkExceptions(methodCheck.checkExceptions())
                 .checkOverride(methodCheck.checkOverride())
                 .containerClass(method.getDeclaringClass().getCanonicalName())
-                .points(methodCheck.maxPoint())
+                .score(methodCheck.score())
                 .build();
     }
 
@@ -82,7 +82,7 @@ public final class ItemFactory {
                 )
                 .modifiers(field.getModifiers())
                 .checkModifiers(fieldCheck.checkModifiers())
-                .points(fieldCheck.maxPoint())
+                .score(fieldCheck.score())
                 .containerClass(field.getDeclaringClass().getCanonicalName())
                 .build();
     }
@@ -92,7 +92,7 @@ public final class ItemFactory {
                 .testClass(customTest.testClass().getCanonicalName())
                 .testMethods(customTest.method())
                 .description(customTest.description())
-                .points(customTest.maxPoint())
+                .score(customTest.score())
                 .build();
     }
 

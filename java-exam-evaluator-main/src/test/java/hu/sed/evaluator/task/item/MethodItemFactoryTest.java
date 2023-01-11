@@ -4,6 +4,7 @@ import hu.sed.evaluator.annotation.syntax.ConstructorCheck;
 import hu.sed.evaluator.annotation.syntax.MethodCheck;
 import hu.sed.evaluator.item.ItemFactory;
 import hu.sed.evaluator.item.element.TypeDefinition;
+import hu.sed.evaluator.item.syntax.ConstructorItem;
 import hu.sed.evaluator.item.syntax.MethodItem;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
@@ -22,7 +23,7 @@ public class MethodItemFactoryTest {
 
     ItemFactory itemFactory = new ItemFactory();
 
-    @MethodCheck(checkExceptions = false, checkOverride = false, maxPoint = 8)
+    @MethodCheck(checkExceptions = false, checkOverride = false, score = 8)
     public static void testMethod(int x, Double z) {
         System.out.println(x + z);
     }
@@ -44,8 +45,7 @@ public class MethodItemFactoryTest {
         assertThat(methodItem.isCheckModifiers()).isTrue();
         assertThat(methodItem.isCheckOverride()).isFalse();
         assertThat(methodItem.isCheckExceptions()).isFalse();
-        assertThat(methodItem.getPoints()).isEqualTo(8);
-        assertThat(methodItem.isConstructor()).isFalse();
+        assertThat(methodItem.getScore()).isEqualTo(8);
         assertThat(methodItem.getContainerClass()).isEqualTo("hu.sed.evaluator.task.item.MethodItemFactoryTest");
 
         // exceptions
@@ -85,8 +85,7 @@ public class MethodItemFactoryTest {
         assertThat(methodItem.isCheckModifiers()).isTrue();
         assertThat(methodItem.isCheckOverride()).isTrue();
         assertThat(methodItem.isCheckExceptions()).isTrue();
-        assertThat(methodItem.getPoints()).isEqualTo(1);
-        assertThat(methodItem.isConstructor()).isFalse();
+        assertThat(methodItem.getScore()).isEqualTo(1);
         assertThat(methodItem.getContainerClass()).isEqualTo("hu.sed.evaluator.task.item.MethodItemFactoryTest");
 
         // exceptions
@@ -125,15 +124,14 @@ public class MethodItemFactoryTest {
                 .orElseThrow();
 
         // WHEN
-        MethodItem constructorMethod = itemFactory.createItem(constructor.getAnnotation(ConstructorCheck.class), constructor);
+        ConstructorItem constructorMethod = itemFactory.createItem(constructor.getAnnotation(ConstructorCheck.class), constructor);
 
         // THEN
         assertThat(constructorMethod.getReadableModifiers()).isEqualTo("public");
         assertThat(constructorMethod.isCheckModifiers()).isTrue();
         assertThat(constructorMethod.isCheckOverride()).isFalse();
         assertThat(constructorMethod.isCheckExceptions()).isTrue();
-        assertThat(constructorMethod.getPoints()).isEqualTo(1);
-        assertThat(constructorMethod.isConstructor()).isTrue();
+        assertThat(constructorMethod.getScore()).isEqualTo(1);
         assertThat(constructorMethod.getContainerClass()).isEqualTo("hu.sed.evaluator.task.item.MethodItemFactoryTest");
 
         // exceptions

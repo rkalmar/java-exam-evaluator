@@ -10,25 +10,20 @@ import hu.sed.evaluator.item.ItemFactory;
 import hu.sed.evaluator.item.container.ItemContainer;
 import hu.sed.evaluator.item.container.ListItemContainer;
 import hu.sed.evaluator.item.container.RootItem;
-import hu.sed.evaluator.item.semantic.TestItem;
-import hu.sed.evaluator.item.syntax.FieldItem;
-import hu.sed.evaluator.item.syntax.MethodItem;
+import hu.sed.evaluator.task.collectors.ConstructorItemCollector;
+import hu.sed.evaluator.task.collectors.CustomTestCollector;
+import hu.sed.evaluator.task.collectors.FieldItemCollector;
+import hu.sed.evaluator.task.collectors.MethodItemCollector;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 
 @Singleton
 @Slf4j
@@ -42,17 +37,28 @@ public class ExamItemCollector implements Task {
     @Inject
     JsonMapper jsonMapper;
 
+    @Inject
+    FieldItemCollector fieldItemCollector;
+
+    @Inject
+    MethodItemCollector methodItemCollector;
+
+    @Inject
+    ConstructorItemCollector constructorItemCollector;
+
+    @Inject
+    CustomTestCollector customTestCollector;
+
     @SneakyThrows
     @Override
     public void execute(TaskArgument argument) {
         List<Class<?>> examClasses = ReflectionUtils.getClassesOfPackage(argument.getExamPackage());
 
-        Predicate<Item> containerItemPredicate = item -> item instanceof ListItemContainer containerItem && !containerItem.getItems().isEmpty();
-        Predicate<Item> otherItemPredicate = item -> !(item instanceof ListItemContainer);
-
         List<Item> items = examClasses.stream()
                 .map(this::getExamItem)
-                .filter(otherItemPredicate.or(containerItemPredicate))
+                .filter(item ->
+                        !(item instanceof ListItemContainer) || ((ListItemContainer) item).isEmpty()
+                )
                 .toList();
 
         RootItem root = RootItem.builder()
@@ -68,42 +74,43 @@ public class ExamItemCollector implements Task {
     private Item getExamItem(Class<?> clazz) {
         Optional<TypeCheck> annotation = ReflectionUtils.getAnnotation(TypeCheck.class, clazz);
 
-        boolean includeUnannotatedFields = false;
-        boolean includeUnannotatedMethods = false;
         ItemContainer item;
+        Optional<TypeCheck> typeCheck;
 
         if (annotation.isEmpty() || ReflectionUtils.skipped(clazz)) {
             item = ListItemContainer.builder()
                     .containerName(clazz.getCanonicalName())
                     .build();
+            typeCheck = Optional.empty();
         } else {
-            TypeCheck typeCheck = annotation.get();
-            item = itemFactory.createItem(typeCheck, clazz);
-            includeUnannotatedFields = typeCheck.checkFields();
-            includeUnannotatedMethods = typeCheck.checkMethods();
+            TypeCheck typeCheckAnnotation = annotation.get();
+            item = itemFactory.createItem(typeCheckAnnotation, clazz);
+            typeCheck = Optional.of(typeCheckAnnotation);
         }
+
+        boolean needUnannotatedFields = typeCheck.isPresent() && typeCheck.get().checkFields();
+        boolean needUnannotatedMethods = typeCheck.isPresent() && typeCheck.get().checkMethods();
+        int scorePerField = typeCheck.map(TypeCheck::scorePerField).orElse(-1);
+        int scorePerMethod = typeCheck.map(TypeCheck::scorePerMethod).orElse(-1);
 
         // add fields
-        List<Item> subItems = new ArrayList<>(getFieldItems(clazz.getDeclaredFields()));
-        if (includeUnannotatedFields) {
-            // TODO
-        }
+        List<Item> subItems = new ArrayList<>(
+                fieldItemCollector.collectItems(clazz, needUnannotatedFields, scorePerField)
+        );
 
         // add constructors
-        subItems.addAll(getConstructorItems(clazz.getConstructors()));
-        if (includeUnannotatedMethods) {
-            // TODO
-        }
+        subItems.addAll(
+                constructorItemCollector.collectItems(clazz, needUnannotatedMethods, scorePerMethod)
+        );
 
         // add methods
-        subItems.addAll(getMethodItems(clazz.getDeclaredMethods()));
-        if (includeUnannotatedMethods) {
-            // TODO
-        }
+        subItems.addAll(
+                methodItemCollector.collectItems(clazz, needUnannotatedMethods, scorePerMethod)
+        );
 
         // add custom tests
         subItems.addAll(
-                getCustomTests(clazz)
+                customTestCollector.collectItems(clazz)
         );
 
         // todo implement subclass..
@@ -112,68 +119,5 @@ public class ExamItemCollector implements Task {
         return item;
     }
 
-    private List<TestItem> getCustomTests(Class<?> clazz) {
-        List<TestItem> testItems = new ArrayList<>(
-                ReflectionUtils.getAnnotations(clazz).stream()
-                        .map(itemFactory::createTestItem).toList()
-        );
 
-        testItems.addAll(ReflectionUtils.getClassMembers(clazz).stream()
-                .filter(ReflectionUtils::hasSemanticTestAnnotation)
-                .filter(ReflectionUtils::notSkipped)
-                .map(ReflectionUtils::getAnnotations)
-                .flatMap(Collection::stream)
-                .map(itemFactory::createTestItem)
-                .toList());
-
-        return testItems;
-    }
-
-    private List<FieldItem> getFieldItems(Field[] fields) {
-        return Arrays.stream(fields)
-                .filter(ReflectionUtils::hasSyntaxCheckAnnotation)
-                .filter(ReflectionUtils::notSkipped)
-                .map(this::getFieldItems)
-                .flatMap(Collection::stream)
-                .toList();
-    }
-
-    private List<FieldItem> getFieldItems(Field field) {
-        return ReflectionUtils.getAnnotations(field)
-                .stream()
-                .map(annotation -> itemFactory.createItem(annotation, field))
-                .toList();
-    }
-
-    private List<MethodItem> getMethodItems(Method[] methods) {
-        return Arrays.stream(methods)
-                .filter(ReflectionUtils::hasSyntaxCheckAnnotation)
-                .filter(ReflectionUtils::notSkipped)
-                .map(this::getMethodItems)
-                .flatMap(Collection::stream)
-                .toList();
-    }
-
-    private List<MethodItem> getMethodItems(Method method) {
-        return ReflectionUtils.getAnnotations(method)
-                .stream()
-                .map(annotation -> itemFactory.createItem(annotation, method))
-                .toList();
-    }
-
-    private List<MethodItem> getConstructorItems(Constructor<?>[] constructors) {
-        return Arrays.stream(constructors)
-                .filter(ReflectionUtils::hasSyntaxCheckAnnotation)
-                .filter(ReflectionUtils::notSkipped)
-                .map(this::getConstructorItems)
-                .flatMap(Collection::stream)
-                .toList();
-    }
-
-    private List<MethodItem> getConstructorItems(Constructor<?> constructors) {
-        return ReflectionUtils.getAnnotations(constructors)
-                .stream()
-                .map(annotation -> itemFactory.createItem(annotation, constructors))
-                .toList();
-    }
 }

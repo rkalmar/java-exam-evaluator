@@ -27,7 +27,7 @@ public class TypeItemFactoryTest {
         assertThat(typeItem.isCheckModifiers()).isTrue();
         assertThat(typeItem.isCheckInterfaces()).isFalse();
         assertThat(typeItem.isCheckParentClazz()).isFalse();
-        assertThat(typeItem.getPoints()).isEqualTo(5);
+        assertThat(typeItem.getScore()).isEqualTo(5);
         assertThat(typeItem.getParentClazz()).isEqualTo("java.lang.Object");
         assertThat(typeItem.getImplementedInterfaces()).isEmpty();
         assertThat(typeItem.getItems()).isNull();
@@ -47,7 +47,7 @@ public class TypeItemFactoryTest {
         assertThat(typeItem.isCheckModifiers()).isTrue();
         assertThat(typeItem.isCheckInterfaces()).isTrue();
         assertThat(typeItem.isCheckParentClazz()).isTrue();
-        assertThat(typeItem.getPoints()).isEqualTo(1);
+        assertThat(typeItem.getScore()).isEqualTo(1);
         assertThat(typeItem.getParentClazz()).isEqualTo("java.lang.Object");
         assertThat(typeItem.getImplementedInterfaces()).isNotNull();
         assertThat(typeItem.getImplementedInterfaces().length).isEqualTo(1);
@@ -69,7 +69,7 @@ public class TypeItemFactoryTest {
         assertThat(typeItem.isCheckModifiers()).isTrue();
         assertThat(typeItem.isCheckInterfaces()).isTrue();
         assertThat(typeItem.isCheckParentClazz()).isTrue();
-        assertThat(typeItem.getPoints()).isEqualTo(1);
+        assertThat(typeItem.getScore()).isEqualTo(1);
         assertThat(typeItem.getParentClazz()).isEqualTo("hu.sed.evaluator.task.item.TypeItemFactoryTest.AbstractTestClass");
         assertThat(typeItem.getImplementedInterfaces()).isNotNull();
         assertThat(typeItem.getImplementedInterfaces()).isEmpty();
@@ -86,7 +86,7 @@ public class TypeItemFactoryTest {
     private interface TestInterface {
     }
 
-    @TypeCheck(checkInterfaces = false, checkParentClazz = false, maxPoint = 5)
+    @TypeCheck(checkInterfaces = false, checkParentClazz = false, score = 5)
     private static class JustAClass {
     }
 

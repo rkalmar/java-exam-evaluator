@@ -33,11 +33,11 @@ public @interface CustomTest {
     String description() default "";
 
     /**
-     * Defines the maximum possible point.
-     * Note: this point can be obtained if all test method is successful,
+     * Defines the maximum possible score.
+     * Note: this score can be obtained if all test method is successful,
      *  therefore it shared among test methods.
      *
-     * @return maximum point
+     * @return maximum score
      */
-    int maxPoint() default 1;
+    int score() default 1;
 }

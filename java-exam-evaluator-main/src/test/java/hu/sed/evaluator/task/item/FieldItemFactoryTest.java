@@ -37,7 +37,7 @@ public class FieldItemFactoryTest {
         TypeDefinition type = fieldItem.getType();
         assertThat(type.getType()).isEqualTo("boolean");
         assertThat(type.getGenericTypes().length).isEqualTo(0);
-        assertThat(fieldItem.getPoints()).isEqualTo(1);
+        assertThat(fieldItem.getScore()).isEqualTo(1);
         assertTrue(fieldItem.isCheckModifiers());
     }
 
@@ -57,7 +57,7 @@ public class FieldItemFactoryTest {
         TypeDefinition type = fieldItem.getType();
         assertThat(type.getType()).isEqualTo(String.class.getCanonicalName());
         assertThat(type.getGenericTypes().length).isEqualTo(0);
-        assertThat(fieldItem.getPoints()).isEqualTo(10);
+        assertThat(fieldItem.getScore()).isEqualTo(10);
         assertFalse(fieldItem.isCheckModifiers());
     }
 
@@ -158,7 +158,7 @@ public class FieldItemFactoryTest {
         @FieldCheck
         private static boolean condition;
 
-        @FieldCheck(checkModifiers = false, maxPoint = 10)
+        @FieldCheck(checkModifiers = false, score = 10)
         protected String myText;
 
         @FieldCheck

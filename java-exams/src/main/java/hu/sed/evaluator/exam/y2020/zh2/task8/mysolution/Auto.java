@@ -8,21 +8,21 @@ import hu.sed.evaluator.annotation.syntax.TypeCheck;
 import hu.sed.evaluator.exam.y2020.zh2.task8.mytests.Tests;
 import hu.sed.evaluator.exam.y2020.zh2.task8.mytests.Tests2;
 
-@CustomTest(testClass = Tests2.class, method = {"myThirdTest", "myFourthTest"}, maxPoint = 5)
+@CustomTest(testClass = Tests2.class, method = {"myThirdTest", "myFourthTest"}, score = 5)
 @TypeCheck(checkMethods = true,
         checkFields = true,
-        maxPoint = 15)
-@CustomTest(testClass = Tests2.class, method = {"xx", "yy"}, maxPoint = 8)
+        score = 15)
+@CustomTest(testClass = Tests2.class, method = {"xx", "yy"}, score = 8)
 public class Auto extends Jarmu {
 
     @FieldCheck
     private final String marka;
 
-    @FieldCheck(maxPoint = 2)
+    @FieldCheck(score = 2)
     private boolean muszakis;
 
     @SkipCheck
-    @CustomTest(description = "Check Akarmi", testClass = Tests2.class, method = {"xx", "yy"}, maxPoint = 8)
+    @CustomTest(description = "Check Akarmi", testClass = Tests2.class, method = {"xx", "yy"}, score = 8)
     private String whatever;
 
 
@@ -42,8 +42,8 @@ public class Auto extends Jarmu {
         return true;
     }
 
-    @CustomTest(testClass = Tests.class, method = {"myFirstTest", "mySecondTest"}, maxPoint = 5)
-    @CustomTest(testClass = Tests2.class, method = {"myThirdTest", "myFourthTest"}, maxPoint = 8)
+    @CustomTest(testClass = Tests.class, method = {"myFirstTest", "mySecondTest"}, score = 5)
+    @CustomTest(testClass = Tests2.class, method = {"myThirdTest", "myFourthTest"}, score = 8)
     @Override
     public void gyorsit(int sebesseg) throws TulNagySebesseg {
         if (!muszakis && getSebesseg() + sebesseg > 50) {

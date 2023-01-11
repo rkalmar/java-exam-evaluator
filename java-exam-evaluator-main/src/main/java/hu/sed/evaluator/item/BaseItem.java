@@ -14,5 +14,5 @@ import lombok.experimental.SuperBuilder;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public abstract class BaseItem implements Item {
 
-    int points;
+    int score;
 }

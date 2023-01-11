@@ -13,22 +13,22 @@ import java.lang.annotation.Target;
  * Checks modifiers and annotations (if any).
  * <p>
  * Note:
- * - that maximum point will be distributed proportionally among checked items.
- * - if type and name are not correct, field worth 0 points
+ * - that maximum score will be distributed proportionally among checked items.
+ * - if type and name are not correct, field worth 0 score
  * <p>
  * Example:
  *
- * @FieldCheck(checkModifiers = true, maxPoint = 2)
+ * @FieldCheck(checkModifiers = true, score = 2)
  * @Getter private final String testField;
  * <p>
  * Check will calculate in the following way:
- * - if field name and type is correct: +1 point
- * - if checkModifiers = true and modifiers (private, final) are added: +1 point
+ * - if field name and type is correct: +1 score
+ * - if checkModifiers = true and modifiers (private, final) are added: +1 score
  * <p>
  * In this case there is 2 checked items, so each item's value is calculated by the following formula:
- * itemPoint = maxPoint / checkedItemCounts = 2 / 2 = 1
+ * itemScore = score / checkedItemCounts = 2 / 2 = 1
  * <p>
- * So if first condition is met, then the item worth 1 points, if maxPoint is 2.
+ * So if first condition is met, then the item worth 1, if score is 2.
  */
 @SyntaxCheck
 @Target(ElementType.FIELD)
@@ -39,13 +39,13 @@ public @interface FieldCheck {
     /**
      * @return true if check needs to validate field modifiers
      */
-    boolean checkModifiers() default true;
+    boolean checkModifiers() default DefaultFieldCheck.checkModifiers;
 
     /**
-     * Defines the maximum possible point.
-     * Note: this point can be obtained if all condition is satisfied.
+     * Defines the maximum possible score.
+     * Note: this score can be obtained if all condition is satisfied.
      *
-     * @return maximum point
+     * @return maximum score
      */
-    int maxPoint() default 1;
+    int score() default 1;
 }

@@ -10,34 +10,34 @@ import java.lang.annotation.Target;
  * Checks parentClass, implementedInterfaces, modifiers, annotations.
  * Furthermore, it can validate all methods and fields defined in class.
  * Note:
- * - that maximum point will be distributed proportionally among checked items.
- * - if name and package are not correct, class worth 0 points
+ * - that maximum score will be distributed proportionally among checked items.
+ * - if name and package are not correct, class worth 0 score
  *
  * Example:
  *
  * @TypeCheck(checkParentClazz = true,
  *      checkInterfaces = true,
  *      checkModifiers = true,
- *      maxPoints = 4)
+ *      score = 4)
  * @EClass
  * public abstract class MyClass extends ClassBase implements IClass {......}
  * <p>
  * Check will calculate in the following way:
- * - if class name and package is correct: +1 point
- * - checkParentClazz = true, so if class extends ClassBase: +1 point
- * - checkInterfaces = true, so if class implements IClass: +1 point
- * - checkModifiers = true, so if modifiers (public, abstract) are added: +1 point
+ * - if class name and package is correct: +1 score
+ * - checkParentClazz = true, so if class extends ClassBase: +1 score
+ * - checkInterfaces = true, so if class implements IClass: +1 score
+ * - checkModifiers = true, so if modifiers (public, abstract) are added: +1 score
  *
  * <p>
  * In this case there is 4 checked items, so each item's value is calculated by the following formula:
- * itemPoint = maxPoint / checkedItemCounts = 4 / 4 = 1
+ * itemScore = score / checkedItemCounts = 4 / 4 = 1
  *
  * Besides,
- *   - each method worth points defined by pointsPerMethod and
- *   - each field worth points defined by pointsPerField
+ *   - each method worth score defined by scorePerMethod and
+ *   - each field worth score defined by scorePerField
  *
- * So if first three conditions are met, then the item worth 3 points, if maxPoint is 4.
- * + (properly implemented method * pointsPerMethod) + (properly implemented fields * pointsPerField)
+ * So if first three conditions are met, then the item worth 3, if score is 4.
+ * + (properly implemented method * scorePerMethod) + (properly implemented fields * scorePerField)
  */
 @SyntaxCheck
 @Target(ElementType.TYPE)
@@ -74,11 +74,11 @@ public @interface TypeCheck {
     boolean checkMethods() default false;
 
     /**
-     * It defines points per method (if checkMethods is true) for methods which does not have specific MethodCheck
+     * It defines score per method (if checkMethods is true) for methods which does not have specific MethodCheck
      *
-     * @return maximum point per method
+     * @return maximum score per method
      */
-    int pointsPerMethod() default 1;
+    int scorePerMethod() default 1;
 
     /**
      * If true, check will validate each class method one by one (including constructor methods)
@@ -95,18 +95,18 @@ public @interface TypeCheck {
     boolean checkFields() default false;
 
     /**
-     * It defines points per field (if checkFields is true) for fields which does not have specific FieldCheck
+     * It defines score per field (if checkFields is true) for fields which does not have specific FieldCheck
      *
-     * @return maximum point per method
+     * @return maximum score per method
      */
-    int pointsPerField() default 1;
+    int scorePerField() default 1;
 
     /**
-     * Defines the maximum possible point.
-     * Note: this point can be obtained if all checked item is correct.
-     * Each item has value of point distributed proportionally.
+     * Defines the maximum possible score.
+     * Note: this score can be obtained if all checked item is correct.
+     * Each item has value of score distributed proportionally.
      *
-     * @return maximum point
+     * @return maximum score
      */
-    int maxPoint() default 1;
+    int score() default 1;
 }

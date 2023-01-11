@@ -18,18 +18,18 @@ public @interface ConstructorCheck {
     /**
      * @return true if check needs to validate method modifiers
      */
-    boolean checkModifiers() default true;
+    boolean checkModifiers() default DefaultConstructorCheck.checkModifiers;
 
     /**
      * @return true if check needs to validate checked exceptions to be thrown
      */
-    boolean checkExceptions() default true;
+    boolean checkExceptions() default DefaultConstructorCheck.checkExceptions;
 
     /**
-     * Defines the maximum possible point.
-     * Note: this point can be obtained if all checked value is correct.
+     * Defines the maximum possible score.
+     * Note: this score can be obtained if all checked value is correct.
      *
-     * @return maximum point
+     * @return maximum score
      */
-    int maxPoint() default 1;
+    int score() default 1;
 }
