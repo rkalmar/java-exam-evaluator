@@ -1,29 +1,34 @@
 package hu.sed.evaluator.task;
 
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import hu.sed.evaluator.ReflectionUtils;
 import hu.sed.evaluator.annotation.syntax.TypeCheck;
-import hu.sed.evaluator.item.container.ItemContainer;
-import hu.sed.evaluator.item.container.ListItemContainer;
 import hu.sed.evaluator.item.Item;
 import hu.sed.evaluator.item.ItemFactory;
+import hu.sed.evaluator.item.container.ItemContainer;
+import hu.sed.evaluator.item.container.ListItemContainer;
+import hu.sed.evaluator.item.container.RootItem;
 import hu.sed.evaluator.item.semantic.TestItem;
 import hu.sed.evaluator.item.syntax.FieldItem;
 import hu.sed.evaluator.item.syntax.MethodItem;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 @Singleton
 @Slf4j
@@ -34,28 +39,45 @@ public class ExamItemCollector implements Task {
     @Inject
     ItemFactory itemFactory;
 
+    @Inject
+    JsonMapper jsonMapper;
+
+    @SneakyThrows
     @Override
     public void execute(TaskArgument argument) {
         List<Class<?>> examClasses = ReflectionUtils.getClassesOfPackage(argument.getExamPackage());
 
-        ListItemContainer root = ListItemContainer.builder()
-                .containerName("root")
-                .items(examClasses.stream().map(this::getExamItem)
-                        .filter(item -> item instanceof ListItemContainer containerItem && !containerItem.getItems().isEmpty())
-                        .toList())
+        Predicate<Item> containerItemPredicate = item -> item instanceof ListItemContainer containerItem && !containerItem.getItems().isEmpty();
+        Predicate<Item> otherItemPredicate = item -> !(item instanceof ListItemContainer);
+
+        List<Item> items = examClasses.stream()
+                .map(this::getExamItem)
+                .filter(otherItemPredicate.or(containerItemPredicate))
+                .toList();
+
+        RootItem root = RootItem.builder()
+                .createdBy(System.getProperty("user.name"))
+                .creationTime(LocalDateTime.now())
+                .items(items)
                 .build();
-        System.out.println(root); // TODO remove syso
+        String serialized = jsonMapper.writeValueAsString(root);
+        System.out.println(serialized); // TODO remove syso
+        // TODO write to file
     }
 
     private Item getExamItem(Class<?> clazz) {
         Optional<TypeCheck> annotation = ReflectionUtils.getAnnotation(TypeCheck.class, clazz);
 
-        boolean includeUnannotatedFields = false, includeUnannotatedMethods = false;
+        boolean includeUnannotatedFields;
+        boolean includeUnannotatedMethods;
         ItemContainer item;
+
         if (annotation.isEmpty() || ReflectionUtils.skipped(clazz)) {
             item = ListItemContainer.builder()
                     .containerName(clazz.getCanonicalName())
                     .build();
+            includeUnannotatedFields = true;
+            includeUnannotatedMethods = true;
         } else {
             TypeCheck typeCheck = annotation.get();
             item = itemFactory.createItem(typeCheck, clazz);
@@ -64,25 +86,23 @@ public class ExamItemCollector implements Task {
         }
 
         // add fields
-        List<Item> subItems = new ArrayList<>(getFieldItems(clazz.getDeclaredFields()));
+        List<Item> subItems = new ArrayList<>();
         if (includeUnannotatedFields) {
-            // TODO
+            subItems.addAll(getFieldItems(clazz.getDeclaredFields()));
         }
 
         // add constructors
-        subItems.addAll(
-                getConstructorItems(clazz.getConstructors())
-        );
         if (includeUnannotatedMethods) {
-            // TODO
+            subItems.addAll(
+                    getConstructorItems(clazz.getConstructors())
+            );
         }
 
         // add methods
-        subItems.addAll(
-                getMethodItems(clazz.getDeclaredMethods())
-        );
         if (includeUnannotatedMethods) {
-            // TODO
+            subItems.addAll(
+                    getMethodItems(clazz.getDeclaredMethods())
+            );
         }
 
         // add custom tests

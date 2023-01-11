@@ -2,7 +2,9 @@ package hu.sed.evaluator.item.syntax;
 
 import hu.sed.evaluator.item.BaseItem;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
@@ -11,6 +13,8 @@ import java.lang.reflect.Modifier;
 
 @Data
 @SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public abstract class BaseSyntaxItem extends BaseItem {
 

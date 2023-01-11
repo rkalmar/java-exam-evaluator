@@ -1,4 +1,4 @@
-package hu.sed.evaluator.item;
+package hu.sed.evaluator.item.container;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -7,12 +7,21 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDateTime;
+
 @Data
-@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
+@SuperBuilder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public abstract class BaseItem implements Item {
+public class RootItem extends ListItemContainer {
 
-    int points;
+    String createdBy;
+
+    LocalDateTime creationTime;
+
+    @Override
+    public String getContainerName() {
+        return "root";
+    }
 }

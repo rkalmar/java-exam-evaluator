@@ -1,5 +1,11 @@
 package hu.sed.evaluator;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -37,24 +43,22 @@ public class MainModule extends AbstractModule {
         };
     }
 
+    @Provides
+    @Singleton
+    public JsonMapper getObjectMapper() {
+        return JsonMapper.builder()
+                .addModule(new Jdk8Module())
+                .addModule(new JavaTimeModule())
+                .configure(JsonGenerator.Feature.IGNORE_UNKNOWN, true)
+                .build();
+    }
+
     public static void main(String[] args) {
-        TaskArgument taskArgument = new TaskArgument(TaskType.GENERATE_EXAM_ITEMS, "hu.sed.evaluator.exam.y2020.zh2.task8.mysolution");
+        TaskArgument taskArgument = TaskArgument.builder()
+                .taskType(TaskType.GENERATE_EXAM_ITEMS)
+                .examPackage("hu.sed.evaluator.exam.y2020.zh2.task8.mysolution")
+                .build();
         Injector injector = Guice.createInjector(new MainModule(taskArgument));
         injector.getInstance(Task.class).execute(taskArgument);
-
-        //        TaskArgument taskArgument;
-//        try {
-//            taskArgument = ArgumentsUtil.parseArguments(args);
-//        } catch (MissingArgumentsException | IllegalArgumentException | InvalidArgumentException e) {
-//            log.error("Argument error: {}", e.getMessage(), e);
-//            return;
-//        }
-//
-//        switch (taskArgument.getTaskType()) {
-//            case UML_GENERATOR -> System.out.println();
-//            case EXAM_EVALUATOR -> System.out.println();
-//            case EXAM_VALIDATOR -> System.out.println();
-//        }
-//        log.error("Task arguments: {}", taskArgument);
     }
 }

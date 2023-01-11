@@ -3,7 +3,7 @@ package hu.sed.evaluator.task.item;
 import hu.sed.evaluator.annotation.syntax.ConstructorCheck;
 import hu.sed.evaluator.annotation.syntax.MethodCheck;
 import hu.sed.evaluator.item.ItemFactory;
-import hu.sed.evaluator.item.element.Type;
+import hu.sed.evaluator.item.element.TypeDefinition;
 import hu.sed.evaluator.item.syntax.MethodItem;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
@@ -54,7 +54,7 @@ public class MethodItemFactoryTest {
         // params
         assertThat(methodItem.getParameters().length).isEqualTo(2);
 
-        Type parameter = methodItem.getParameters()[0];
+        TypeDefinition parameter = methodItem.getParameters()[0];
         assertThat(parameter.getType()).isEqualTo("int");
         assertThat(parameter.getGenericTypes()).isEmpty();
 
@@ -63,7 +63,7 @@ public class MethodItemFactoryTest {
         assertThat(parameter.getGenericTypes()).isEmpty();
 
         // return value
-        Type returnType = methodItem.getReturnType();
+        TypeDefinition returnType = methodItem.getReturnType();
         assertThat(returnType.getType()).isEqualTo("void");
         assertThat(returnType.getGenericTypes()).isEmpty();
     }
@@ -91,25 +91,25 @@ public class MethodItemFactoryTest {
 
         // exceptions
         assertThat(methodItem.getExceptions().length).isEqualTo(1);
-        Type exception = methodItem.getExceptions()[0];
+        TypeDefinition exception = methodItem.getExceptions()[0];
         assertThat(exception.getType()).isEqualTo(TestException.class.getCanonicalName());
         assertThat(exception.getGenericTypes()).isEmpty();
 
         // params
         assertThat(methodItem.getParameters().length).isEqualTo(1);
 
-        Type parameter = methodItem.getParameters()[0];
+        TypeDefinition parameter = methodItem.getParameters()[0];
         assertThat(parameter.getType()).isEqualTo(List.class.getCanonicalName());
         assertThat(parameter.getGenericTypes().length).isEqualTo(1);
-        Type genericType = parameter.getGenericTypes()[0];
+        TypeDefinition genericType = parameter.getGenericTypes()[0];
         assertThat(genericType.getType()).isEqualTo(String.class.getCanonicalName());
         assertThat(genericType.getGenericTypes()).isEmpty();
 
         // return value
-        Type returnType = methodItem.getReturnType();
+        TypeDefinition returnType = methodItem.getReturnType();
         assertThat(returnType.getType()).isEqualTo(List.class.getCanonicalName());
         assertThat(returnType.getGenericTypes().length).isEqualTo(1);
-        Type returnGenericType = returnType.getGenericTypes()[0];
+        TypeDefinition returnGenericType = returnType.getGenericTypes()[0];
         assertThat(returnGenericType.getType()).isEqualTo(String.class.getCanonicalName());
         assertThat(returnGenericType.getGenericTypes()).isEmpty();
     }
@@ -138,14 +138,14 @@ public class MethodItemFactoryTest {
 
         // exceptions
         assertThat(constructorMethod.getExceptions().length).isEqualTo(1);
-        Type exception = constructorMethod.getExceptions()[0];
+        TypeDefinition exception = constructorMethod.getExceptions()[0];
         assertThat(exception.getType()).isEqualTo(Exception.class.getCanonicalName());
         assertThat(exception.getGenericTypes()).isEmpty();
 
         // params
         assertThat(constructorMethod.getParameters().length).isEqualTo(1);
 
-        Type parameter = constructorMethod.getParameters()[0];
+        TypeDefinition parameter = constructorMethod.getParameters()[0];
         assertThat(parameter.getType()).isEqualTo(ItemFactory.class.getCanonicalName());
         assertThat(parameter.getGenericTypes().length).isEqualTo(0);
     }

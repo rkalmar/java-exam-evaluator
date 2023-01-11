@@ -1,20 +1,22 @@
 package hu.sed.evaluator.item.syntax;
 
-import hu.sed.evaluator.item.element.Type;
+import hu.sed.evaluator.item.element.TypeDefinition;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
 
 @Data
 @SuperBuilder
-@EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class FieldItem extends BaseSyntaxItem {
 
-    Type type;
+    TypeDefinition type;
 
     @Override
     public String toString() {

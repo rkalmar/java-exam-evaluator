@@ -1,21 +1,25 @@
 package hu.sed.evaluator.item.syntax;
 
-import hu.sed.evaluator.item.element.Type;
+import hu.sed.evaluator.item.element.TypeDefinition;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
 @Data
 @SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class MethodItem extends BaseSyntaxItem {
 
-    Type returnType;
+    TypeDefinition returnType;
 
-    Type[] parameters;
+    TypeDefinition[] parameters;
 
-    Type[] exceptions;
+    TypeDefinition[] exceptions;
 
     boolean checkOverride;
 

@@ -2,6 +2,7 @@ package hu.sed.evaluator.exam.y2020.zh2.task8.mysolution;
 
 import hu.sed.evaluator.annotation.semantic.CustomTest;
 import hu.sed.evaluator.annotation.syntax.MethodCheck;
+import hu.sed.evaluator.exam.y2020.zh2.task8.mytests.Tests2;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -14,7 +15,7 @@ public final class Autopalya {
     public String nev;
     public List<Jarmu> jarmuvek;
 
-    @CustomTest(testClass = Autopalya.class)
+    @CustomTest(testClass = Tests2.class)
     public Autopalya(String nev) {
         this.nev = nev;
         this.jarmuvek = new ArrayList<>();

@@ -3,7 +3,9 @@ package hu.sed.evaluator.item.syntax;
 import hu.sed.evaluator.item.Item;
 import hu.sed.evaluator.item.container.ItemContainer;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
@@ -11,6 +13,8 @@ import java.util.List;
 
 @Data
 @SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class TypeItem extends BaseSyntaxItem implements ItemContainer {
 

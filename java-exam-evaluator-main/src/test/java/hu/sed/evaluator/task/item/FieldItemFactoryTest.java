@@ -2,7 +2,7 @@ package hu.sed.evaluator.task.item;
 
 import hu.sed.evaluator.annotation.syntax.FieldCheck;
 import hu.sed.evaluator.item.ItemFactory;
-import hu.sed.evaluator.item.element.Type;
+import hu.sed.evaluator.item.element.TypeDefinition;
 import hu.sed.evaluator.item.syntax.FieldItem;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
@@ -34,7 +34,7 @@ public class FieldItemFactoryTest {
         assertEquals(fieldName, fieldItem.getName());
         assertThat(fieldItem.getReadableModifiers()).isEqualTo("private static");
 
-        Type type = fieldItem.getType();
+        TypeDefinition type = fieldItem.getType();
         assertThat(type.getType()).isEqualTo("boolean");
         assertThat(type.getGenericTypes().length).isEqualTo(0);
         assertThat(fieldItem.getPoints()).isEqualTo(1);
@@ -54,7 +54,7 @@ public class FieldItemFactoryTest {
         // THEN
         assertThat(fieldItem.getName()).isEqualTo(fieldName);
         assertThat(fieldItem.getReadableModifiers()).isEqualTo("protected");
-        Type type = fieldItem.getType();
+        TypeDefinition type = fieldItem.getType();
         assertThat(type.getType()).isEqualTo(String.class.getCanonicalName());
         assertThat(type.getGenericTypes().length).isEqualTo(0);
         assertThat(fieldItem.getPoints()).isEqualTo(10);
@@ -75,11 +75,11 @@ public class FieldItemFactoryTest {
         assertThat(fieldItem.getName()).isEqualTo(fieldName);
         assertThat(fieldItem.getReadableModifiers()).isEqualTo("private");
 
-        Type type = fieldItem.getType();
+        TypeDefinition type = fieldItem.getType();
         assertThat(type.getType()).isEqualTo(List.class.getCanonicalName());
         assertThat(type.getGenericTypes().length).isEqualTo(1);
 
-        Type genericType = type.getGenericTypes()[0];
+        TypeDefinition genericType = type.getGenericTypes()[0];
         assertThat(genericType.getType()).isEqualTo(Double.class.getCanonicalName());
         assertThat(genericType.getGenericTypes().length).isEqualTo(0);
     }
@@ -98,7 +98,7 @@ public class FieldItemFactoryTest {
         assertThat(fieldItem.getName()).isEqualTo(fieldName);
         assertThat(fieldItem.getReadableModifiers()).isEqualTo("private");
 
-        Type type = fieldItem.getType();
+        TypeDefinition type = fieldItem.getType();
         assertThat(type.getType()).isEqualTo(List.class.getCanonicalName());
         assertThat(type.getGenericTypes().length).isEqualTo(1);
 
@@ -123,11 +123,11 @@ public class FieldItemFactoryTest {
         FieldItem fieldItem = itemFactory.createItem(genericField.getAnnotation(FieldCheck.class), genericField);
 
         // THEN
-        Type type = fieldItem.getType();
+        TypeDefinition type = fieldItem.getType();
         assertThat(type.getType()).isEqualTo(Map.class.getCanonicalName());
         assertThat(type.getGenericTypes().length).isEqualTo(2);
 
-        Type genericType = type.getGenericTypes()[0];
+        TypeDefinition genericType = type.getGenericTypes()[0];
         assertThat(genericType.getType()).isEqualTo(Integer.class.getCanonicalName());
         assertThat(genericType.getGenericTypes().length).isEqualTo(0);
 

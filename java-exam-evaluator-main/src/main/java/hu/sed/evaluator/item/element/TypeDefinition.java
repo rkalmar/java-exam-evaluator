@@ -1,18 +1,24 @@
 package hu.sed.evaluator.item.element;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.util.Arrays;
 
 @Data
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public final class Type {
+public final class TypeDefinition {
 
     String type;
 
     @Builder.Default
-    Type[] genericTypes = {};
+    TypeDefinition[] genericTypes = {};
 
     @Override
     public String toString() {

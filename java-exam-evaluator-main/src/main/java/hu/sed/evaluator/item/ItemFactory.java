@@ -6,7 +6,7 @@ import hu.sed.evaluator.annotation.syntax.ConstructorCheck;
 import hu.sed.evaluator.annotation.syntax.FieldCheck;
 import hu.sed.evaluator.annotation.syntax.MethodCheck;
 import hu.sed.evaluator.annotation.syntax.TypeCheck;
-import hu.sed.evaluator.item.element.Type;
+import hu.sed.evaluator.item.element.TypeDefinition;
 import hu.sed.evaluator.item.semantic.TestItem;
 import hu.sed.evaluator.item.syntax.FieldItem;
 import hu.sed.evaluator.item.syntax.MethodItem;
@@ -24,12 +24,13 @@ import java.util.List;
 public final class ItemFactory {
 
     public TypeItem createItem(TypeCheck check, Class<?> clazz) {
+        boolean checkParentClazz = clazz.getSuperclass() != null && check.checkParentClazz();
         return TypeItem.builder()
                 .checkModifiers(check.checkModifiers())
                 .modifiers(clazz.getModifiers())
-                .name(clazz.getSuperclass() == null ? null : clazz.getSuperclass().getCanonicalName())
-                .checkParentClazz(clazz.getSuperclass() == null && check.checkParentClazz())
-                .parentClazz(clazz.getSuperclass().getCanonicalName())
+                .name(clazz.getCanonicalName())
+                .checkParentClazz(checkParentClazz)
+                .parentClazz(checkParentClazz ? clazz.getSuperclass().getCanonicalName() : null)
                 .checkInterfaces(check.checkInterfaces())
                 .implementedInterfaces(Arrays.stream(clazz.getInterfaces()).map(Class::getCanonicalName).toArray(String[]::new))
                 .points(check.maxPoint())
@@ -53,7 +54,7 @@ public final class ItemFactory {
         return MethodItem.builder()
                 .name(method.getName())
                 .returnType(
-                        Type.builder()
+                        TypeDefinition.builder()
                                 .type(method.getReturnType().getCanonicalName())
                                 .genericTypes(buildParameterizedType(method.getGenericReturnType()))
                                 .build()
@@ -74,7 +75,7 @@ public final class ItemFactory {
         return FieldItem.builder()
                 .name(field.getName())
                 .type(
-                        Type.builder()
+                        TypeDefinition.builder()
                                 .type(field.getType().getCanonicalName())
                                 .genericTypes(buildParameterizedType(field.getGenericType()))
                                 .build()
@@ -95,28 +96,28 @@ public final class ItemFactory {
                 .build();
     }
 
-    private Type[] buildParameterizedTypeFromList(List<java.lang.reflect.Type> types) {
-        List<Type> result = new ArrayList<>();
+    private TypeDefinition[] buildParameterizedTypeFromList(List<java.lang.reflect.Type> types) {
+        List<TypeDefinition> result = new ArrayList<>();
         for (java.lang.reflect.Type type : types) {
-            result.add(Type.builder()
+            result.add(TypeDefinition.builder()
                     .type(toTypeName(type))
                     .genericTypes(buildParameterizedType(type))
                     .build());
         }
-        return result.toArray(Type[]::new);
+        return result.toArray(TypeDefinition[]::new);
     }
 
-    private Type[] buildParameterizedType(java.lang.reflect.Type type) {
-        List<Type> result = new ArrayList<>();
+    private TypeDefinition[] buildParameterizedType(java.lang.reflect.Type type) {
+        List<TypeDefinition> result = new ArrayList<>();
         if (type instanceof ParameterizedType parameterizedType) {
             for (java.lang.reflect.Type typeArgument : parameterizedType.getActualTypeArguments()) {
-                result.add(Type.builder()
+                result.add(TypeDefinition.builder()
                         .type(toTypeName(typeArgument))
                         .genericTypes(buildParameterizedType(typeArgument))
                         .build());
             }
         }
-        return result.toArray(Type[]::new);
+        return result.toArray(TypeDefinition[]::new);
     }
 
     private String toTypeName(java.lang.reflect.Type type) {
