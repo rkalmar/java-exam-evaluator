@@ -68,16 +68,14 @@ public class ExamItemCollector implements Task {
     private Item getExamItem(Class<?> clazz) {
         Optional<TypeCheck> annotation = ReflectionUtils.getAnnotation(TypeCheck.class, clazz);
 
-        boolean includeUnannotatedFields;
-        boolean includeUnannotatedMethods;
+        boolean includeUnannotatedFields = false;
+        boolean includeUnannotatedMethods = false;
         ItemContainer item;
 
         if (annotation.isEmpty() || ReflectionUtils.skipped(clazz)) {
             item = ListItemContainer.builder()
                     .containerName(clazz.getCanonicalName())
                     .build();
-            includeUnannotatedFields = true;
-            includeUnannotatedMethods = true;
         } else {
             TypeCheck typeCheck = annotation.get();
             item = itemFactory.createItem(typeCheck, clazz);
@@ -86,23 +84,21 @@ public class ExamItemCollector implements Task {
         }
 
         // add fields
-        List<Item> subItems = new ArrayList<>();
+        List<Item> subItems = new ArrayList<>(getFieldItems(clazz.getDeclaredFields()));
         if (includeUnannotatedFields) {
-            subItems.addAll(getFieldItems(clazz.getDeclaredFields()));
+            // TODO
         }
 
         // add constructors
+        subItems.addAll(getConstructorItems(clazz.getConstructors()));
         if (includeUnannotatedMethods) {
-            subItems.addAll(
-                    getConstructorItems(clazz.getConstructors())
-            );
+            // TODO
         }
 
         // add methods
+        subItems.addAll(getMethodItems(clazz.getDeclaredMethods()));
         if (includeUnannotatedMethods) {
-            subItems.addAll(
-                    getMethodItems(clazz.getDeclaredMethods())
-            );
+            // TODO
         }
 
         // add custom tests
