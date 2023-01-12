@@ -29,11 +29,11 @@ public class ItemFactory {
         return TypeItem.builder()
                 .checkModifiers(check.checkModifiers())
                 .modifiers(clazz.getModifiers())
-                .name(clazz.getCanonicalName())
+                .name(clazz.getName())
                 .checkParentClazz(checkParentClazz)
-                .parentClazz(checkParentClazz ? clazz.getSuperclass().getCanonicalName() : null)
+                .parentClazz(checkParentClazz ? clazz.getSuperclass().getName() : null)
                 .checkInterfaces(check.checkInterfaces())
-                .implementedInterfaces(Arrays.stream(clazz.getInterfaces()).map(Class::getCanonicalName).toArray(String[]::new))
+                .implementedInterfaces(Arrays.stream(clazz.getInterfaces()).map(Class::getName).toArray(String[]::new))
                 .score(check.score())
                 .build();
     }
@@ -45,7 +45,7 @@ public class ItemFactory {
                 .modifiers(constructor.getModifiers())
                 .checkModifiers(constructorCheck.checkModifiers())
                 .checkExceptions(constructorCheck.checkExceptions())
-                .containerClass(constructor.getDeclaringClass().getCanonicalName())
+                .containerClass(constructor.getDeclaringClass().getName())
                 .score(constructorCheck.score())
                 .build();
     }
@@ -55,7 +55,7 @@ public class ItemFactory {
                 .name(method.getName())
                 .returnType(
                         TypeDefinition.builder()
-                                .type(method.getReturnType().getCanonicalName())
+                                .type(method.getReturnType().getName())
                                 .genericTypes(buildParameterizedType(method.getGenericReturnType()))
                                 .build()
                 )
@@ -65,7 +65,7 @@ public class ItemFactory {
                 .checkModifiers(methodCheck.checkModifiers())
                 .checkExceptions(methodCheck.checkExceptions())
                 .checkOverride(methodCheck.checkOverride())
-                .containerClass(method.getDeclaringClass().getCanonicalName())
+                .containerClass(method.getDeclaringClass().getName())
                 .score(methodCheck.score())
                 .build();
     }
@@ -75,28 +75,32 @@ public class ItemFactory {
         return FieldItem.builder()
                 .name(field.getName())
                 .type(
-                        TypeDefinition.builder()
-                                .type(field.getType().getCanonicalName())
-                                .genericTypes(buildParameterizedType(field.getGenericType()))
-                                .build()
+                        createTypeDef(field)
                 )
                 .modifiers(field.getModifiers())
                 .checkModifiers(fieldCheck.checkModifiers())
                 .score(fieldCheck.score())
-                .containerClass(field.getDeclaringClass().getCanonicalName())
+                .containerClass(field.getDeclaringClass().getName())
+                .build();
+    }
+
+    public TypeDefinition createTypeDef(Field field) {
+        return TypeDefinition.builder()
+                .type(field.getType().getName())
+                .genericTypes(buildParameterizedType(field.getGenericType()))
                 .build();
     }
 
     public TestItem createTestItem(CustomTest customTest) {
         return TestItem.builder()
-                .testClass(customTest.testClass().getCanonicalName())
+                .testClass(customTest.testClass().getName())
                 .testMethods(customTest.method())
                 .description(customTest.description())
                 .score(customTest.score())
                 .build();
     }
 
-    private TypeDefinition[] buildParameterizedTypeFromList(List<java.lang.reflect.Type> types) {
+    public TypeDefinition[] buildParameterizedTypeFromList(List<java.lang.reflect.Type> types) {
         List<TypeDefinition> result = new ArrayList<>();
         for (java.lang.reflect.Type type : types) {
             result.add(TypeDefinition.builder()
@@ -107,7 +111,7 @@ public class ItemFactory {
         return result.toArray(TypeDefinition[]::new);
     }
 
-    private TypeDefinition[] buildParameterizedType(java.lang.reflect.Type type) {
+    public TypeDefinition[] buildParameterizedType(java.lang.reflect.Type type) {
         List<TypeDefinition> result = new ArrayList<>();
         if (type instanceof ParameterizedType parameterizedType) {
             for (java.lang.reflect.Type typeArgument : parameterizedType.getActualTypeArguments()) {
@@ -123,6 +127,6 @@ public class ItemFactory {
     private String toTypeName(java.lang.reflect.Type type) {
         //noinspection rawtypes
         return type instanceof ParameterizedType parameterizedType1 ?
-                parameterizedType1.getRawType().getTypeName() : ((Class) type).getCanonicalName();
+                parameterizedType1.getRawType().getTypeName() : ((Class) type).getName();
     }
 }

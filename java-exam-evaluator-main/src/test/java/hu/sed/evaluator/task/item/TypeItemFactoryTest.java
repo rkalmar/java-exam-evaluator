@@ -51,7 +51,7 @@ public class TypeItemFactoryTest {
         assertThat(typeItem.getParentClazz()).isEqualTo("java.lang.Object");
         assertThat(typeItem.getImplementedInterfaces()).isNotNull();
         assertThat(typeItem.getImplementedInterfaces().length).isEqualTo(1);
-        assertThat(typeItem.getImplementedInterfaces()[0]).isEqualTo("hu.sed.evaluator.task.item.TypeItemFactoryTest.TestInterface");
+        assertThat(typeItem.getImplementedInterfaces()[0]).isEqualTo("hu.sed.evaluator.task.item.TypeItemFactoryTest$TestInterface");
         assertThat(typeItem.getItems()).isNull();
     }
 
@@ -70,7 +70,7 @@ public class TypeItemFactoryTest {
         assertThat(typeItem.isCheckInterfaces()).isTrue();
         assertThat(typeItem.isCheckParentClazz()).isTrue();
         assertThat(typeItem.getScore()).isEqualTo(1);
-        assertThat(typeItem.getParentClazz()).isEqualTo("hu.sed.evaluator.task.item.TypeItemFactoryTest.AbstractTestClass");
+        assertThat(typeItem.getParentClazz()).isEqualTo("hu.sed.evaluator.task.item.TypeItemFactoryTest$AbstractTestClass");
         assertThat(typeItem.getImplementedInterfaces()).isNotNull();
         assertThat(typeItem.getImplementedInterfaces()).isEmpty();
         assertThat(typeItem.getItems()).isNull();

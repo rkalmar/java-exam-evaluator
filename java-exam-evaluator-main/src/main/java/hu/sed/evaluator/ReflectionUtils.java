@@ -75,11 +75,21 @@ public class ReflectionUtils {
         return List.of(annotatedElement.getDeclaredAnnotationsByType(CustomTest.class));
     }
 
-
     public List<AnnotatedElement> getClassMembers(Class<?> clazz) {
         List<AnnotatedElement> members = new ArrayList<>(List.of(clazz.getDeclaredFields()));
         members.addAll(List.of(clazz.getConstructors()));
         members.addAll(List.of(clazz.getDeclaredMethods()));
         return members;
+    }
+
+    public Field getFieldByName(String containerClass, String fieldName) throws ClassNotFoundException, NoSuchFieldException {
+        return Class.forName(containerClass).getDeclaredField(fieldName);
+    }
+
+    public Field getMethodByName(String containerClass, String methodName) throws ClassNotFoundException, NoSuchMethodException {
+        return Arrays.stream(Class.forName(containerClass).getDeclaredFields())
+                .filter(method -> method.getName().equals(methodName))
+                .findFirst()
+                .orElseThrow(NoSuchMethodException::new);
     }
 }

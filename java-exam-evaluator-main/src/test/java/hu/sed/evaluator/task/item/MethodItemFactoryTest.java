@@ -91,14 +91,14 @@ public class MethodItemFactoryTest {
         // exceptions
         assertThat(methodItem.getExceptions().length).isEqualTo(1);
         TypeDefinition exception = methodItem.getExceptions()[0];
-        assertThat(exception.getType()).isEqualTo(TestException.class.getCanonicalName());
+        assertThat(exception.getType()).isEqualTo(TestException.class.getName());
         assertThat(exception.getGenericTypes()).isEmpty();
 
         // params
         assertThat(methodItem.getParameters().length).isEqualTo(1);
 
         TypeDefinition parameter = methodItem.getParameters()[0];
-        assertThat(parameter.getType()).isEqualTo(List.class.getCanonicalName());
+        assertThat(parameter.getType()).isEqualTo(List.class.getName());
         assertThat(parameter.getGenericTypes().length).isEqualTo(1);
         TypeDefinition genericType = parameter.getGenericTypes()[0];
         assertThat(genericType.getType()).isEqualTo(String.class.getCanonicalName());
@@ -132,7 +132,7 @@ public class MethodItemFactoryTest {
         assertThat(constructorMethod.isCheckOverride()).isFalse();
         assertThat(constructorMethod.isCheckExceptions()).isTrue();
         assertThat(constructorMethod.getScore()).isEqualTo(1);
-        assertThat(constructorMethod.getContainerClass()).isEqualTo("hu.sed.evaluator.task.item.MethodItemFactoryTest.TestClass");
+        assertThat(constructorMethod.getContainerClass()).isEqualTo("hu.sed.evaluator.task.item.MethodItemFactoryTest$TestClass");
 
         // exceptions
         assertThat(constructorMethod.getExceptions().length).isEqualTo(1);
