@@ -1,8 +1,6 @@
 package hu.sed.evaluator;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -15,8 +13,8 @@ import hu.sed.evaluator.task.ExamEvaluator;
 import hu.sed.evaluator.task.ExamItemCollector;
 import hu.sed.evaluator.task.ExamValidator;
 import hu.sed.evaluator.task.Task;
-import hu.sed.evaluator.task.TaskArgument;
-import hu.sed.evaluator.task.TaskType;
+import hu.sed.evaluator.task.argument.TaskArgument;
+import hu.sed.evaluator.task.argument.TaskType;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

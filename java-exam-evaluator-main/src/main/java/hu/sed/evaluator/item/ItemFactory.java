@@ -40,8 +40,8 @@ public class ItemFactory {
 
     public ConstructorItem createItem(ConstructorCheck constructorCheck, Constructor<?> constructor) {
         return ConstructorItem.builder()
-                .parameters(buildParameterizedTypeFromList(Arrays.asList(constructor.getGenericParameterTypes())))
-                .exceptions(buildParameterizedTypeFromList(Arrays.asList(constructor.getGenericExceptionTypes())))
+                .parameters(buildParameterizedTypeFromList(constructor.getGenericParameterTypes()))
+                .exceptions(buildParameterizedTypeFromList(constructor.getGenericExceptionTypes()))
                 .modifiers(constructor.getModifiers())
                 .checkModifiers(constructorCheck.checkModifiers())
                 .checkExceptions(constructorCheck.checkExceptions())
@@ -53,14 +53,9 @@ public class ItemFactory {
     public MethodItem createItem(MethodCheck methodCheck, Method method) {
         return MethodItem.builder()
                 .name(method.getName())
-                .returnType(
-                        TypeDefinition.builder()
-                                .type(method.getReturnType().getName())
-                                .genericTypes(buildParameterizedType(method.getGenericReturnType()))
-                                .build()
-                )
-                .parameters(buildParameterizedTypeFromList(Arrays.asList(method.getGenericParameterTypes())))
-                .exceptions(buildParameterizedTypeFromList(Arrays.asList(method.getGenericExceptionTypes())))
+                .returnType(createReturnTypeDef(method))
+                .parameters(buildParameterizedTypeFromList(method.getGenericParameterTypes()))
+                .exceptions(buildParameterizedTypeFromList(method.getGenericExceptionTypes()))
                 .modifiers(method.getModifiers())
                 .checkModifiers(methodCheck.checkModifiers())
                 .checkExceptions(methodCheck.checkExceptions())
@@ -91,6 +86,13 @@ public class ItemFactory {
                 .build();
     }
 
+    public TypeDefinition createReturnTypeDef(Method method) {
+        return TypeDefinition.builder()
+                .type(method.getReturnType().getName())
+                .genericTypes(buildParameterizedType(method.getGenericReturnType()))
+                .build();
+    }
+
     public TestItem createTestItem(CustomTest customTest) {
         return TestItem.builder()
                 .testClass(customTest.testClass().getName())
@@ -100,7 +102,7 @@ public class ItemFactory {
                 .build();
     }
 
-    public TypeDefinition[] buildParameterizedTypeFromList(List<java.lang.reflect.Type> types) {
+    public TypeDefinition[] buildParameterizedTypeFromList(java.lang.reflect.Type[] types) {
         List<TypeDefinition> result = new ArrayList<>();
         for (java.lang.reflect.Type type : types) {
             result.add(TypeDefinition.builder()

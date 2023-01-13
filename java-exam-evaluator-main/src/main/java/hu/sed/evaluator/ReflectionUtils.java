@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @UtilityClass
 public class ReflectionUtils {
@@ -86,10 +87,9 @@ public class ReflectionUtils {
         return Class.forName(containerClass).getDeclaredField(fieldName);
     }
 
-    public Field getMethodByName(String containerClass, String methodName) throws ClassNotFoundException, NoSuchMethodException {
-        return Arrays.stream(Class.forName(containerClass).getDeclaredFields())
+    public List<Method> getMethodsByName(String containerClass, String methodName) throws ClassNotFoundException {
+        return Arrays.stream(Class.forName(containerClass).getDeclaredMethods())
                 .filter(method -> method.getName().equals(methodName))
-                .findFirst()
-                .orElseThrow(NoSuchMethodException::new);
+                .collect(Collectors.toList());
     }
 }

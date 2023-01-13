@@ -12,6 +12,9 @@ import lombok.experimental.FieldDefaults;
 
 import java.lang.reflect.Field;
 
+import static hu.sed.evaluator.task.evaluators.CheckedElement.EXISTANCE;
+import static hu.sed.evaluator.task.evaluators.CheckedElement.MODIFIERS;
+
 @Singleton
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor(onConstructor = @__(@Inject))
@@ -25,31 +28,26 @@ public class FieldItemEvaluator implements Evaluator<FieldItem> {
 
     @Override
     public ScoredItem evaluate(FieldItem item) {
-        ScoredItem.ScoredItemBuilder scoredItemBuilder = ScoredItem.builder()
-                .item(item);
+        ScoredItem scoredItem = ScoredItem.builder()
+                .item(item)
+                .build();
         try {
             Field field = ReflectionUtils.getFieldByName(item.getContainerClass(), item.getName());
             if (!checkType(field, item.getType())) {
                 throw new NoSuchFieldException();
             }
 
-            scoredItemBuilder.correctElement(CheckedElement.EXISTANCE);
+            scoredItem.successfulElement(EXISTANCE);
 
             if (item.isCheckModifiers()) {
-                if (evaluatorService.checkModifiers(field.getModifiers(), item.getModifiers())) {
-                    scoredItemBuilder.correctElement(CheckedElement.MODIFIERS);
-                } else {
-                    scoredItemBuilder.incorrectElement(CheckedElement.MODIFIERS);
-                }
+                scoredItem.element(MODIFIERS,
+                        evaluatorService.checkModifiers(field.getModifiers(), item.getModifiers()));
             }
-            return scoredItemBuilder.build();
 
         } catch (ClassNotFoundException | NoSuchFieldException e) {
-            return ScoredItem.builder()
-                    .incorrectElement(CheckedElement.EXISTANCE)
-                    .item(item)
-                    .build();
+            scoredItem.unsuccessfulElement(EXISTANCE);
         }
+        return scoredItem;
     }
 
     public boolean checkType(Field field, TypeDefinition expectedType) {

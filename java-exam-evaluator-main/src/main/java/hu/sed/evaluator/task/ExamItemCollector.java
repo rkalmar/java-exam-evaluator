@@ -10,6 +10,7 @@ import hu.sed.evaluator.item.ItemFactory;
 import hu.sed.evaluator.item.container.ItemContainer;
 import hu.sed.evaluator.item.container.ListItemContainer;
 import hu.sed.evaluator.item.container.RootItem;
+import hu.sed.evaluator.task.argument.TaskArgument;
 import hu.sed.evaluator.task.collectors.ConstructorItemCollector;
 import hu.sed.evaluator.task.collectors.CustomTestItemCollector;
 import hu.sed.evaluator.task.collectors.FieldItemCollector;

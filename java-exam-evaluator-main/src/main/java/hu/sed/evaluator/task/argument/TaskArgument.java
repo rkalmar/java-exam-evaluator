@@ -1,4 +1,4 @@
-package hu.sed.evaluator.task;
+package hu.sed.evaluator.task.argument;
 
 import lombok.AccessLevel;
 import lombok.Builder;

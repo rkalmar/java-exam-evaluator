@@ -10,9 +10,12 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.lang.reflect.Field;
+import java.util.Map;
 
 import static hu.sed.evaluator.task.evaluators.CheckedElement.*;
 import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
@@ -47,9 +50,11 @@ public class FieldItemEvaluatorTest {
         assertThat(scoredItem.getScore()).isEqualTo(1.0);
         assertThat(scoredItem.getChildren()).isEmpty();
         assertThat(scoredItem.getItem()).isEqualTo(fieldItem);
-        assertThat(scoredItem.getIncorrectElements()).isEmpty();
-        assertThat(scoredItem.getCorrectElements())
-                .containsExactlyInAnyOrder(EXISTANCE, MODIFIERS);
+
+        Map<CheckedElement, Boolean> checkedElements = scoredItem.getCheckedElements();
+        assertThat(checkedElements.keySet()).containsExactlyInAnyOrder(EXISTANCE, MODIFIERS);
+        assertTrue(checkedElements.get(EXISTANCE));
+        assertTrue(checkedElements.get(MODIFIERS));
     }
 
     @Test
@@ -66,9 +71,10 @@ public class FieldItemEvaluatorTest {
         assertThat(scoredItem.getScore()).isEqualTo(0.0);
         assertThat(scoredItem.getChildren()).isEmpty();
         assertThat(scoredItem.getItem()).isEqualTo(fieldItem);
-        assertThat(scoredItem.getCorrectElements()).isEmpty();
-        assertThat(scoredItem.getIncorrectElements())
-                .containsExactlyInAnyOrder(EXISTANCE);
+
+        Map<CheckedElement, Boolean> checkedElements = scoredItem.getCheckedElements();
+        assertThat(checkedElements.keySet()).containsExactlyInAnyOrder(EXISTANCE);
+        assertFalse(checkedElements.get(EXISTANCE));
     }
 
     @Test
@@ -86,8 +92,11 @@ public class FieldItemEvaluatorTest {
         assertThat(scoredItem.getScore()).isEqualTo(5);
         assertThat(scoredItem.getChildren()).isEmpty();
         assertThat(scoredItem.getItem()).isEqualTo(fieldItem);
-        assertThat(scoredItem.getCorrectElements()).contains(EXISTANCE);
-        assertThat(scoredItem.getIncorrectElements()).contains(MODIFIERS);
+
+        Map<CheckedElement, Boolean> checkedElements = scoredItem.getCheckedElements();
+        assertThat(checkedElements.keySet()).containsExactlyInAnyOrder(EXISTANCE, MODIFIERS);
+        assertTrue(checkedElements.get(EXISTANCE));
+        assertFalse(checkedElements.get(MODIFIERS));
     }
 
     @SneakyThrows

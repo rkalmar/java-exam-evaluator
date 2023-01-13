@@ -17,20 +17,24 @@ public class EvaluatorService {
     }
 
     public boolean checkType(TypeDefinition actualType, TypeDefinition expectedType) {
-        if (actualType.getType().equals(expectedType.getType())
-                || actualType.getGenericTypes().length == expectedType.getGenericTypes().length) {
+        if (!actualType.getType().equals(expectedType.getType())) {
             return false;
         }
 
-        for (int i = 0; i < actualType.getGenericTypes().length; i++) {
-            TypeDefinition actualGenericType = actualType.getGenericTypes()[i];
-            TypeDefinition expectedGenericType = expectedType.getGenericTypes()[i];
+        return checkTypes(actualType.getGenericTypes(), expectedType.getGenericTypes());
+    }
+
+    public boolean checkTypes(TypeDefinition[] actualTypes, TypeDefinition[] expectedTypes) {
+        if (actualTypes.length != expectedTypes.length) {
+            return false;
+        }
+        for (int i = 0; i < actualTypes.length; i++) {
+            TypeDefinition actualGenericType = actualTypes[i];
+            TypeDefinition expectedGenericType = expectedTypes[i];
             if (!checkType(actualGenericType, expectedGenericType)) {
                 return false;
             }
         }
-
         return true;
     }
-
 }

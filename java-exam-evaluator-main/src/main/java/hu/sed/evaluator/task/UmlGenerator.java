@@ -1,5 +1,6 @@
 package hu.sed.evaluator.task;
 
+import hu.sed.evaluator.task.argument.TaskArgument;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

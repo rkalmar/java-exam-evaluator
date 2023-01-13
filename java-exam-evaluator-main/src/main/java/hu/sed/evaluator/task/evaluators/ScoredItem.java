@@ -5,11 +5,12 @@ import hu.sed.evaluator.item.Item;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Singular;
 import lombok.experimental.FieldDefaults;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Builder
@@ -21,14 +22,26 @@ public class ScoredItem {
     @Builder.Default
     List<Item> children = new ArrayList<>();
 
-    @Singular
-    List<CheckedElement> correctElements;
+    @Builder.Default
+    Map<CheckedElement, Boolean> checkedElements = new HashMap<>();
 
-    @Singular
-    List<CheckedElement> incorrectElements;
+    public final void successfulElement(CheckedElement checkedElement) {
+        element(checkedElement, true);
+    }
+
+    public final void unsuccessfulElement(CheckedElement checkedElement) {
+        element(checkedElement, false);
+    }
+
+    public final void element(CheckedElement checkedElement, boolean checkResult) {
+        checkedElements.put(checkedElement, checkResult);
+    }
 
     public final double getScore() {
-        int checkedItemCount = correctElements.size() + incorrectElements.size();
-        return ((double) item.getScore() / checkedItemCount) * correctElements.size();
+        if (checkedElements.size() == 0) {
+           return 0;
+        }
+        long successfulCount = checkedElements.values().stream().filter(value -> value).count();
+        return ((double) item.getScore() / checkedElements.size()) * successfulCount;
     }
 }
