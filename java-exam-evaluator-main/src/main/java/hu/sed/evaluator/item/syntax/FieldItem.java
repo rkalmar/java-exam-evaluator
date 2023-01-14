@@ -21,7 +21,7 @@ public class FieldItem extends BaseSyntaxItem {
     @Override
     public String toString() {
         return "FieldItem{" +
-                ", type=" + type +
+                "type=" + type +
                 ", " + super.toString() +
                 '}';
     }

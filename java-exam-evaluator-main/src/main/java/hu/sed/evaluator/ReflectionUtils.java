@@ -92,4 +92,8 @@ public class ReflectionUtils {
                 .filter(method -> method.getName().equals(methodName))
                 .collect(Collectors.toList());
     }
+
+    public List<Constructor<?>> getConstructorsByName(String containerClass) throws ClassNotFoundException {
+        return Arrays.asList(Class.forName(containerClass).getDeclaredConstructors());
+    }
 }

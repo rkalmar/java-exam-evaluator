@@ -20,6 +20,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
+import static com.google.inject.matcher.Matchers.annotatedWith;
+
 /**
  * @author rkalmar
  */
@@ -29,6 +31,15 @@ import lombok.extern.slf4j.Slf4j;
 public class MainModule extends AbstractModule {
 
     TaskArgument argument;
+
+    public static void main(String[] args) {
+        TaskArgument taskArgument = TaskArgument.builder()
+                .taskType(TaskType.GENERATE_EXAM_ITEMS)
+                .examPackage("hu.sed.evaluator.exam.y2020.zh2.task8.mysolution")
+                .build();
+        Injector injector = Guice.createInjector(new MainModule(taskArgument));
+        injector.getInstance(Task.class).execute(taskArgument);
+    }
 
     @Provides
     @Singleton
@@ -49,14 +60,5 @@ public class MainModule extends AbstractModule {
                 .addModule(new JavaTimeModule())
                 .configure(JsonGenerator.Feature.IGNORE_UNKNOWN, true)
                 .build();
-    }
-
-    public static void main(String[] args) {
-        TaskArgument taskArgument = TaskArgument.builder()
-                .taskType(TaskType.GENERATE_EXAM_ITEMS)
-                .examPackage("hu.sed.evaluator.exam.y2020.zh2.task8.mysolution")
-                .build();
-        Injector injector = Guice.createInjector(new MainModule(taskArgument));
-        injector.getInstance(Task.class).execute(taskArgument);
     }
 }

@@ -4,7 +4,7 @@ import java.lang.annotation.Annotation;
 
 public final class DefaultMethodCheck {
     public static final boolean checkModifiers = true;
-    public static final boolean checkOverride = true;
+    public static final boolean checkOverride = false;
     public static final boolean checkExceptions = true;
 
     public static MethodCheck defaultCheck(int score) {
@@ -15,7 +15,7 @@ public final class DefaultMethodCheck {
             }
 
             @Override
-            public boolean checkOverride() {
+            public boolean checkOverrideAnnotation() {
                 return checkOverride;
             }
 

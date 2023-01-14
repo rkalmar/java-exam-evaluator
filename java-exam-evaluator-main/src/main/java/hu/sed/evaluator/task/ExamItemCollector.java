@@ -32,22 +32,16 @@ import java.util.Optional;
 @RequiredArgsConstructor(onConstructor = @__(@Inject))
 public class ExamItemCollector implements Task {
 
-    @Inject
     ItemFactory itemFactory;
 
-    @Inject
     JsonMapper jsonMapper;
 
-    @Inject
     FieldItemCollector fieldItemCollector;
 
-    @Inject
     MethodItemCollector methodItemCollector;
 
-    @Inject
     ConstructorItemCollector constructorItemCollector;
 
-    @Inject
     CustomTestItemCollector customTestItemCollector;
 
     @SneakyThrows
@@ -66,10 +60,11 @@ public class ExamItemCollector implements Task {
                 .createdBy(System.getProperty("user.name"))
                 .creationTime(LocalDateTime.now())
                 .items(items)
+                .containerName(argument.getExamPackage())
                 .build();
         String serialized = jsonMapper.writeValueAsString(root);
         System.out.println(serialized); // TODO remove syso
-        // TODO write to file
+        // TODO write to file or to some
     }
 
     private Item getExamItem(Class<?> clazz) {

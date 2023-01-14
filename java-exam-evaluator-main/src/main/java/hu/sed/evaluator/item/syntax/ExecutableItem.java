@@ -1,5 +1,6 @@
-package hu.sed.evaluator.item.container;
+package hu.sed.evaluator.item.syntax;
 
+import hu.sed.evaluator.item.element.TypeDefinition;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,17 +8,16 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDateTime;
-
 @Data
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class RootItem extends ListItemContainer {
+public abstract class ExecutableItem extends BaseSyntaxItem {
 
-    String createdBy;
+    TypeDefinition[] parameters;
 
-    LocalDateTime creationTime;
+    TypeDefinition[] exceptions;
 
+    boolean checkExceptions;
 }

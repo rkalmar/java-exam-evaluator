@@ -1,6 +1,7 @@
 package hu.sed.evaluator.task.evaluators;
 
 import hu.sed.evaluator.item.element.TypeDefinition;
+import hu.sed.evaluator.task.evaluators.syntax.EvaluatorService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;

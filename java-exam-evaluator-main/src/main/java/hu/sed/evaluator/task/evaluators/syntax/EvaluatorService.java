@@ -1,4 +1,4 @@
-package hu.sed.evaluator.task.evaluators;
+package hu.sed.evaluator.task.evaluators.syntax;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -6,6 +6,8 @@ import hu.sed.evaluator.item.element.TypeDefinition;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+
+import java.lang.reflect.Method;
 
 @Singleton
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -36,5 +38,9 @@ public class EvaluatorService {
             }
         }
         return true;
+    }
+
+    public boolean checkOverrideAnnotation(Method method) {
+        return method.isAnnotationPresent(Override.class);
     }
 }

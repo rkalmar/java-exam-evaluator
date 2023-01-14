@@ -59,7 +59,7 @@ public class ItemFactory {
                 .modifiers(method.getModifiers())
                 .checkModifiers(methodCheck.checkModifiers())
                 .checkExceptions(methodCheck.checkExceptions())
-                .checkOverride(methodCheck.checkOverride())
+                .checkOverrideAnnotation(methodCheck.checkOverrideAnnotation())
                 .containerClass(method.getDeclaringClass().getName())
                 .score(methodCheck.score())
                 .build();

@@ -3,6 +3,8 @@ package hu.sed.evaluator.task.evaluators;
 import hu.sed.evaluator.annotation.syntax.FieldCheck;
 import hu.sed.evaluator.item.ItemFactory;
 import hu.sed.evaluator.item.syntax.FieldItem;
+import hu.sed.evaluator.task.evaluators.syntax.EvaluatorService;
+import hu.sed.evaluator.task.evaluators.syntax.FieldItemEvaluator;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

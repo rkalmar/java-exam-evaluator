@@ -18,7 +18,6 @@ import java.util.List;
 @RequiredArgsConstructor(onConstructor = @__(@Inject))
 public final class CustomTestItemCollector {
 
-    @Inject
     ItemFactory itemFactory;
 
     public List<TestItem> collectItems(Class<?> clazz) {

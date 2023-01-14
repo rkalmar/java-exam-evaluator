@@ -19,7 +19,6 @@ import java.util.function.Function;
 @RequiredArgsConstructor(onConstructor = @__(@Inject))
 public final class MethodItemCollector extends ItemCollector<MethodItem, Method> {
 
-    @Inject
     ItemFactory itemFactory;
 
     @Override

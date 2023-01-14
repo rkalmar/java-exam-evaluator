@@ -33,7 +33,7 @@ public class MethodItemCollectorTest {
         methodItemCollector = new MethodItemCollector(itemFactory);
 
         when(itemFactory.createItem(any(MethodCheck.class), any(Method.class)))
-                .thenReturn(ConstructorItem.builder()
+                .thenReturn(MethodItem.builder()
                         .name(String.valueOf(new Random().nextInt(100)))
                         .build());
     }

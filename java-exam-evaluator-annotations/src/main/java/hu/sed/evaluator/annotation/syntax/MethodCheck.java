@@ -47,9 +47,9 @@ public @interface MethodCheck {
     boolean checkModifiers() default DefaultMethodCheck.checkModifiers;
 
     /**
-     * @return true if check needs to validate, if method is an override
+     * @return true if check needs to validate, if method has an o Override annotation
      */
-    boolean checkOverride() default DefaultMethodCheck.checkOverride;
+    boolean checkOverrideAnnotation() default DefaultMethodCheck.checkOverride;
 
     /**
      * @return true if check needs to validate checked exceptions to be thrown

@@ -1,5 +1,6 @@
 package hu.sed.evaluator.item.syntax;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import hu.sed.evaluator.item.BaseItem;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -8,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
-import java.beans.Transient;
 import java.lang.reflect.Modifier;
 
 @Data
@@ -26,9 +26,14 @@ public abstract class BaseSyntaxItem extends BaseItem {
 
     String name;
 
-    @Transient
+    @JsonIgnore
     public String getReadableModifiers() {
         return Modifier.toString(modifiers);
+    }
+
+    @JsonIgnore
+    public final String getIdentifier() {
+        return containerClass + "." + name;
     }
 
     @Override
