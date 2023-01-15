@@ -4,5 +4,7 @@ public enum CheckedElement {
     EXISTANCE,
     MODIFIERS,
     EXCEPTIONS,
-    OVERRIDE_ANNOTATION
+    OVERRIDE_ANNOTATION,
+    PARENT_CLASS,
+    INTERFACES
 }

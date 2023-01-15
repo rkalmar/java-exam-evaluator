@@ -2,6 +2,7 @@ package hu.sed.evaluator.item.syntax;
 
 import hu.sed.evaluator.item.Item;
 import hu.sed.evaluator.item.container.ItemContainer;
+import hu.sed.evaluator.item.element.TypeDefinition;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,14 +26,19 @@ public class TypeItem extends BaseSyntaxItem implements ItemContainer {
     /**
      * Fully qualified name of class
      */
-    String parentClazz;
+    TypeDefinition parentClazz;
 
     boolean checkInterfaces;
 
     /**
      * Array of fully qualified name of interfaces
      */
-    String[] implementedInterfaces;
+    TypeDefinition[] implementedInterfaces;
 
-    boolean checkMethods;
+    boolean interfce;
+
+    @Override
+    public String getIdentifier() {
+        return this.getName();
+    }
 }

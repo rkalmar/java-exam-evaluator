@@ -17,6 +17,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,21 +26,23 @@ import java.util.List;
 public class ItemFactory {
 
     public TypeItem createItem(TypeCheck check, Class<?> clazz) {
-        boolean checkParentClazz = clazz.getSuperclass() != null && check.checkParentClazz();
+        boolean checkParentClazz = !clazz.isInterface() && check.checkParentClazz();
         return TypeItem.builder()
                 .checkModifiers(check.checkModifiers())
                 .modifiers(clazz.getModifiers())
                 .name(clazz.getName())
                 .checkParentClazz(checkParentClazz)
-                .parentClazz(checkParentClazz ? clazz.getSuperclass().getName() : null)
+                .interfce(clazz.isInterface())
+                .parentClazz(checkParentClazz ? createTypeDef(clazz.getGenericSuperclass()) : null)
                 .checkInterfaces(check.checkInterfaces())
-                .implementedInterfaces(Arrays.stream(clazz.getInterfaces()).map(Class::getName).toArray(String[]::new))
+                .implementedInterfaces(createTypeDefForImplementedInterfaces(clazz))
                 .score(check.score())
                 .build();
     }
 
     public ConstructorItem createItem(ConstructorCheck constructorCheck, Constructor<?> constructor) {
         return ConstructorItem.builder()
+                .name("constructorMethod")
                 .parameters(buildParameterizedTypeFromList(constructor.getGenericParameterTypes()))
                 .exceptions(buildParameterizedTypeFromList(constructor.getGenericExceptionTypes()))
                 .modifiers(constructor.getModifiers())
@@ -69,14 +72,23 @@ public class ItemFactory {
     public FieldItem createItem(FieldCheck fieldCheck, Field field) {
         return FieldItem.builder()
                 .name(field.getName())
-                .type(
-                        createTypeDef(field)
-                )
+                .type(createTypeDef(field))
                 .modifiers(field.getModifiers())
                 .checkModifiers(fieldCheck.checkModifiers())
                 .score(fieldCheck.score())
                 .containerClass(field.getDeclaringClass().getName())
                 .build();
+    }
+
+    public TypeDefinition createTypeDef(Type type) {
+        return TypeDefinition.builder()
+                .type(toTypeName(type))
+                .genericTypes(buildParameterizedType(type))
+                .build();
+    }
+
+    public TypeDefinition[] createTypeDefForImplementedInterfaces(Class<?> clazz) {
+        return Arrays.stream(clazz.getGenericInterfaces()).map(this::createTypeDef).toArray(TypeDefinition[]::new);
     }
 
     public TypeDefinition createTypeDef(Field field) {

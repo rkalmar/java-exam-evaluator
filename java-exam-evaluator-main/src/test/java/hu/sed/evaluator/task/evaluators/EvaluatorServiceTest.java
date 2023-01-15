@@ -108,4 +108,38 @@ public class EvaluatorServiceTest {
         assertFalse(evaluatorService.checkType(actualTypeDef, expectedTypeDef));
     }
 
+    @Test
+    public void checkTypeDefinitionsMatchInAnyOrderTest() {
+        // GIVEN
+        TypeDefinition[] actualTypes = new TypeDefinition[]{
+                TypeDefinition.builder().type("java.lang.Integer").build(),
+                TypeDefinition.builder().type("java.lang.String").build()
+        };
+
+        TypeDefinition[] expectedTypes = new TypeDefinition[]{
+                TypeDefinition.builder().type("java.lang.String").build(),
+                TypeDefinition.builder().type("java.lang.Integer").build()
+        };
+
+        // WHEN
+        assertTrue(evaluatorService.checkTypesInAnyOrder(actualTypes, expectedTypes));
+    }
+
+    @Test
+    public void checkTypeDoesDefinitionsMatchOrderTest() {
+        // GIVEN
+        TypeDefinition[] actualTypes = new TypeDefinition[]{
+                TypeDefinition.builder().type("java.lang.Integer").build(),
+                TypeDefinition.builder().type("java.lang.String").build()
+        };
+
+        TypeDefinition[] expectedTypes = new TypeDefinition[]{
+                TypeDefinition.builder().type("java.lang.String").build(),
+                TypeDefinition.builder().type("java.lang.Integer").build()
+        };
+
+        // WHEN
+        assertFalse(evaluatorService.checkTypesInOrder(actualTypes, expectedTypes));
+    }
+
 }

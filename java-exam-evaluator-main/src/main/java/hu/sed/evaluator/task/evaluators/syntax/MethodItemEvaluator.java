@@ -42,7 +42,7 @@ public class MethodItemEvaluator extends ExecutableItemEvaluator<Method, MethodI
         List<Method> methodsByName = ReflectionUtils.getMethodsByName(item.getContainerClass(), item.getName());
         for (Method method : methodsByName) {
             if (evaluatorService.checkType(itemFactory.createReturnTypeDef(method), item.getReturnType())
-                    && evaluatorService.checkTypes(itemFactory.buildParameterizedTypeFromList(method.getGenericParameterTypes()), item.getParameters())) {
+                    && evaluatorService.checkTypesInOrder(itemFactory.buildParameterizedTypeFromList(method.getGenericParameterTypes()), item.getParameters())) {
                 return method;
             }
         }

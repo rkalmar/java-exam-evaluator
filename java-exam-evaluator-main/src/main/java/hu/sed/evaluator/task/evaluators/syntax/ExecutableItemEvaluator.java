@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Executable;
 import java.lang.reflect.Type;
+import java.util.Arrays;
 
 @Slf4j
 @FieldDefaults(level = AccessLevel.PROTECTED, makeFinal = true)
@@ -52,12 +53,12 @@ public abstract class ExecutableItemEvaluator<T extends Executable, E extends Ex
         if (item.isCheckExceptions()) {
             TypeDefinition[] actualExceptions = itemFactory.buildParameterizedTypeFromList(actualExceptionsTypes);
             TypeDefinition[] exceptedExceptions = item.getExceptions();
-            boolean checkResult = evaluatorService.checkTypes(actualExceptions, exceptedExceptions);
+            boolean checkResult = evaluatorService.checkTypesInAnyOrder(actualExceptions, exceptedExceptions);
             scoredItem.element(CheckedElement.EXCEPTIONS, checkResult);
 
             if (!checkResult) {
                 log.info("{} defined exception mismatch. Actual value: {}, expected value: {}",
-                        item.getIdentifier(), actualExceptions, exceptedExceptions); // TODO toString
+                        item.getIdentifier(), Arrays.toString(actualExceptions), Arrays.toString(exceptedExceptions));
             }
         }
     }

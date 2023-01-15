@@ -21,7 +21,8 @@ public class ConstructorItemEvaluator extends ExecutableItemEvaluator<Constructo
     protected Constructor<?> findExecutableElement(ConstructorItem item) throws ClassNotFoundException, NoSuchMethodException {
         List<Constructor<?>> constructors = ReflectionUtils.getConstructorsByName(item.getContainerClass());
         for (Constructor<?> constructor : constructors) {
-            if (evaluatorService.checkTypes(itemFactory.buildParameterizedTypeFromList(constructor.getGenericParameterTypes()), item.getParameters())) {
+            if (evaluatorService.checkTypesInOrder(
+                    itemFactory.buildParameterizedTypeFromList(constructor.getGenericParameterTypes()), item.getParameters())) {
                 return constructor;
             }
         }

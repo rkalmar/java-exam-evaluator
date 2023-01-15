@@ -22,9 +22,7 @@ public final class TypeDefinition {
 
     @Override
     public String toString() {
-        return "Type{'" +
-                type + '\'' +
-                (getGenericTypes().length > 0 ? ", genericTypes=" + Arrays.toString(genericTypes) : "") +
-                '}';
+        return type +
+                (getGenericTypes().length > 0 ? "<" + Arrays.toString(genericTypes) + ">" : "");
     }
 }

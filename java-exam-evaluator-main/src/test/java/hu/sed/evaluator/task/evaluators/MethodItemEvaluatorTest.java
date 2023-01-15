@@ -44,7 +44,8 @@ public class MethodItemEvaluatorTest {
         // GIVEN
         MethodItem methodItem = createMethodItem("testMethod");
         when(evaluatorService.checkType(any(), any())).thenReturn(true);
-        when(evaluatorService.checkTypes(any(), any())).thenReturn(true);
+        when(evaluatorService.checkTypesInOrder(any(), any())).thenReturn(true);
+        when(evaluatorService.checkTypesInAnyOrder(any(), any())).thenReturn(true);
         when(evaluatorService.checkModifiers(anyInt(), anyInt())).thenReturn(true);
         when(evaluatorService.checkOverrideAnnotation(any())).thenReturn(true);
 
@@ -53,7 +54,6 @@ public class MethodItemEvaluatorTest {
 
         // THEN
         assertThat(scoredItem.getScore()).isEqualTo(1.0);
-        assertThat(scoredItem.getChildren()).isEmpty();
         assertThat(scoredItem.getItem()).isEqualTo(methodItem);
 
         Map<CheckedElement, Boolean> checkedElements = scoredItem.getCheckedElements();
@@ -69,7 +69,8 @@ public class MethodItemEvaluatorTest {
         // GIVEN
         MethodItem methodItem = createMethodItem("testMethod");
         when(evaluatorService.checkType(any(), any())).thenReturn(true);
-        when(evaluatorService.checkTypes(any(), any())).thenReturn(true);
+        when(evaluatorService.checkTypesInOrder(any(), any())).thenReturn(true);
+        when(evaluatorService.checkTypesInAnyOrder(any(), any())).thenReturn(true);
         when(evaluatorService.checkModifiers(anyInt(), anyInt())).thenReturn(false);
         when(evaluatorService.checkOverrideAnnotation(any())).thenReturn(false);
 
@@ -78,7 +79,6 @@ public class MethodItemEvaluatorTest {
 
         // THEN
         assertThat(scoredItem.getScore()).isEqualTo(0.5);
-        assertThat(scoredItem.getChildren()).isEmpty();
         assertThat(scoredItem.getItem()).isEqualTo(methodItem);
 
         Map<CheckedElement, Boolean> checkedElements = scoredItem.getCheckedElements();
@@ -100,7 +100,6 @@ public class MethodItemEvaluatorTest {
 
         // THEN
         assertThat(scoredItem.getScore()).isEqualTo(0.0);
-        assertThat(scoredItem.getChildren()).isEmpty();
         assertThat(scoredItem.getItem()).isEqualTo(methodItem);
 
         Map<CheckedElement, Boolean> checkedElements = scoredItem.getCheckedElements();

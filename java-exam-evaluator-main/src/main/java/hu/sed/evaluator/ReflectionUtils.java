@@ -96,4 +96,8 @@ public class ReflectionUtils {
     public List<Constructor<?>> getConstructorsByName(String containerClass) throws ClassNotFoundException {
         return Arrays.asList(Class.forName(containerClass).getDeclaredConstructors());
     }
+
+    public Class<?> getClassByName(String clazz) throws ClassNotFoundException {
+        return Class.forName(clazz);
+    }
 }

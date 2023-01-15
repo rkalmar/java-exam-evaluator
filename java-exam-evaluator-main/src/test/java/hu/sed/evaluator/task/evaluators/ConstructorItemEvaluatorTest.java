@@ -45,7 +45,8 @@ public class ConstructorItemEvaluatorTest {
     public void checkDefaultConstructor() {
         // GIVEN
         ConstructorItem constructorItem = createConstructorItem(TestClass.class);
-        when(evaluatorService.checkTypes(any(), any())).thenReturn(true);
+        when(evaluatorService.checkTypesInOrder(any(), any())).thenReturn(true);
+        when(evaluatorService.checkTypesInAnyOrder(any(), any())).thenReturn(true);
         when(evaluatorService.checkModifiers(anyInt(), anyInt())).thenReturn(true);
 
         // WHEN
@@ -53,7 +54,6 @@ public class ConstructorItemEvaluatorTest {
 
         // THEN
         assertThat(scoredItem.getScore()).isEqualTo(1.0);
-        assertThat(scoredItem.getChildren()).isEmpty();
         assertThat(scoredItem.getItem()).isEqualTo(constructorItem);
 
         Map<CheckedElement, Boolean> checkedElements = scoredItem.getCheckedElements();
@@ -67,7 +67,8 @@ public class ConstructorItemEvaluatorTest {
     public void checkDefaultConstructorWithIncorrectModifiers() {
         // GIVEN
         ConstructorItem constructorItem = createConstructorItem(TestClass.class);
-        when(evaluatorService.checkTypes(any(), any())).thenReturn(true);
+        when(evaluatorService.checkTypesInOrder(any(), any())).thenReturn(true);
+        when(evaluatorService.checkTypesInAnyOrder(any(), any())).thenReturn(true);
         when(evaluatorService.checkModifiers(anyInt(), anyInt())).thenReturn(false);
 
         // WHEN
@@ -75,7 +76,6 @@ public class ConstructorItemEvaluatorTest {
 
         // THEN
         assertThat(scoredItem.getScore()).isEqualTo((1.0 / 3) * 2);
-        assertThat(scoredItem.getChildren()).isEmpty();
         assertThat(scoredItem.getItem()).isEqualTo(constructorItem);
 
         Map<CheckedElement, Boolean> checkedElements = scoredItem.getCheckedElements();
@@ -89,14 +89,13 @@ public class ConstructorItemEvaluatorTest {
     public void checkConstructorDoesNotExist() {
         // GIVEN
         ConstructorItem constructorItem = createConstructorItem(TestClass.class);
-        when(evaluatorService.checkTypes(any(), any())).thenReturn(false);
+        when(evaluatorService.checkTypesInOrder(any(), any())).thenReturn(false);
 
         // WHEN
         ScoredItem scoredItem = constructorItemEvaluator.evaluate(constructorItem);
 
         // THEN
         assertThat(scoredItem.getScore()).isEqualTo(0);
-        assertThat(scoredItem.getChildren()).isEmpty();
         assertThat(scoredItem.getItem()).isEqualTo(constructorItem);
 
         Map<CheckedElement, Boolean> checkedElements = scoredItem.getCheckedElements();
@@ -108,7 +107,8 @@ public class ConstructorItemEvaluatorTest {
     public void checkParameterizedConstructor() {
         // GIVEN
         ConstructorItem constructorItem = createConstructorItem(TestClass1.class);
-        when(evaluatorService.checkTypes(any(), any())).thenReturn(true);
+        when(evaluatorService.checkTypesInOrder(any(), any())).thenReturn(true);
+        when(evaluatorService.checkTypesInAnyOrder(any(), any())).thenReturn(true);
         when(evaluatorService.checkModifiers(anyInt(), anyInt())).thenReturn(true);
 
         // WHEN
@@ -116,7 +116,6 @@ public class ConstructorItemEvaluatorTest {
 
         // THEN
         assertThat(scoredItem.getScore()).isEqualTo(1.0);
-        assertThat(scoredItem.getChildren()).isEmpty();
         assertThat(scoredItem.getItem()).isEqualTo(constructorItem);
 
         Map<CheckedElement, Boolean> checkedElements = scoredItem.getCheckedElements();
@@ -130,7 +129,8 @@ public class ConstructorItemEvaluatorTest {
     public void checkParameterizedConstructorWithIncorrectModifier() {
         // GIVEN
         ConstructorItem constructorItem = createConstructorItem(TestClass1.class);
-        when(evaluatorService.checkTypes(any(), any())).thenReturn(true);
+        when(evaluatorService.checkTypesInOrder(any(), any())).thenReturn(true);
+        when(evaluatorService.checkTypesInAnyOrder(any(), any())).thenReturn(true);
         when(evaluatorService.checkModifiers(anyInt(), anyInt())).thenReturn(false);
 
         // WHEN
@@ -138,7 +138,6 @@ public class ConstructorItemEvaluatorTest {
 
         // THEN
         assertThat(scoredItem.getScore()).isEqualTo((1.0 / 3) * 2);
-        assertThat(scoredItem.getChildren()).isEmpty();
         assertThat(scoredItem.getItem()).isEqualTo(constructorItem);
 
         Map<CheckedElement, Boolean> checkedElements = scoredItem.getCheckedElements();

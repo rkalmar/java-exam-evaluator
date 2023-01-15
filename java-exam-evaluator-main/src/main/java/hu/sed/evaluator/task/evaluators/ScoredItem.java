@@ -1,15 +1,12 @@
 package hu.sed.evaluator.task.evaluators;
 
 import hu.sed.evaluator.item.BaseItem;
-import hu.sed.evaluator.item.Item;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Data
@@ -18,9 +15,6 @@ import java.util.Map;
 public class ScoredItem {
 
     BaseItem item;
-
-    @Builder.Default
-    List<Item> children = new ArrayList<>();
 
     @Builder.Default
     Map<CheckedElement, Boolean> checkedElements = new HashMap<>();
@@ -39,7 +33,7 @@ public class ScoredItem {
 
     public final double getScore() {
         if (checkedElements.size() == 0) {
-           return 0;
+            return 0;
         }
         long successfulCount = checkedElements.values().stream().filter(value -> value).count();
         return ((double) item.getScore() / checkedElements.size()) * successfulCount;

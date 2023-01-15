@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 @Singleton
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -23,18 +24,35 @@ public class EvaluatorService {
             return false;
         }
 
-        return checkTypes(actualType.getGenericTypes(), expectedType.getGenericTypes());
+        return checkTypesInOrder(actualType.getGenericTypes(), expectedType.getGenericTypes());
     }
 
-    public boolean checkTypes(TypeDefinition[] actualTypes, TypeDefinition[] expectedTypes) {
+    public boolean checkTypesInOrder(TypeDefinition[] actualTypes, TypeDefinition[] expectedTypes) {
+        return checkTypes(actualTypes, expectedTypes, true);
+    }
+
+    public boolean checkTypesInAnyOrder(TypeDefinition[] actualTypes, TypeDefinition[] expectedTypes) {
+        return checkTypes(actualTypes, expectedTypes, false);
+    }
+
+    private boolean checkTypes(TypeDefinition[] actualTypes, TypeDefinition[] expectedTypes, boolean checkInOrder) {
         if (actualTypes.length != expectedTypes.length) {
             return false;
         }
+
         for (int i = 0; i < actualTypes.length; i++) {
-            TypeDefinition actualGenericType = actualTypes[i];
-            TypeDefinition expectedGenericType = expectedTypes[i];
-            if (!checkType(actualGenericType, expectedGenericType)) {
-                return false;
+            TypeDefinition actualType = actualTypes[i];
+
+            if (checkInOrder) {
+                TypeDefinition expectedType = expectedTypes[i];
+                if (!checkType(actualType, expectedType)) {
+                    return false;
+                }
+            } else {
+                if (Arrays.stream(expectedTypes)
+                        .noneMatch(expType -> checkType(actualType, expType))) {
+                    return false;
+                }
             }
         }
         return true;

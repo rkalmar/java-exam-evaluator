@@ -50,8 +50,6 @@ public class FieldItemEvaluatorTest {
 
         // THEN
         assertThat(scoredItem.getScore()).isEqualTo(1.0);
-        assertThat(scoredItem.getChildren()).isEmpty();
-        assertThat(scoredItem.getItem()).isEqualTo(fieldItem);
 
         Map<CheckedElement, Boolean> checkedElements = scoredItem.getCheckedElements();
         assertThat(checkedElements.keySet()).containsExactlyInAnyOrder(EXISTANCE, MODIFIERS);
@@ -71,7 +69,6 @@ public class FieldItemEvaluatorTest {
 
         // THEN
         assertThat(scoredItem.getScore()).isEqualTo(0.0);
-        assertThat(scoredItem.getChildren()).isEmpty();
         assertThat(scoredItem.getItem()).isEqualTo(fieldItem);
 
         Map<CheckedElement, Boolean> checkedElements = scoredItem.getCheckedElements();
@@ -92,7 +89,6 @@ public class FieldItemEvaluatorTest {
 
         // THEN
         assertThat(scoredItem.getScore()).isEqualTo(5);
-        assertThat(scoredItem.getChildren()).isEmpty();
         assertThat(scoredItem.getItem()).isEqualTo(fieldItem);
 
         Map<CheckedElement, Boolean> checkedElements = scoredItem.getCheckedElements();

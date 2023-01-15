@@ -32,7 +32,7 @@ public abstract class BaseSyntaxItem extends BaseItem {
     }
 
     @JsonIgnore
-    public final String getIdentifier() {
+    public String getIdentifier() {
         return containerClass + "." + name;
     }
 
