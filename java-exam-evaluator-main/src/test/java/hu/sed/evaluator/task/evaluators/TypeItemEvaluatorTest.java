@@ -3,6 +3,7 @@ package hu.sed.evaluator.task.evaluators;
 import hu.sed.evaluator.annotation.syntax.TypeCheck;
 import hu.sed.evaluator.item.ItemFactory;
 import hu.sed.evaluator.item.syntax.TypeItem;
+import hu.sed.evaluator.task.evaluators.syntax.SyntaxElement;
 import hu.sed.evaluator.task.evaluators.syntax.EvaluatorService;
 import hu.sed.evaluator.task.evaluators.syntax.TypeItemEvaluator;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +14,7 @@ import org.mockito.MockitoAnnotations;
 import java.util.List;
 import java.util.Map;
 
-import static hu.sed.evaluator.task.evaluators.CheckedElement.*;
+import static hu.sed.evaluator.task.evaluators.syntax.SyntaxElement.*;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -52,9 +53,9 @@ public class TypeItemEvaluatorTest {
         assertThat(scoredItem.getScore()).isEqualTo(1.0);
         assertThat(scoredItem.getItem()).isEqualTo(item);
 
-        Map<CheckedElement, Boolean> checkedElements = scoredItem.getCheckedElements();
-        assertThat(checkedElements.keySet()).containsExactlyInAnyOrder(EXISTANCE, MODIFIERS, PARENT_CLASS, INTERFACES);
-        assertTrue(checkedElements.get(EXISTANCE));
+        Map<SyntaxElement, Boolean> checkedElements = scoredItem.getCheckedElements();
+        assertThat(checkedElements.keySet()).containsExactlyInAnyOrder(EXISTENCE, MODIFIERS, PARENT_CLASS, INTERFACES);
+        assertTrue(checkedElements.get(EXISTENCE));
         assertTrue(checkedElements.get(MODIFIERS));
         assertTrue(checkedElements.get(PARENT_CLASS));
         assertTrue(checkedElements.get(INTERFACES));
@@ -74,9 +75,9 @@ public class TypeItemEvaluatorTest {
         assertThat(scoredItem.getScore()).isEqualTo(0.0);
         assertThat(scoredItem.getItem()).isEqualTo(item);
 
-        Map<CheckedElement, Boolean> checkedElements = scoredItem.getCheckedElements();
-        assertThat(checkedElements.keySet()).containsExactlyInAnyOrder(EXISTANCE);
-        assertFalse(checkedElements.get(EXISTANCE));
+        Map<SyntaxElement, Boolean> checkedElements = scoredItem.getCheckedElements();
+        assertThat(checkedElements.keySet()).containsExactlyInAnyOrder(EXISTENCE);
+        assertFalse(checkedElements.get(EXISTENCE));
     }
 
     @Test
@@ -93,9 +94,9 @@ public class TypeItemEvaluatorTest {
         assertThat(scoredItem.getScore()).isEqualTo(0.0);
         assertThat(scoredItem.getItem()).isEqualTo(item);
 
-        Map<CheckedElement, Boolean> checkedElements = scoredItem.getCheckedElements();
-        assertThat(checkedElements.keySet()).containsExactlyInAnyOrder(EXISTANCE);
-        assertFalse(checkedElements.get(EXISTANCE));
+        Map<SyntaxElement, Boolean> checkedElements = scoredItem.getCheckedElements();
+        assertThat(checkedElements.keySet()).containsExactlyInAnyOrder(EXISTENCE);
+        assertFalse(checkedElements.get(EXISTENCE));
     }
 
     @Test
@@ -114,9 +115,9 @@ public class TypeItemEvaluatorTest {
         assertThat(scoredItem.getScore()).isEqualTo(0.25);
         assertThat(scoredItem.getItem()).isEqualTo(item);
 
-        Map<CheckedElement, Boolean> checkedElements = scoredItem.getCheckedElements();
-        assertThat(checkedElements.keySet()).containsExactlyInAnyOrder(EXISTANCE, MODIFIERS, PARENT_CLASS, INTERFACES);
-        assertTrue(checkedElements.get(EXISTANCE));
+        Map<SyntaxElement, Boolean> checkedElements = scoredItem.getCheckedElements();
+        assertThat(checkedElements.keySet()).containsExactlyInAnyOrder(EXISTENCE, MODIFIERS, PARENT_CLASS, INTERFACES);
+        assertTrue(checkedElements.get(EXISTENCE));
         assertFalse(checkedElements.get(MODIFIERS));
         assertFalse(checkedElements.get(PARENT_CLASS));
         assertFalse(checkedElements.get(INTERFACES));

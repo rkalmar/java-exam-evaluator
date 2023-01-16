@@ -2,7 +2,7 @@ package hu.sed.evaluator.task.evaluators;
 
 import hu.sed.evaluator.item.Item;
 
-public interface Evaluator<T extends Item> {
+public interface Evaluator<T extends Item, R extends ScoredItem> {
 
-    ScoredItem evaluate(T item);
+    R evaluate(T item);
 }

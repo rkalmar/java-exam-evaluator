@@ -6,7 +6,6 @@ import hu.sed.evaluator.ReflectionUtils;
 import hu.sed.evaluator.item.ItemFactory;
 import hu.sed.evaluator.item.element.TypeDefinition;
 import hu.sed.evaluator.item.syntax.TypeItem;
-import hu.sed.evaluator.task.evaluators.ScoredItem;
 import hu.sed.evaluator.task.evaluators.exception.NoSuchSyntaxItemException;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -14,9 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
 
-import static hu.sed.evaluator.task.evaluators.CheckedElement.EXISTANCE;
-import static hu.sed.evaluator.task.evaluators.CheckedElement.INTERFACES;
-import static hu.sed.evaluator.task.evaluators.CheckedElement.PARENT_CLASS;
+import static hu.sed.evaluator.task.evaluators.syntax.SyntaxElement.EXISTENCE;
+import static hu.sed.evaluator.task.evaluators.syntax.SyntaxElement.INTERFACES;
+import static hu.sed.evaluator.task.evaluators.syntax.SyntaxElement.PARENT_CLASS;
 
 
 @Slf4j
@@ -33,17 +32,17 @@ public class TypeItemEvaluator extends SyntaxItemEvaluator<TypeItem> {
     }
 
     @Override
-    public void evaluate(ScoredItem scoredItem) throws NoSuchSyntaxItemException {
+    public void evaluate(ScoredSyntaxItem scoredItem) throws NoSuchSyntaxItemException {
         TypeItem item = getItem(scoredItem);
         Class<?> clazz = getClass(item);
-        scoredItem.successfulElement(EXISTANCE);
+        scoredItem.successfulCheck(EXISTENCE);
 
         checkModifiers(scoredItem, clazz.getModifiers());
 
         if (item.isCheckParentClazz()) {
             TypeDefinition actualParentClazz = itemFactory.createTypeDef(clazz.getGenericSuperclass());
             boolean checkResult = evaluatorService.checkType(actualParentClazz, item.getParentClazz());
-            scoredItem.element(PARENT_CLASS, checkResult);
+            scoredItem.addCheck(PARENT_CLASS, checkResult);
             if (!checkResult) {
                 log.info("{} -> Parent class is incorrect. Actual value: {}, expected value: {}",
                         item.getIdentifier(), actualParentClazz, item.getParentClazz());
@@ -53,7 +52,7 @@ public class TypeItemEvaluator extends SyntaxItemEvaluator<TypeItem> {
         if (item.isCheckInterfaces()) {
             TypeDefinition[] actualImplementedInterfaces = itemFactory.createTypeDefForImplementedInterfaces(clazz);
             boolean checkResult = evaluatorService.checkTypesInAnyOrder(actualImplementedInterfaces, item.getImplementedInterfaces());
-            scoredItem.element(INTERFACES, checkResult);
+            scoredItem.addCheck(INTERFACES, checkResult);
             if (!checkResult) {
                 log.info("{} -> Implemented interface list is incorrect. Actual value: {}, expected value: {}",
                         item.getIdentifier(), Arrays.toString(actualImplementedInterfaces), Arrays.toString(item.getImplementedInterfaces()));

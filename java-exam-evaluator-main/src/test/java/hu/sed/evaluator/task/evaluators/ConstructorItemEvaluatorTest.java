@@ -3,6 +3,7 @@ package hu.sed.evaluator.task.evaluators;
 import hu.sed.evaluator.annotation.syntax.ConstructorCheck;
 import hu.sed.evaluator.item.ItemFactory;
 import hu.sed.evaluator.item.syntax.ConstructorItem;
+import hu.sed.evaluator.task.evaluators.syntax.SyntaxElement;
 import hu.sed.evaluator.task.evaluators.syntax.ConstructorItemEvaluator;
 import hu.sed.evaluator.task.evaluators.syntax.EvaluatorService;
 import lombok.SneakyThrows;
@@ -15,9 +16,9 @@ import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.Map;
 
-import static hu.sed.evaluator.task.evaluators.CheckedElement.EXCEPTIONS;
-import static hu.sed.evaluator.task.evaluators.CheckedElement.EXISTANCE;
-import static hu.sed.evaluator.task.evaluators.CheckedElement.MODIFIERS;
+import static hu.sed.evaluator.task.evaluators.syntax.SyntaxElement.EXCEPTIONS;
+import static hu.sed.evaluator.task.evaluators.syntax.SyntaxElement.EXISTENCE;
+import static hu.sed.evaluator.task.evaluators.syntax.SyntaxElement.MODIFIERS;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -56,9 +57,9 @@ public class ConstructorItemEvaluatorTest {
         assertThat(scoredItem.getScore()).isEqualTo(1.0);
         assertThat(scoredItem.getItem()).isEqualTo(constructorItem);
 
-        Map<CheckedElement, Boolean> checkedElements = scoredItem.getCheckedElements();
-        assertThat(checkedElements.keySet()).containsExactlyInAnyOrder(EXISTANCE, MODIFIERS, EXCEPTIONS);
-        assertTrue(checkedElements.get(EXISTANCE));
+        Map<SyntaxElement, Boolean> checkedElements = scoredItem.getCheckedElements();
+        assertThat(checkedElements.keySet()).containsExactlyInAnyOrder(EXISTENCE, MODIFIERS, EXCEPTIONS);
+        assertTrue(checkedElements.get(EXISTENCE));
         assertTrue(checkedElements.get(MODIFIERS));
         assertTrue(checkedElements.get(EXCEPTIONS));
     }
@@ -78,9 +79,9 @@ public class ConstructorItemEvaluatorTest {
         assertThat(scoredItem.getScore()).isEqualTo((1.0 / 3) * 2);
         assertThat(scoredItem.getItem()).isEqualTo(constructorItem);
 
-        Map<CheckedElement, Boolean> checkedElements = scoredItem.getCheckedElements();
-        assertThat(checkedElements.keySet()).containsExactlyInAnyOrder(EXISTANCE, MODIFIERS, EXCEPTIONS);
-        assertTrue(checkedElements.get(EXISTANCE));
+        Map<SyntaxElement, Boolean> checkedElements = scoredItem.getCheckedElements();
+        assertThat(checkedElements.keySet()).containsExactlyInAnyOrder(EXISTENCE, MODIFIERS, EXCEPTIONS);
+        assertTrue(checkedElements.get(EXISTENCE));
         assertFalse(checkedElements.get(MODIFIERS));
         assertTrue(checkedElements.get(EXCEPTIONS));
     }
@@ -98,9 +99,9 @@ public class ConstructorItemEvaluatorTest {
         assertThat(scoredItem.getScore()).isEqualTo(0);
         assertThat(scoredItem.getItem()).isEqualTo(constructorItem);
 
-        Map<CheckedElement, Boolean> checkedElements = scoredItem.getCheckedElements();
-        assertThat(checkedElements.keySet()).containsExactlyInAnyOrder(EXISTANCE);
-        assertFalse(checkedElements.get(EXISTANCE));
+        Map<SyntaxElement, Boolean> checkedElements = scoredItem.getCheckedElements();
+        assertThat(checkedElements.keySet()).containsExactlyInAnyOrder(EXISTENCE);
+        assertFalse(checkedElements.get(EXISTENCE));
     }
 
     @Test
@@ -118,9 +119,9 @@ public class ConstructorItemEvaluatorTest {
         assertThat(scoredItem.getScore()).isEqualTo(1.0);
         assertThat(scoredItem.getItem()).isEqualTo(constructorItem);
 
-        Map<CheckedElement, Boolean> checkedElements = scoredItem.getCheckedElements();
-        assertThat(checkedElements.keySet()).containsExactlyInAnyOrder(EXISTANCE, MODIFIERS, EXCEPTIONS);
-        assertTrue(checkedElements.get(EXISTANCE));
+        Map<SyntaxElement, Boolean> checkedElements = scoredItem.getCheckedElements();
+        assertThat(checkedElements.keySet()).containsExactlyInAnyOrder(EXISTENCE, MODIFIERS, EXCEPTIONS);
+        assertTrue(checkedElements.get(EXISTENCE));
         assertTrue(checkedElements.get(MODIFIERS));
         assertTrue(checkedElements.get(EXCEPTIONS));
     }
@@ -140,9 +141,9 @@ public class ConstructorItemEvaluatorTest {
         assertThat(scoredItem.getScore()).isEqualTo((1.0 / 3) * 2);
         assertThat(scoredItem.getItem()).isEqualTo(constructorItem);
 
-        Map<CheckedElement, Boolean> checkedElements = scoredItem.getCheckedElements();
-        assertThat(checkedElements.keySet()).containsExactlyInAnyOrder(EXISTANCE, MODIFIERS, EXCEPTIONS);
-        assertTrue(checkedElements.get(EXISTANCE));
+        Map<SyntaxElement, Boolean> checkedElements = scoredItem.getCheckedElements();
+        assertThat(checkedElements.keySet()).containsExactlyInAnyOrder(EXISTENCE, MODIFIERS, EXCEPTIONS);
+        assertTrue(checkedElements.get(EXISTENCE));
         assertFalse(checkedElements.get(MODIFIERS));
         assertTrue(checkedElements.get(EXCEPTIONS));
     }

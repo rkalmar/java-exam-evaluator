@@ -1,7 +1,6 @@
 package hu.sed.evaluator.task.evaluators.syntax;
 
 import hu.sed.evaluator.item.syntax.BaseSyntaxItem;
-import hu.sed.evaluator.task.evaluators.CheckedElement;
 import hu.sed.evaluator.task.evaluators.Evaluator;
 import hu.sed.evaluator.task.evaluators.ScoredItem;
 import hu.sed.evaluator.task.evaluators.exception.NoSuchSyntaxItemException;
@@ -12,19 +11,19 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Modifier;
 
-import static hu.sed.evaluator.task.evaluators.CheckedElement.MODIFIERS;
+import static hu.sed.evaluator.task.evaluators.syntax.SyntaxElement.MODIFIERS;
 
 @Slf4j
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PROTECTED, makeFinal = true)
-public abstract class SyntaxItemEvaluator<T extends BaseSyntaxItem> implements Evaluator<T> {
+public abstract class SyntaxItemEvaluator<T extends BaseSyntaxItem> implements Evaluator<T, ScoredSyntaxItem> {
 
     EvaluatorService evaluatorService;
 
     @Override
-    public final ScoredItem evaluate(T item) {
+    public final ScoredSyntaxItem evaluate(T item) {
         log.info("{} -> checking item.", item.getIdentifier());
-        ScoredItem scoredItem = ScoredItem.builder()
+        ScoredSyntaxItem scoredItem = ScoredSyntaxItem.builder()
                 .item(item)
                 .build();
 
@@ -32,19 +31,19 @@ public abstract class SyntaxItemEvaluator<T extends BaseSyntaxItem> implements E
             evaluate(scoredItem);
         } catch (NoSuchSyntaxItemException exception) {
             log.info("{} -> Item does not exist.", item.getIdentifier());
-            scoredItem.unsuccessfulElement(CheckedElement.EXISTANCE);
+            scoredItem.unsuccessfulCheck(SyntaxElement.EXISTENCE);
         }
 
         return scoredItem;
     }
 
-    public abstract void evaluate(ScoredItem scoredItem) throws NoSuchSyntaxItemException;
+    public abstract void evaluate(ScoredSyntaxItem scoredItem) throws NoSuchSyntaxItemException;
 
-    protected void checkModifiers(ScoredItem scoredItem, int actualModifiers) {
+    protected void checkModifiers(ScoredSyntaxItem scoredItem, int actualModifiers) {
         BaseSyntaxItem item = (BaseSyntaxItem) scoredItem.getItem();
         if (item.isCheckModifiers()) {
             boolean checkResult = evaluatorService.checkModifiers(actualModifiers, item.getModifiers());
-            scoredItem.element(MODIFIERS, checkResult);
+            scoredItem.addCheck(MODIFIERS, checkResult);
             if (!checkResult) {
                 log.info("{} modifier mismatch. Actual value: {}, expected value: {}",
                         item.getIdentifier(), Modifier.toString(actualModifiers), item.getReadableModifiers());

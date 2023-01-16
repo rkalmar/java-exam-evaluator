@@ -1,7 +1,7 @@
-package hu.sed.evaluator.task.evaluators;
+package hu.sed.evaluator.task.evaluators.syntax;
 
-public enum CheckedElement {
-    EXISTANCE,
+public enum SyntaxElement {
+    EXISTENCE,
     MODIFIERS,
     EXCEPTIONS,
     OVERRIDE_ANNOTATION,

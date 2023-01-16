@@ -5,8 +5,6 @@ import com.google.inject.Singleton;
 import hu.sed.evaluator.ReflectionUtils;
 import hu.sed.evaluator.item.ItemFactory;
 import hu.sed.evaluator.item.syntax.MethodItem;
-import hu.sed.evaluator.task.evaluators.CheckedElement;
-import hu.sed.evaluator.task.evaluators.ScoredItem;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
@@ -26,11 +24,11 @@ public class MethodItemEvaluator extends ExecutableItemEvaluator<Method, MethodI
     }
 
     @Override
-    protected void evaluate(Method method, ScoredItem scoredItem) {
+    protected void evaluate(Method method, ScoredSyntaxItem scoredItem) {
         MethodItem item = getItem(scoredItem);
         if (!Modifier.isStatic(method.getModifiers()) && item.isCheckOverrideAnnotation()) {
             boolean checkResult = evaluatorService.checkOverrideAnnotation(method);
-            scoredItem.element(CheckedElement.OVERRIDE_ANNOTATION, checkResult);
+            scoredItem.addCheck(SyntaxElement.OVERRIDE_ANNOTATION, checkResult);
             if (!checkResult) {
                 log.info("{} -> Override annotation is not present.", item.getIdentifier());
             }

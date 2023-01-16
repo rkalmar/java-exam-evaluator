@@ -5,29 +5,30 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.SuperBuilder;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Data
-@Builder
+@SuperBuilder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ScoredItem {
+public abstract class ScoredItem<T> {
 
     BaseItem item;
 
     @Builder.Default
-    Map<CheckedElement, Boolean> checkedElements = new HashMap<>();
+    Map<T, Boolean> checkedElements = new HashMap<>();
 
-    public final void successfulElement(CheckedElement checkedElement) {
-        element(checkedElement, true);
+    public final void successfulCheck(T checkedElement) {
+        addCheck(checkedElement, true);
     }
 
-    public final void unsuccessfulElement(CheckedElement checkedElement) {
-        element(checkedElement, false);
+    public final void unsuccessfulCheck(T checkedElement) {
+        addCheck(checkedElement, false);
     }
 
-    public final void element(CheckedElement checkedElement, boolean checkResult) {
+    public final void addCheck(T checkedElement, boolean checkResult) {
         checkedElements.put(checkedElement, checkResult);
     }
 
@@ -36,6 +37,10 @@ public class ScoredItem {
             return 0;
         }
         long successfulCount = checkedElements.values().stream().filter(value -> value).count();
-        return ((double) item.getScore() / checkedElements.size()) * successfulCount;
+        return ((double) getItem().getScore() / checkedElements.size()) * successfulCount;
+    }
+
+    public int getMaxScore() {
+        return item.getScore();
     }
 }

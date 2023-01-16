@@ -3,6 +3,7 @@ package hu.sed.evaluator.task.evaluators;
 import hu.sed.evaluator.annotation.syntax.MethodCheck;
 import hu.sed.evaluator.item.ItemFactory;
 import hu.sed.evaluator.item.syntax.MethodItem;
+import hu.sed.evaluator.task.evaluators.syntax.SyntaxElement;
 import hu.sed.evaluator.task.evaluators.syntax.EvaluatorService;
 import hu.sed.evaluator.task.evaluators.syntax.MethodItemEvaluator;
 import lombok.SneakyThrows;
@@ -15,7 +16,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Map;
 
-import static hu.sed.evaluator.task.evaluators.CheckedElement.*;
+import static hu.sed.evaluator.task.evaluators.syntax.SyntaxElement.*;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -56,9 +57,9 @@ public class MethodItemEvaluatorTest {
         assertThat(scoredItem.getScore()).isEqualTo(1.0);
         assertThat(scoredItem.getItem()).isEqualTo(methodItem);
 
-        Map<CheckedElement, Boolean> checkedElements = scoredItem.getCheckedElements();
-        assertThat(checkedElements.keySet()).containsExactlyInAnyOrder(EXISTANCE, MODIFIERS, EXCEPTIONS, OVERRIDE_ANNOTATION);
-        assertTrue(checkedElements.get(EXISTANCE));
+        Map<SyntaxElement, Boolean> checkedElements = scoredItem.getCheckedElements();
+        assertThat(checkedElements.keySet()).containsExactlyInAnyOrder(EXISTENCE, MODIFIERS, EXCEPTIONS, OVERRIDE_ANNOTATION);
+        assertTrue(checkedElements.get(EXISTENCE));
         assertTrue(checkedElements.get(MODIFIERS));
         assertTrue(checkedElements.get(EXCEPTIONS));
         assertTrue(checkedElements.get(OVERRIDE_ANNOTATION));
@@ -81,9 +82,9 @@ public class MethodItemEvaluatorTest {
         assertThat(scoredItem.getScore()).isEqualTo(0.5);
         assertThat(scoredItem.getItem()).isEqualTo(methodItem);
 
-        Map<CheckedElement, Boolean> checkedElements = scoredItem.getCheckedElements();
-        assertThat(checkedElements.keySet()).containsExactlyInAnyOrder(EXISTANCE, MODIFIERS, EXCEPTIONS, OVERRIDE_ANNOTATION);
-        assertTrue(checkedElements.get(EXISTANCE));
+        Map<SyntaxElement, Boolean> checkedElements = scoredItem.getCheckedElements();
+        assertThat(checkedElements.keySet()).containsExactlyInAnyOrder(EXISTENCE, MODIFIERS, EXCEPTIONS, OVERRIDE_ANNOTATION);
+        assertTrue(checkedElements.get(EXISTENCE));
         assertFalse(checkedElements.get(MODIFIERS));
         assertTrue(checkedElements.get(EXCEPTIONS));
         assertFalse(checkedElements.get(OVERRIDE_ANNOTATION));
@@ -102,9 +103,9 @@ public class MethodItemEvaluatorTest {
         assertThat(scoredItem.getScore()).isEqualTo(0.0);
         assertThat(scoredItem.getItem()).isEqualTo(methodItem);
 
-        Map<CheckedElement, Boolean> checkedElements = scoredItem.getCheckedElements();
-        assertThat(checkedElements.keySet()).containsExactlyInAnyOrder(EXISTANCE);
-        assertFalse(checkedElements.get(EXISTANCE));
+        Map<SyntaxElement, Boolean> checkedElements = scoredItem.getCheckedElements();
+        assertThat(checkedElements.keySet()).containsExactlyInAnyOrder(EXISTENCE);
+        assertFalse(checkedElements.get(EXISTENCE));
     }
 
     @SneakyThrows

@@ -3,8 +3,6 @@ package hu.sed.evaluator.task.evaluators.syntax;
 import hu.sed.evaluator.item.ItemFactory;
 import hu.sed.evaluator.item.element.TypeDefinition;
 import hu.sed.evaluator.item.syntax.ExecutableItem;
-import hu.sed.evaluator.task.evaluators.CheckedElement;
-import hu.sed.evaluator.task.evaluators.ScoredItem;
 import hu.sed.evaluator.task.evaluators.exception.NoSuchSyntaxItemException;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -26,7 +24,7 @@ public abstract class ExecutableItemEvaluator<T extends Executable, E extends Ex
     }
 
     @Override
-    public final void evaluate(ScoredItem scoredItem) throws NoSuchSyntaxItemException {
+    public final void evaluate(ScoredSyntaxItem scoredItem) throws NoSuchSyntaxItemException {
         E item = getItem(scoredItem);
         T executable;
         try {
@@ -34,7 +32,7 @@ public abstract class ExecutableItemEvaluator<T extends Executable, E extends Ex
         } catch (ClassNotFoundException | NoSuchMethodException e) {
             throw new NoSuchSyntaxItemException();
         }
-        scoredItem.successfulElement(CheckedElement.EXISTANCE);
+        scoredItem.successfulCheck(SyntaxElement.EXISTENCE);
 
         checkModifiers(scoredItem, executable.getModifiers());
 
@@ -43,18 +41,18 @@ public abstract class ExecutableItemEvaluator<T extends Executable, E extends Ex
         evaluate(executable, scoredItem);
     }
 
-    protected void evaluate(T executable, ScoredItem scoredItem) {
+    protected void evaluate(T executable, ScoredSyntaxItem scoredItem) {
     }
 
     protected abstract T findExecutableElement(E item) throws ClassNotFoundException, NoSuchMethodException;
 
-    protected void checkExceptions(ScoredItem scoredItem, Type[] actualExceptionsTypes) {
+    protected void checkExceptions(ScoredSyntaxItem scoredItem, Type[] actualExceptionsTypes) {
         E item = getItem(scoredItem);
         if (item.isCheckExceptions()) {
             TypeDefinition[] actualExceptions = itemFactory.buildParameterizedTypeFromList(actualExceptionsTypes);
             TypeDefinition[] exceptedExceptions = item.getExceptions();
             boolean checkResult = evaluatorService.checkTypesInAnyOrder(actualExceptions, exceptedExceptions);
-            scoredItem.element(CheckedElement.EXCEPTIONS, checkResult);
+            scoredItem.addCheck(SyntaxElement.EXCEPTIONS, checkResult);
 
             if (!checkResult) {
                 log.info("{} defined exception mismatch. Actual value: {}, expected value: {}",

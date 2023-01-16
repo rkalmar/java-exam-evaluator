@@ -25,7 +25,7 @@ public @interface CustomTest {
     /**
      * @return array of methods to execute as part of the test
      */
-    String[] method() default { "all" };
+    String[] method() default CustomTestContants.ALL_TEST;
 
     /**
      * @return test description
@@ -35,7 +35,7 @@ public @interface CustomTest {
     /**
      * Defines the maximum possible score.
      * Note: this score can be obtained if all test method is successful,
-     *  therefore it shared among test methods.
+     * therefore it shared among test methods.
      *
      * @return maximum score
      */
