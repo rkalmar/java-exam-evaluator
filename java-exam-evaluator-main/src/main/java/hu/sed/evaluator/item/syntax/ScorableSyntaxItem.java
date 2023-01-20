@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
+import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Modifier;
 
@@ -31,8 +32,9 @@ public abstract class ScorableSyntaxItem extends ScorableItem {
         return Modifier.toString(modifiers);
     }
 
-    @JsonIgnore
-    public String getIdentifier() {
-        return containerClass + "." + name;
+    @Override
+    public String identifier() {
+        return getClass().getSimpleName() + "." + (StringUtils.isNotBlank(getContainerClass()) ? getContainerClass() + "." : "") + getName();
     }
+
 }

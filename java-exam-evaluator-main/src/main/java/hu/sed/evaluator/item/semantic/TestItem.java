@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
+import java.util.Arrays;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,5 +29,10 @@ public class TestItem extends ScorableItem {
     @Override
     public <R> R accept(ItemVisitor<R> visitor) {
         return visitor.visit(this);
+    }
+
+    @Override
+    public String identifier() {
+        return testClass + Arrays.toString(testMethods);
     }
 }

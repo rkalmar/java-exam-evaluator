@@ -15,4 +15,6 @@ import lombok.experimental.SuperBuilder;
 public abstract class ScorableItem implements Item {
 
     int score;
+
+    public abstract String identifier();
 }

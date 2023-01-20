@@ -10,7 +10,7 @@ import java.util.Optional;
 public enum TaskType {
     EXAM_VALIDATOR(ArgumentsUtil.VALIDATE_ARG),
     EXPORT_EXAM_ITEMS(ArgumentsUtil.EVALUATE_ARG),
-    UML_GENERATOR(ArgumentsUtil.UML_ARG),
+    EXPORT_DOC(ArgumentsUtil.UML_ARG),
     EXAM_EVALUATOR(ArgumentsUtil.EVALUATE_ARG);
 
     String argName;

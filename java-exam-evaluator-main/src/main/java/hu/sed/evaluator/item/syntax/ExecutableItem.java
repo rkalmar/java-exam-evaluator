@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
+import java.util.Arrays;
+
 @Data
 @SuperBuilder
 @NoArgsConstructor
@@ -20,4 +22,9 @@ public abstract class ExecutableItem extends ScorableSyntaxItem {
     TypeDefinition[] exceptions;
 
     boolean checkExceptions;
+
+    @Override
+    public String identifier() {
+        return super.identifier() + Arrays.toString(parameters);
+    }
 }

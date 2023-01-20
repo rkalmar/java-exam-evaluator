@@ -39,11 +39,6 @@ public class TypeItem extends ScorableSyntaxItem implements ItemContainer {
     boolean interfce;
 
     @Override
-    public String getIdentifier() {
-        return this.getName();
-    }
-
-    @Override
     public <R> R accept(ItemVisitor<R> visitor) {
         return visitor.visit(this);
     }

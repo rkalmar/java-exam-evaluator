@@ -26,14 +26,14 @@ import lombok.extern.slf4j.Slf4j;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class MainModule extends AbstractModule {
 
-    TaskArgument argument;
-
     public static void main(String[] args) {
         TaskArgument taskArgument = TaskArgument.builder()
-                .taskType(TaskType.EXAM_VALIDATOR)
+                .taskType(TaskType.EXAM_EVALUATOR)
                 .examPackage("hu.sed.evaluator.exam.y2020.zh2.task8.mysolution")
+                .examItemOutputFile("c:\\Users\\rkalmar\\Desktop\\szte\\diplomamunka\\examfile")
+                .examItemFile("c:\\Users\\rkalmar\\Desktop\\szte\\diplomamunka\\examfile")
                 .build();
-        Injector injector = Guice.createInjector(new MainModule(taskArgument));
+        Injector injector = Guice.createInjector(new MainModule());
         injector.getInstance(TaskExecutor.class).execute(taskArgument);
     }
 

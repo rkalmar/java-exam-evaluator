@@ -40,7 +40,11 @@ public abstract class ScoredItem<T> {
         return ((double) getItem().getScore() / checkedElements.size()) * successfulCount;
     }
 
-    public int getMaxScore() {
+    public final int getMaxScore() {
         return item.getScore();
+    }
+
+    public String identifier() {
+        return item.identifier();
     }
 }

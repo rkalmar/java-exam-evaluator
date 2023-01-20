@@ -6,7 +6,7 @@ import hu.sed.evaluator.item.Item;
 import hu.sed.evaluator.item.ScorableItem;
 import hu.sed.evaluator.item.container.ItemContainer;
 import hu.sed.evaluator.item.container.RootItem;
-import hu.sed.evaluator.task.evaluators.EvaluatorItemVisitor;
+import hu.sed.evaluator.task.evaluator.EvaluatorItemVisitor;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -32,9 +32,18 @@ public class ExamEvaluator implements Task<Score, RootItem> {
                 item -> evaluateItem(scoredItems, item)
         );
 
-        return Score.builder()
+        if (log.isErrorEnabled()) { //TODO
+            scoredItems.forEach(scoredItem ->
+                    log.error("{} - {}/{}", scoredItem.identifier(), scoredItem.getScore(), (double) scoredItem.getMaxScore())
+            );
+        }
+
+        Score score = Score.builder()
                 .scoredItems(scoredItems)
                 .build();
+        log.error("Score/TotalScore - {}/{} ({}%)", score.getScore(), score.getMaxScore(), score.getPercentage());
+
+        return score;
     }
 
     private void evaluateItem(List<ScoredItem<?>> scoredItems, Item item) {

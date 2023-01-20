@@ -9,15 +9,15 @@ public final class Score {
 
     List<ScoredItem<?>> scoredItems;
 
-    public double getTotalScore() {
+    public double getMaxScore() {
         return scoredItems.stream().mapToDouble(ScoredItem::getMaxScore).sum();
     }
 
-    public double getEarnedScore() {
+    public double getScore() {
         return scoredItems.stream().mapToDouble(ScoredItem::getScore).sum();
     }
 
     public double getPercentage() {
-        return getEarnedScore() / getTotalScore();
+        return getScore() / getMaxScore();
     }
 }

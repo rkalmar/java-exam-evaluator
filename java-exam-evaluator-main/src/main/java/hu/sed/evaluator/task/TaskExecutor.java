@@ -7,14 +7,13 @@ import hu.sed.evaluator.task.argument.TaskArgument;
 import hu.sed.evaluator.task.argument.TaskType;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.FileWriter;
-import java.io.Writer;
-
-import static hu.sed.evaluator.task.argument.TaskType.*;
+import static hu.sed.evaluator.task.argument.TaskType.EXAM_EVALUATOR;
+import static hu.sed.evaluator.task.argument.TaskType.EXAM_VALIDATOR;
+import static hu.sed.evaluator.task.argument.TaskType.EXPORT_EXAM_ITEMS;
+import static hu.sed.evaluator.task.argument.TaskType.EXPORT_DOC;
 
 @Singleton
 @Slf4j
@@ -26,7 +25,7 @@ public class TaskExecutor implements Task<Void, TaskArgument> {
 
     ExamEvaluator evaluator;
 
-    UmlGenerator umlGenerator;
+    DocExporter docExporter;
 
     ExamItemLoader examItemLoader;
 
@@ -37,12 +36,6 @@ public class TaskExecutor implements Task<Void, TaskArgument> {
 
         TaskType taskType = taskArgument.getTaskType();
 
-        switch (taskType) {
-            case EXAM_VALIDATOR:
-            case UML_GENERATOR:
-            case EXPORT_EXAM_ITEMS:
-            case EXAM_EVALUATOR:
-        }
         if (taskType == EXAM_VALIDATOR) {
             examValidator.execute(rootItem);
         } else if (taskType == EXPORT_EXAM_ITEMS) {
@@ -53,15 +46,14 @@ public class TaskExecutor implements Task<Void, TaskArgument> {
                     return rootItem;
                 }
 
-                @SneakyThrows
                 @Override
-                public Writer getWriter() {
-                    return new FileWriter(taskArgument.getExamItemOutputFile());
+                public String getFileName() {
+                    return taskArgument.getExamItemOutputFile();
                 }
             });
-        } else if (taskType == UML_GENERATOR) {
-            umlGenerator.execute(taskArgument);
-        } else if(taskType == EXAM_EVALUATOR) {
+        } else if (taskType == EXPORT_DOC) {
+            docExporter.execute(taskArgument);
+        } else if (taskType == EXAM_EVALUATOR) {
             evaluator.execute(rootItem);
         }
 
