@@ -22,7 +22,14 @@ public final class TypeDefinition {
 
     @Override
     public String toString() {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < genericTypes.length; i++) {
+            builder.append(genericTypes[i]);
+            if (i != genericTypes.length - 1) {
+                builder.append(", ");
+            }
+        }
         return type +
-                (getGenericTypes().length > 0 ? "<" + Arrays.toString(genericTypes) + ">" : "");
+                (getGenericTypes().length > 0 ? "<" + builder + ">" : "");
     }
 }

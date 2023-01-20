@@ -1,4 +1,4 @@
-package hu.sed.evaluator;
+package hu.sed.evaluator.task;
 
 import hu.sed.evaluator.annotation.semantic.CustomTest;
 import hu.sed.evaluator.annotation.semantic.SemanticTest;

@@ -1,7 +1,7 @@
 package hu.sed.evaluator.task.collectors;
 
 import com.google.common.collect.Lists;
-import hu.sed.evaluator.ReflectionUtils;
+import hu.sed.evaluator.task.ReflectionUtils;
 import hu.sed.evaluator.item.Item;
 
 import java.lang.reflect.AccessibleObject;

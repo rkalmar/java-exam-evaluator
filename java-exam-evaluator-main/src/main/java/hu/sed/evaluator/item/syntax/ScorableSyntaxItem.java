@@ -1,7 +1,7 @@
 package hu.sed.evaluator.item.syntax;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import hu.sed.evaluator.item.BaseItem;
+import hu.sed.evaluator.item.ScorableItem;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +16,7 @@ import java.lang.reflect.Modifier;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public abstract class BaseSyntaxItem extends BaseItem {
+public abstract class ScorableSyntaxItem extends ScorableItem {
 
     String containerClass;
 
@@ -34,13 +34,5 @@ public abstract class BaseSyntaxItem extends BaseItem {
     @JsonIgnore
     public String getIdentifier() {
         return containerClass + "." + name;
-    }
-
-    @Override
-    public String toString() {
-        return " score=" + this.getScore() +
-                ", name=" + name +
-                ", modifiers=" + getReadableModifiers() +
-                ", checkModifiers=" + checkModifiers;
     }
 }

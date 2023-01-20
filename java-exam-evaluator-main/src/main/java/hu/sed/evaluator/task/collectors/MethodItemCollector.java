@@ -2,7 +2,7 @@ package hu.sed.evaluator.task.collectors;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import hu.sed.evaluator.ReflectionUtils;
+import hu.sed.evaluator.task.ReflectionUtils;
 import hu.sed.evaluator.annotation.syntax.DefaultMethodCheck;
 import hu.sed.evaluator.item.ItemFactory;
 import hu.sed.evaluator.item.syntax.MethodItem;

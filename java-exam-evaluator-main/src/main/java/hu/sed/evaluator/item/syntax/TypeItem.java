@@ -1,6 +1,7 @@
 package hu.sed.evaluator.item.syntax;
 
 import hu.sed.evaluator.item.Item;
+import hu.sed.evaluator.item.ItemVisitor;
 import hu.sed.evaluator.item.container.ItemContainer;
 import hu.sed.evaluator.item.element.TypeDefinition;
 import lombok.AccessLevel;
@@ -17,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class TypeItem extends BaseSyntaxItem implements ItemContainer {
+public class TypeItem extends ScorableSyntaxItem implements ItemContainer {
 
     List<Item> items;
 
@@ -40,5 +41,15 @@ public class TypeItem extends BaseSyntaxItem implements ItemContainer {
     @Override
     public String getIdentifier() {
         return this.getName();
+    }
+
+    @Override
+    public <R> R accept(ItemVisitor<R> visitor) {
+        return visitor.visit(this);
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return items == null || items.isEmpty();
     }
 }

@@ -9,4 +9,6 @@ public interface ItemContainer extends Item {
     void setItems(List<Item> items);
 
     List<Item> getItems();
+
+    boolean isEmpty();
 }

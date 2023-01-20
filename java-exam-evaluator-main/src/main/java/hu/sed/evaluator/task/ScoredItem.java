@@ -1,6 +1,6 @@
-package hu.sed.evaluator.task.evaluators;
+package hu.sed.evaluator.task;
 
-import hu.sed.evaluator.item.BaseItem;
+import hu.sed.evaluator.item.ScorableItem;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +15,7 @@ import java.util.Map;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public abstract class ScoredItem<T> {
 
-    BaseItem item;
+    ScorableItem item;
 
     @Builder.Default
     Map<T, Boolean> checkedElements = new HashMap<>();

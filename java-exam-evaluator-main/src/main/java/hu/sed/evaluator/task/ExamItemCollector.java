@@ -1,10 +1,9 @@
 package hu.sed.evaluator.task;
 
-import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import hu.sed.evaluator.ReflectionUtils;
 import hu.sed.evaluator.annotation.syntax.TypeCheck;
+import hu.sed.evaluator.item.ScorableItem;
 import hu.sed.evaluator.item.Item;
 import hu.sed.evaluator.item.ItemFactory;
 import hu.sed.evaluator.item.container.ItemContainer;
@@ -30,11 +29,9 @@ import java.util.Optional;
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor(onConstructor = @__(@Inject))
-public class ExamItemCollector implements Task {
+public class ExamItemCollector implements Task<RootItem, TaskArgument> {
 
     ItemFactory itemFactory;
-
-    JsonMapper jsonMapper;
 
     FieldItemCollector fieldItemCollector;
 
@@ -46,25 +43,24 @@ public class ExamItemCollector implements Task {
 
     @SneakyThrows
     @Override
-    public void execute(TaskArgument argument) {
+    public RootItem execute(TaskArgument argument) {
+        log.info("Executing item collector for package: {}", argument.getExamPackage());
         List<Class<?>> examClasses = ReflectionUtils.getClassesOfPackage(argument.getExamPackage());
 
         List<Item> items = examClasses.stream()
                 .map(this::getExamItem)
                 .filter(item ->
-                        !(item instanceof ListItemContainer) || ((ListItemContainer) item).isEmpty()
+                        item instanceof ScorableItem ||
+                        !(item instanceof ItemContainer container) || !container.isEmpty()
                 )
                 .toList();
 
-        RootItem root = RootItem.builder()
+        return RootItem.builder()
                 .createdBy(System.getProperty("user.name"))
                 .creationTime(LocalDateTime.now())
                 .items(items)
                 .containerName(argument.getExamPackage())
                 .build();
-        String serialized = jsonMapper.writeValueAsString(root);
-        System.out.println(serialized); // TODO remove syso
-        // TODO write to file or to some
     }
 
     private Item getExamItem(Class<?> clazz) {

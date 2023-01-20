@@ -13,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public abstract class ExecutableItem extends BaseSyntaxItem {
+public abstract class ExecutableItem extends ScorableSyntaxItem {
 
     TypeDefinition[] parameters;
 

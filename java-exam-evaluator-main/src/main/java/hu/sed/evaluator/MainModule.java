@@ -9,10 +9,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
-import hu.sed.evaluator.task.ExamEvaluator;
-import hu.sed.evaluator.task.ExamItemCollector;
-import hu.sed.evaluator.task.ExamValidator;
-import hu.sed.evaluator.task.Task;
+import hu.sed.evaluator.task.TaskExecutor;
 import hu.sed.evaluator.task.argument.TaskArgument;
 import hu.sed.evaluator.task.argument.TaskType;
 import lombok.AccessLevel;
@@ -20,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
-import static com.google.inject.matcher.Matchers.annotatedWith;
 
 /**
  * @author rkalmar
@@ -34,22 +30,11 @@ public class MainModule extends AbstractModule {
 
     public static void main(String[] args) {
         TaskArgument taskArgument = TaskArgument.builder()
-                .taskType(TaskType.GENERATE_EXAM_ITEMS)
+                .taskType(TaskType.EXAM_VALIDATOR)
                 .examPackage("hu.sed.evaluator.exam.y2020.zh2.task8.mysolution")
                 .build();
         Injector injector = Guice.createInjector(new MainModule(taskArgument));
-        injector.getInstance(Task.class).execute(taskArgument);
-    }
-
-    @Provides
-    @Singleton
-    public Task getTask(Injector injector) {
-        return switch (this.argument.getTaskType()) {
-            case GENERATE_EXAM_ITEMS -> injector.getInstance(ExamItemCollector.class);
-            case EXAM_VALIDATOR -> injector.getInstance(ExamValidator.class);
-            case EXAM_EVALUATOR -> injector.getInstance(ExamEvaluator.class);
-            default -> throw new IllegalArgumentException();
-        };
+        injector.getInstance(TaskExecutor.class).execute(taskArgument);
     }
 
     @Provides

@@ -1,6 +1,6 @@
 package hu.sed.evaluator.task.evaluators.syntax;
 
-import hu.sed.evaluator.task.evaluators.ScoredItem;
+import hu.sed.evaluator.task.ScoredItem;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;

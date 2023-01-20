@@ -3,6 +3,7 @@ package hu.sed.evaluator.task.evaluators;
 import hu.sed.evaluator.annotation.syntax.TypeCheck;
 import hu.sed.evaluator.item.ItemFactory;
 import hu.sed.evaluator.item.syntax.TypeItem;
+import hu.sed.evaluator.task.ScoredItem;
 import hu.sed.evaluator.task.evaluators.syntax.SyntaxElement;
 import hu.sed.evaluator.task.evaluators.syntax.EvaluatorService;
 import hu.sed.evaluator.task.evaluators.syntax.TypeItemEvaluator;

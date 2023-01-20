@@ -1,6 +1,7 @@
 package hu.sed.evaluator.item.semantic;
 
-import hu.sed.evaluator.item.BaseItem;
+import hu.sed.evaluator.item.ScorableItem;
+import hu.sed.evaluator.item.ItemVisitor;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,7 +14,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @SuperBuilder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class TestItem extends BaseItem {
+public class TestItem extends ScorableItem {
 
     private static final String ALL_TEST_METHOD = "all";
 
@@ -22,4 +23,9 @@ public class TestItem extends BaseItem {
     String[] testMethods;
 
     String description;
+
+    @Override
+    public <R> R accept(ItemVisitor<R> visitor) {
+        return visitor.visit(this);
+    }
 }

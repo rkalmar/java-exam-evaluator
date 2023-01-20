@@ -25,4 +25,6 @@ import java.io.Serializable;
         @JsonSubTypes.Type(value = RootItem.class, name = "root")}
 )
 public interface Item extends Serializable {
+
+    <R> R accept(ItemVisitor<R> visitor);
 }

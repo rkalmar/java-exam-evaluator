@@ -1,8 +1,7 @@
 package hu.sed.evaluator.task;
 
-import hu.sed.evaluator.task.argument.TaskArgument;
 
-public interface Task {
+public interface Task<R, T> {
 
-    void execute(TaskArgument argument);
+    R execute(T argument);
 }

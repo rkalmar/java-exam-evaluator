@@ -4,10 +4,11 @@ import hu.sed.evaluator.task.argument.TaskArgument;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class UmlGenerator implements Task {
+public class UmlGenerator implements Task<Void, TaskArgument> {
 
     @Override
-    public void execute(TaskArgument argument) {
+    public Void execute(TaskArgument argument) {
         log.debug("Execute Uml generator");
+        return null;
     }
 }
