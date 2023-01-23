@@ -1,7 +1,7 @@
 package hu.sed.evaluator.item.semantic;
 
-import hu.sed.evaluator.item.ScorableItem;
 import hu.sed.evaluator.item.ItemVisitor;
+import hu.sed.evaluator.item.ScorableItem;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;

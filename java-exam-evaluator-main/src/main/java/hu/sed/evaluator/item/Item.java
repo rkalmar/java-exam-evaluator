@@ -23,7 +23,7 @@ import java.io.Serializable;
         @JsonSubTypes.Type(value = TestItem.class, name = "test"),
         @JsonSubTypes.Type(value = ListItemContainer.class, name = "container"),
         @JsonSubTypes.Type(value = RootItem.class, name = "root")}
-)
+    )
 public interface Item extends Serializable {
 
     <R> R accept(ItemVisitor<R> visitor);

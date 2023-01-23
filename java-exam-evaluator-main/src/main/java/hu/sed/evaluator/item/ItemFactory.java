@@ -87,15 +87,15 @@ public class ItemFactory {
                 .build();
     }
 
-    public TypeDefinition[] createTypeDefForImplementedInterfaces(Class<?> clazz) {
-        return Arrays.stream(clazz.getGenericInterfaces()).map(this::createTypeDef).toArray(TypeDefinition[]::new);
-    }
-
     public TypeDefinition createTypeDef(Field field) {
         return TypeDefinition.builder()
                 .type(field.getType().getName())
                 .genericTypes(buildParameterizedType(field.getGenericType()))
                 .build();
+    }
+
+    public TypeDefinition[] createTypeDefForImplementedInterfaces(Class<?> clazz) {
+        return Arrays.stream(clazz.getGenericInterfaces()).map(this::createTypeDef).toArray(TypeDefinition[]::new);
     }
 
     public TypeDefinition createReturnTypeDef(Method method) {
@@ -127,8 +127,8 @@ public class ItemFactory {
 
     public TypeDefinition[] buildParameterizedType(java.lang.reflect.Type type) {
         List<TypeDefinition> result = new ArrayList<>();
-        if (type instanceof ParameterizedType parameterizedType) {
-            for (java.lang.reflect.Type typeArgument : parameterizedType.getActualTypeArguments()) {
+        if (type instanceof ParameterizedType) {
+            for (java.lang.reflect.Type typeArgument : ((ParameterizedType) type).getActualTypeArguments()) {
                 result.add(TypeDefinition.builder()
                         .type(toTypeName(typeArgument))
                         .genericTypes(buildParameterizedType(typeArgument))
@@ -140,7 +140,7 @@ public class ItemFactory {
 
     private String toTypeName(java.lang.reflect.Type type) {
         //noinspection rawtypes
-        return type instanceof ParameterizedType parameterizedType1 ?
-                parameterizedType1.getRawType().getTypeName() : ((Class) type).getName();
+        return type instanceof ParameterizedType ?
+                ((ParameterizedType)type).getRawType().getTypeName() : ((Class) type).getName();
     }
 }

@@ -1,12 +1,12 @@
-package hu.sed.evaluator.exam.y2020.zh2.task8.mysolution;
+package hu.sed.evaluator.exam.sample;
 
 import hu.sed.evaluator.annotation.semantic.CustomTest;
 import hu.sed.evaluator.annotation.syntax.FieldCheck;
 import hu.sed.evaluator.annotation.syntax.MethodCheck;
 import hu.sed.evaluator.annotation.syntax.SkipCheck;
 import hu.sed.evaluator.annotation.syntax.TypeCheck;
-import hu.sed.evaluator.exam.y2020.zh2.task8.mytests.Tests;
-import hu.sed.evaluator.exam.y2020.zh2.task8.mytests.Tests2;
+import test.hu.sed.evaluator.exam.sample.Tests;
+import test.hu.sed.evaluator.exam.sample.Tests2;
 
 @CustomTest(testClass = Tests2.class, method = {"myThirdTest", "myFourthTest"}, score = 5)
 @TypeCheck(checkMethods = true,

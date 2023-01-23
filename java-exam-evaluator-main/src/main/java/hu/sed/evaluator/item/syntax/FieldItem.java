@@ -1,6 +1,5 @@
 package hu.sed.evaluator.item.syntax;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import hu.sed.evaluator.item.ItemVisitor;
 import hu.sed.evaluator.item.element.TypeDefinition;
 import lombok.AccessLevel;

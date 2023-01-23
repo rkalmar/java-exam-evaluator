@@ -1,4 +1,4 @@
-package hu.sed.evaluator.exam.y2020.zh2.task8.mysolution;
+package hu.sed.evaluator.exam.sample;
 
 import hu.sed.evaluator.annotation.syntax.MethodCheck;
 import hu.sed.evaluator.annotation.syntax.TypeCheck;

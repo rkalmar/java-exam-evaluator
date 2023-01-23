@@ -2,18 +2,16 @@ package hu.sed.evaluator.task.evaluator.syntax;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import hu.sed.evaluator.task.ReflectionUtils;
 import hu.sed.evaluator.item.ItemFactory;
 import hu.sed.evaluator.item.element.TypeDefinition;
 import hu.sed.evaluator.item.syntax.FieldItem;
+import hu.sed.evaluator.task.ReflectionUtils;
 import hu.sed.evaluator.task.evaluator.exception.NoSuchSyntaxItemException;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;
-
-import static hu.sed.evaluator.task.evaluator.syntax.SyntaxElement.EXISTENCE;
 
 @Slf4j
 @Singleton
@@ -40,7 +38,7 @@ public class FieldItemEvaluator extends SyntaxItemEvaluator<FieldItem> {
         if (!checkType(field, item.getType())) {
             throw new NoSuchSyntaxItemException();
         }
-        scoredItem.successfulCheck(EXISTENCE);
+        scoredItem.successfulCheck(SyntaxElement.EXISTENCE);
 
         checkModifiers(scoredItem, field.getModifiers());
     }

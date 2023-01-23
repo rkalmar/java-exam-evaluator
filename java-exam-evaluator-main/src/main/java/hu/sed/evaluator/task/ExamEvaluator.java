@@ -28,9 +28,8 @@ public class ExamEvaluator implements Task<Score, RootItem> {
         log.debug("Execute evaluator");
         List<ScoredItem<?>> scoredItems = new ArrayList<>();
 
-        rootItem.getItems().forEach(
-                item -> evaluateItem(scoredItems, item)
-        );
+        rootItem.getItems()
+                .forEach(item -> evaluateItem(scoredItems, item));
 
         if (log.isErrorEnabled()) { //TODO
             scoredItems.forEach(scoredItem ->
@@ -51,8 +50,8 @@ public class ExamEvaluator implements Task<Score, RootItem> {
             ScoredItem<?> scoredItem = item.accept(evaluatorItemVisitor);
             scoredItems.add(scoredItem);
         }
-        if (item instanceof ItemContainer container) {
-            container.getItems().forEach(childItem -> evaluateItem(scoredItems, childItem));
+        if (item instanceof ItemContainer) {
+            ((ItemContainer) item).getItems().forEach(childItem -> evaluateItem(scoredItems, childItem));
         }
     }
 }

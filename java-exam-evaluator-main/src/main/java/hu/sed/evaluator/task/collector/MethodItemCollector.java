@@ -2,10 +2,10 @@ package hu.sed.evaluator.task.collector;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import hu.sed.evaluator.task.ReflectionUtils;
 import hu.sed.evaluator.annotation.syntax.DefaultMethodCheck;
 import hu.sed.evaluator.item.ItemFactory;
 import hu.sed.evaluator.item.syntax.MethodItem;
+import hu.sed.evaluator.task.ReflectionUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

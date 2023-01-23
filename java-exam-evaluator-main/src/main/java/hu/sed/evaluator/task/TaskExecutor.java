@@ -10,11 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
-import static hu.sed.evaluator.task.argument.TaskType.EXAM_EVALUATOR;
-import static hu.sed.evaluator.task.argument.TaskType.EXAM_VALIDATOR;
-import static hu.sed.evaluator.task.argument.TaskType.EXPORT_EXAM_ITEMS;
-import static hu.sed.evaluator.task.argument.TaskType.EXPORT_DOC;
-
 @Singleton
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -36,9 +31,9 @@ public class TaskExecutor implements Task<Void, TaskArgument> {
 
         TaskType taskType = taskArgument.getTaskType();
 
-        if (taskType == EXAM_VALIDATOR) {
+        if (taskType == TaskType.EXAM_VALIDATOR) {
             examValidator.execute(rootItem);
-        } else if (taskType == EXPORT_EXAM_ITEMS) {
+        } else if (taskType == TaskType.EXPORT_EXAM_ITEMS) {
             examValidator.execute(rootItem);
             examItemExporter.execute(new ExamItemExporter.ExportParam() {
                 @Override
@@ -51,9 +46,9 @@ public class TaskExecutor implements Task<Void, TaskArgument> {
                     return taskArgument.getExamItemOutputFile();
                 }
             });
-        } else if (taskType == EXPORT_DOC) {
+        } else if (taskType == TaskType.EXPORT_DOC) {
             docExporter.execute(taskArgument);
-        } else if (taskType == EXAM_EVALUATOR) {
+        } else if (taskType == TaskType.EXAM_EVALUATOR) {
             evaluator.execute(rootItem);
         }
 

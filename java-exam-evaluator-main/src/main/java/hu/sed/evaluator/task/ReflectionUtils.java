@@ -48,6 +48,10 @@ public class ReflectionUtils {
         return clazz.isAnnotationPresent(SkipCheck.class);
     }
 
+    public <T extends Annotation> Optional<T> getAnnotation(Class<T> annotationClazz, Class<?> clazz) {
+        return clazz.isAnnotationPresent(annotationClazz) ? Optional.of(clazz.getAnnotation(annotationClazz)) : Optional.empty();
+    }
+
     public List<FieldCheck> getAnnotations(Field field) {
         return getAnnotations(FieldCheck.class, field);
     }
@@ -62,10 +66,6 @@ public class ReflectionUtils {
 
     public <T extends Annotation> List<T> getAnnotations(Class<T> annotationClazz, AnnotatedElement annotatedElement) {
         return Arrays.asList(annotatedElement.getAnnotationsByType(annotationClazz));
-    }
-
-    public <T extends Annotation> Optional<T> getAnnotation(Class<T> annotationClazz, Class<?> clazz) {
-        return clazz.isAnnotationPresent(annotationClazz) ? Optional.of(clazz.getAnnotation(annotationClazz)) : Optional.empty();
     }
 
     public List<CustomTest> getAnnotations(Class<?> clazz) {

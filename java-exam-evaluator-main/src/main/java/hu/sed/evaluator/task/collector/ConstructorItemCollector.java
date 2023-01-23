@@ -2,10 +2,10 @@ package hu.sed.evaluator.task.collector;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import hu.sed.evaluator.task.ReflectionUtils;
 import hu.sed.evaluator.annotation.syntax.DefaultConstructorCheck;
 import hu.sed.evaluator.item.ItemFactory;
 import hu.sed.evaluator.item.syntax.ConstructorItem;
+import hu.sed.evaluator.task.ReflectionUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -17,7 +17,7 @@ import java.util.function.Function;
 @Singleton
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor(onConstructor = @__(@Inject))
-public final class ConstructorItemCollector extends ItemCollector<ConstructorItem, Constructor<?>>{
+public final class ConstructorItemCollector extends ItemCollector<ConstructorItem, Constructor<?>> {
 
     ItemFactory itemFactory;
 

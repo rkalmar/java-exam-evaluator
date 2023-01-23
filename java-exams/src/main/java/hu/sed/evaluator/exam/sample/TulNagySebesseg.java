@@ -1,4 +1,4 @@
-package hu.sed.evaluator.exam.y2020.zh2.task8.mysolution;
+package hu.sed.evaluator.exam.sample;
 
 public class TulNagySebesseg extends Exception {
 

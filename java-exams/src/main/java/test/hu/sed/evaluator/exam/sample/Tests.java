@@ -1,4 +1,4 @@
-package hu.sed.evaluator.exam.y2020.zh2.task8.mytests;
+package test.hu.sed.evaluator.exam.sample;
 
 public class Tests {
 

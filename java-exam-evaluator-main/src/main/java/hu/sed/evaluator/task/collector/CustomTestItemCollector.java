@@ -2,9 +2,9 @@ package hu.sed.evaluator.task.collector;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import hu.sed.evaluator.task.ReflectionUtils;
 import hu.sed.evaluator.item.ItemFactory;
 import hu.sed.evaluator.item.semantic.TestItem;
+import hu.sed.evaluator.task.ReflectionUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

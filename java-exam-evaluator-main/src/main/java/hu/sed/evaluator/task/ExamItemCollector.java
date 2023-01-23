@@ -3,9 +3,9 @@ package hu.sed.evaluator.task;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import hu.sed.evaluator.annotation.syntax.TypeCheck;
-import hu.sed.evaluator.item.ScorableItem;
 import hu.sed.evaluator.item.Item;
 import hu.sed.evaluator.item.ItemFactory;
+import hu.sed.evaluator.item.ScorableItem;
 import hu.sed.evaluator.item.container.ItemContainer;
 import hu.sed.evaluator.item.container.ListItemContainer;
 import hu.sed.evaluator.item.container.RootItem;
@@ -51,7 +51,7 @@ public class ExamItemCollector implements Task<RootItem, TaskArgument> {
                 .map(this::getExamItem)
                 .filter(item ->
                         item instanceof ScorableItem ||
-                        !(item instanceof ItemContainer container) || !container.isEmpty()
+                                !(item instanceof ItemContainer) || !((ItemContainer) item).isEmpty()
                 )
                 .toList();
 

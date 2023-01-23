@@ -1,8 +1,8 @@
 package hu.sed.evaluator.task.evaluator.syntax;
 
 import hu.sed.evaluator.item.syntax.ScorableSyntaxItem;
-import hu.sed.evaluator.task.evaluator.Evaluator;
 import hu.sed.evaluator.task.ScoredItem;
+import hu.sed.evaluator.task.evaluator.Evaluator;
 import hu.sed.evaluator.task.evaluator.exception.NoSuchSyntaxItemException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -10,8 +10,6 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Modifier;
-
-import static hu.sed.evaluator.task.evaluator.syntax.SyntaxElement.MODIFIERS;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -43,7 +41,7 @@ public abstract class SyntaxItemEvaluator<T extends ScorableSyntaxItem> implemen
         ScorableSyntaxItem item = (ScorableSyntaxItem) scoredItem.getItem();
         if (item.isCheckModifiers()) {
             boolean checkResult = evaluatorService.checkModifiers(actualModifiers, item.getModifiers());
-            scoredItem.addCheck(MODIFIERS, checkResult);
+            scoredItem.addCheck(SyntaxElement.MODIFIERS, checkResult);
             if (!checkResult) {
                 log.info("{} modifier mismatch. Actual value: {}, expected value: {}",
                         item.identifier(), Modifier.toString(actualModifiers), item.getReadableModifiers());

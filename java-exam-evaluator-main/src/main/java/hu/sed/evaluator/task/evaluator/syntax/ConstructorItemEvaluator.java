@@ -2,9 +2,9 @@ package hu.sed.evaluator.task.evaluator.syntax;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import hu.sed.evaluator.task.ReflectionUtils;
 import hu.sed.evaluator.item.ItemFactory;
 import hu.sed.evaluator.item.syntax.ConstructorItem;
+import hu.sed.evaluator.task.ReflectionUtils;
 
 import java.lang.reflect.Constructor;
 import java.util.List;

@@ -27,8 +27,8 @@ public class ExamValidator implements Task<Void, RootItem> {
         log.debug("Execute validator");
 
         try {
-            String s = jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(rootItem);
-            log.error(s);
+            String jsonString = jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(rootItem);
+            log.error(jsonString);
         } catch (JsonProcessingException e) {
             // TODO
         }
