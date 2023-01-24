@@ -1,5 +1,7 @@
 package hu.sed.evaluator.item;
 
+import static com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -16,13 +18,13 @@ import java.io.Serializable;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "itemType")
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = FieldItem.class, name = "field"),
-        @JsonSubTypes.Type(value = MethodItem.class, name = "method"),
-        @JsonSubTypes.Type(value = ConstructorItem.class, name = "constructor"),
-        @JsonSubTypes.Type(value = TypeItem.class, name = "type"),
-        @JsonSubTypes.Type(value = TestItem.class, name = "test"),
-        @JsonSubTypes.Type(value = ListItemContainer.class, name = "container"),
-        @JsonSubTypes.Type(value = RootItem.class, name = "root")}
+        @Type(value = FieldItem.class, name = "field"),
+        @Type(value = MethodItem.class, name = "method"),
+        @Type(value = ConstructorItem.class, name = "constructor"),
+        @Type(value = TypeItem.class, name = "type"),
+        @Type(value = TestItem.class, name = "test"),
+        @Type(value = ListItemContainer.class, name = "container"),
+        @Type(value = RootItem.class, name = "root")}
     )
 public interface Item extends Serializable {
 
