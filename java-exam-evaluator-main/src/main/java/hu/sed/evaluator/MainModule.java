@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * @author rkalmar
  */
-@Slf4j // TODO add config file for logger
+@Slf4j
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class MainModule extends AbstractModule {
@@ -33,6 +33,7 @@ public class MainModule extends AbstractModule {
                 .examItemOutputFile("c:\\Users\\rkalmar\\Desktop\\szte\\diplomamunka\\examfile")
                 .examItemFile("c:\\Users\\rkalmar\\Desktop\\szte\\diplomamunka\\examfile")
                 .build();
+        log.info("Initializing.. arguments: {}", taskArgument);
         Injector injector = Guice.createInjector(new MainModule());
         injector.getInstance(TaskExecutor.class).execute(taskArgument);
     }
