@@ -20,7 +20,7 @@ public abstract class SyntaxItemEvaluator<T extends ScorableSyntaxItem> implemen
 
     @Override
     public final ScoredSyntaxItem evaluate(T item) {
-        log.info("{} -> checking item.", item.identifier());
+        log.debug("Evaluate item {}", item.identifier());
         ScoredSyntaxItem scoredItem = ScoredSyntaxItem.builder()
                 .item(item)
                 .build();
@@ -30,6 +30,12 @@ public abstract class SyntaxItemEvaluator<T extends ScorableSyntaxItem> implemen
         } catch (NoSuchSyntaxItemException exception) {
             log.info("{} -> Item does not exist.", item.identifier());
             scoredItem.unsuccessfulCheck(SyntaxElement.EXISTENCE);
+        }
+
+        if (scoredItem.getUnsuccessfulChecks().isEmpty()) {
+            log.debug("Successfully tested.");
+        } else {
+            log.debug("Failed items {}", scoredItem.getUnsuccessfulChecks());
         }
 
         return scoredItem;

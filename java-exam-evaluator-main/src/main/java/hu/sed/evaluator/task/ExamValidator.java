@@ -24,7 +24,7 @@ public class ExamValidator implements Task<Void, RootItem> {
 
     @Override
     public Void execute(RootItem rootItem) {
-        log.debug("Execute validator");
+        log.debug("Executing validator..");
 
         try {
             String jsonString = jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(rootItem);
@@ -32,6 +32,8 @@ public class ExamValidator implements Task<Void, RootItem> {
         } catch (JsonProcessingException e) {
             // TODO
         }
+
+        // TODO
 
         return null;
     }

@@ -7,6 +7,7 @@ import hu.sed.evaluator.annotation.syntax.FieldCheck;
 import hu.sed.evaluator.annotation.syntax.MethodCheck;
 import hu.sed.evaluator.annotation.syntax.SkipCheck;
 import hu.sed.evaluator.annotation.syntax.SyntaxCheck;
+import hu.sed.evaluator.annotation.uml.SkipFromUml;
 import lombok.experimental.UtilityClass;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
@@ -46,6 +47,10 @@ public class ReflectionUtils {
 
     public boolean skipped(Class<?> clazz) {
         return clazz.isAnnotationPresent(SkipCheck.class);
+    }
+
+    public boolean notUmlSkipped(AnnotatedElement annotatedElement) {
+        return !annotatedElement.isAnnotationPresent(SkipFromUml.class);
     }
 
     public <T extends Annotation> Optional<T> getAnnotation(Class<T> annotationClazz, Class<?> clazz) {

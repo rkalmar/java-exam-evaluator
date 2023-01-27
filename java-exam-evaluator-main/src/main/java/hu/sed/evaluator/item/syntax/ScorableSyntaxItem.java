@@ -34,7 +34,7 @@ public abstract class ScorableSyntaxItem extends ScorableItem {
 
     @Override
     public String identifier() {
-        return getClass().getSimpleName() + "." + (StringUtils.isNotBlank(getContainerClass()) ? getContainerClass() + "." : "") + getName();
+        return getClass().getSimpleName() + "-" + (StringUtils.isNotBlank(getContainerClass()) ? getContainerClass() + "." : "") + getName();
     }
 
 }

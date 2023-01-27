@@ -29,9 +29,10 @@ public class MainModule extends AbstractModule {
     public static void main(String[] args) {
         TaskArgument taskArgument = TaskArgument.builder()
                 .taskType(TaskType.EXAM_EVALUATOR)
-                .examPackage("hu.sed.evaluator.exam.y2020.zh2.task8.mysolution")
+                .examPackage("hu.sed.evaluator.exam.sample")
                 .examItemOutputFile("c:\\Users\\rkalmar\\Desktop\\szte\\diplomamunka\\examfile")
                 .examItemFile("c:\\Users\\rkalmar\\Desktop\\szte\\diplomamunka\\examfile")
+                .examDocOutputFolder("c:\\Users\\rkalmar\\Desktop\\szte\\diplomamunka")
                 .build();
         log.info("Initializing.. arguments: {}", taskArgument);
         Injector injector = Guice.createInjector(new MainModule());

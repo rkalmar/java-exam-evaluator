@@ -5,6 +5,7 @@ import hu.sed.evaluator.annotation.syntax.FieldCheck;
 import hu.sed.evaluator.annotation.syntax.MethodCheck;
 import hu.sed.evaluator.annotation.syntax.SkipCheck;
 import hu.sed.evaluator.annotation.syntax.TypeCheck;
+import hu.sed.evaluator.annotation.uml.SkipFromUml;
 import test.hu.sed.evaluator.exam.sample.Tests;
 import test.hu.sed.evaluator.exam.sample.Tests2;
 
@@ -85,6 +86,7 @@ public class Auto extends Jarmu {
         return marka;
     }
 
+    @SkipFromUml
     @Override
     public String toString() {
         return "Az auto markaja " + marka + ", gyartasi eve " + getGyartasiEv() + ", fogyasztasa " +

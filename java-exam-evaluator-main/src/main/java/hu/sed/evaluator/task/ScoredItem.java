@@ -8,7 +8,9 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Data
 @SuperBuilder
@@ -42,6 +44,12 @@ public abstract class ScoredItem<T> {
 
     public final int getMaxScore() {
         return item.getScore();
+    }
+
+    public final List<T> getUnsuccessfulChecks() {
+        return checkedElements.keySet().stream()
+                .filter(check -> !checkedElements.get(check))
+                .collect(Collectors.toList());
     }
 
     public String identifier() {

@@ -16,5 +16,7 @@ public class TaskArgument {
 
     String examItemOutputFile;
 
+    String examDocOutputFolder;
+
     String examItemFile;
 }
