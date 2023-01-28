@@ -159,7 +159,7 @@ public class TypeItemFactoryTest {
         assertThat(typeItem.getReadableModifiers()).isEqualTo("private abstract static interface");
         assertThat(typeItem.isCheckParentClazz()).isFalse();
         assertThat(typeItem.getImplementedInterfaces()).isEmpty();
-        assertThat(typeItem.isInterfce()).isTrue();
+        assertThat(typeItem.isInterfaze()).isTrue();
     }
 
     private Class<?> getClassByName(String clazzName) {

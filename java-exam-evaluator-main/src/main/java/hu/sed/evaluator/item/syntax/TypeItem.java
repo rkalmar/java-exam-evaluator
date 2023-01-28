@@ -36,7 +36,9 @@ public class TypeItem extends ScorableSyntaxItem implements ItemContainer {
      */
     TypeDefinition[] implementedInterfaces;
 
-    boolean interfce;
+    boolean interfaze;
+
+    boolean enumeration;
 
     @Override
     public <R> R accept(ItemVisitor<R> visitor) {

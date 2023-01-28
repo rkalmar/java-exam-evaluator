@@ -59,7 +59,10 @@ public class TypeItemEvaluator extends SyntaxItemEvaluator<TypeItem> {
     private Class<?> getClass(TypeItem item) throws NoSuchSyntaxItemException {
         try {
             Class<?> classByName = ReflectionUtils.getClassByName(item.getName());
-            if (item.isInterfce() != classByName.isInterface()) {
+            if (item.isInterfaze() != classByName.isInterface()) {
+                throw new ClassNotFoundException();
+            }
+            if (item.isEnumeration() != classByName.isEnum()) {
                 throw new ClassNotFoundException();
             }
             return classByName;

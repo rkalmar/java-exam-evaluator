@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
@@ -36,6 +37,11 @@ public final class FieldItemCollector extends ItemCollector<FieldItem, Field> {
 
     @Override
     protected Field[] getElements(Class<?> clazz) {
+        if (clazz.isEnum()) {
+            return Arrays.stream(clazz.getDeclaredFields())
+                    .filter(field -> !field.getName().contains("$"))
+                    .toArray(Field[]::new);
+        }
         return clazz.getDeclaredFields();
     }
 }

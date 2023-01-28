@@ -86,7 +86,7 @@ public class TypeItemEvaluatorTest {
         // GIVEN
         Class<TestClass> testClass = TestClass.class;
         TypeItem item = itemFactory.createItem(testClass.getAnnotation(TypeCheck.class), testClass);
-        item.setInterfce(true);
+        item.setInterfaze(true);
 
         // WHEN
         ScoredItem scoredItem = typeItemEvaluator.evaluate(item);

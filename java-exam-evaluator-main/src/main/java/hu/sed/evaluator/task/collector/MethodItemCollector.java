@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
@@ -36,6 +37,12 @@ public final class MethodItemCollector extends ItemCollector<MethodItem, Method>
 
     @Override
     protected Method[] getElements(Class<?> clazz) {
+        if (clazz.isEnum()) {
+            return Arrays.stream(clazz.getDeclaredMethods())
+                    .filter(method -> !method.getName().contains("$") &&
+                            !Arrays.asList("valueOf", "values").contains(method.getName()))
+                    .toArray(Method[]::new);
+        }
         return clazz.getDeclaredMethods();
     }
 }
