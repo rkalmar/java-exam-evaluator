@@ -13,11 +13,13 @@ public class ExamExporter implements Task<Void> {
 
     DocExporter docExporter;
     ExamItemExporter examItemExporter;
+    ExamValidator examValidator;
 
     @Override
     public Void execute() {
-        docExporter.execute();
+        examValidator.execute();
         examItemExporter.execute();
+        docExporter.execute();
         return null;
     }
 }

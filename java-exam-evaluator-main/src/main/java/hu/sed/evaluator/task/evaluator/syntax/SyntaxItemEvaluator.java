@@ -20,7 +20,7 @@ public abstract class SyntaxItemEvaluator<T extends ScorableSyntaxItem> implemen
 
     @Override
     public final ScoredSyntaxItem evaluate(T item) {
-        log.debug("Evaluate item {}", item.identifier());
+        log.info("Evaluate item {}", item.identifier());
         ScoredSyntaxItem scoredItem = ScoredSyntaxItem.builder()
                 .item(item)
                 .build();
@@ -33,9 +33,9 @@ public abstract class SyntaxItemEvaluator<T extends ScorableSyntaxItem> implemen
         }
 
         if (scoredItem.getUnsuccessfulChecks().isEmpty()) {
-            log.debug("Successfully tested.");
+            log.info("Successfully tested.");
         } else {
-            log.debug("Failed items {}", scoredItem.getUnsuccessfulChecks());
+            log.info("Failed items {}", scoredItem.getUnsuccessfulChecks());
         }
 
         return scoredItem;

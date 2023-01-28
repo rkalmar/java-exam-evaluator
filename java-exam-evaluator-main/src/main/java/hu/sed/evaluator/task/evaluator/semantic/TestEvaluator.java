@@ -27,7 +27,7 @@ public class TestEvaluator implements Evaluator<TestItem, ScoredSemanticItem> {
 
     @Override
     public ScoredSemanticItem evaluate(TestItem item) {
-        log.debug("Evaluate item: {}", item.identifier());
+        log.info("Evaluate item: {}", item.identifier());
         if (!StringUtils.isBlank(item.getDescription())) {
             log.info("Description of test: {}", item.getDescription());
         }
@@ -109,7 +109,9 @@ public class TestEvaluator implements Evaluator<TestItem, ScoredSemanticItem> {
                 .filter(method -> Modifier.isPublic(method.getModifiers()))
                 .filter(method -> method.getGenericParameterTypes().length == 0);
         if (testMethodNames.size() == 1 && CustomTestContants.ALL_TEST.equals(testMethodNames.get(0))) {
-            testMethods.addAll(methodStream.toList());
+            List<Method> methods = methodStream.toList();
+            item.setTestMethods(methods.stream().map(Method::getName).toArray(String[]::new));
+            testMethods.addAll(methods);
         } else {
             List<Method> methods = methodStream.toList();
             for (String testMethodName : testMethodNames) {

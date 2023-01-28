@@ -28,7 +28,7 @@ class DocExporter implements Task<Void> {
 
     @Override
     public Void execute() {
-        log.debug("Executing document generator..");
+        log.info("Executing document generator..");
 
         UmlRepresentation umlRepresentation = UmlUtility.createUmlRepresentation(argument.getExamPackage());
 

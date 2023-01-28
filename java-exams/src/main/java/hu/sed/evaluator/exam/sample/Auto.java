@@ -6,6 +6,7 @@ import hu.sed.evaluator.annotation.syntax.MethodCheck;
 import hu.sed.evaluator.annotation.syntax.SkipCheck;
 import hu.sed.evaluator.annotation.syntax.TypeCheck;
 import hu.sed.evaluator.annotation.uml.SkipFromUml;
+import test.hu.sed.evaluator.exam.sample.Test3;
 import test.hu.sed.evaluator.exam.sample.Tests;
 import test.hu.sed.evaluator.exam.sample.Tests2;
 
@@ -14,6 +15,7 @@ import test.hu.sed.evaluator.exam.sample.Tests2;
         checkFields = true,
         score = 15)
 @CustomTest(testClass = Tests2.class, method = {"xx", "yy"}, score = 8)
+@CustomTest(testClass = Test3.class)
 public class Auto extends Jarmu {
 
     @FieldCheck

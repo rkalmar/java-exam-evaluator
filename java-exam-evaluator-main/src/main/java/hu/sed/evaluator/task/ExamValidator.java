@@ -25,7 +25,7 @@ public class ExamValidator implements Task<Void> {
 
     @Override
     public Void execute() {
-        log.debug("Executing validator..");
+        log.info("Executing validator..");
 
         try {
             String jsonString = jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(rootItem);

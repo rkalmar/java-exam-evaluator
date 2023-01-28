@@ -24,6 +24,11 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import net.sourceforge.plantuml.StringUtils;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 
 /**
@@ -39,11 +44,27 @@ public class MainModule extends AbstractModule {
     public static void main(String[] args) throws InvalidArgumentException, MissingArgumentsException {
         TaskArgument taskArgument = ArgumentsUtil.parseArguments(args);
 
+        if (StringUtils.isNotEmpty(taskArgument.getOutputFolder())) {
+            checkFileExistence(taskArgument.getOutputFolder());
+        }
+        if (StringUtils.isNotEmpty(taskArgument.getExamItemFile())) {
+            checkFileExistence(taskArgument.getOutputFolder());
+        }
+
         taskArgument.setTaskType(TaskType.EXAM_EVALUATOR);
 
         log.info("Initializing.. arguments: {}", taskArgument);
         Injector injector = Guice.createInjector(new MainModule(taskArgument));
         injector.getInstance(Task.class).execute();
+    }
+
+    private static void checkFileExistence(String file) throws InvalidArgumentException {
+        if (StringUtils.isNotEmpty(file)) {
+            Path path = Paths.get(file);
+            if (!Files.exists(path)) {
+                throw new InvalidArgumentException("Does not exists: " + file);
+            }
+        }
     }
 
     @Provides

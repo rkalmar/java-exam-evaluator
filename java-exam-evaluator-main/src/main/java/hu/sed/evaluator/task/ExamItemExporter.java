@@ -29,20 +29,14 @@ class ExamItemExporter implements Task<Void> {
 
     RootItem rootItem;
 
-    ExamValidator examValidator;
-
     @SneakyThrows
     @Override
     public Void execute() {
-        examValidator.execute();
-
         byte[] bytes = jsonMapper.writeValueAsBytes(rootItem);
         String encodedJson = Base64.getEncoder().encodeToString(bytes);
         try (FileWriter fileWriter = new FileWriter(argument.getOutputFolder() + File.separator + FILE_NAME)) {
             fileWriter.write(encodedJson);
         }
-
-        // TODO export the same what we are exporting in case of examEvaluator
         return null;
     }
 }

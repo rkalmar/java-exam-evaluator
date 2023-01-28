@@ -1,5 +1,7 @@
 package hu.sed.evaluator.task;
 
+import static java.lang.System.lineSeparator;
+
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import hu.sed.evaluator.item.Item;
@@ -8,12 +10,18 @@ import hu.sed.evaluator.item.container.ItemContainer;
 import hu.sed.evaluator.item.container.RootItem;
 import hu.sed.evaluator.item.syntax.TypeItem;
 import hu.sed.evaluator.task.argument.TaskArgument;
+import hu.sed.evaluator.task.argument.TaskType;
 import hu.sed.evaluator.task.evaluator.EvaluatorItemVisitor;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.time.StopWatch;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,36 +37,48 @@ public class ExamEvaluator implements Task<Score> {
 
     TaskArgument argument;
 
+    @SneakyThrows
     @Override
     public Score execute() {
-        log.debug("Executing evaluator. Test was created by {} at {}. Container: {}", rootItem.getCreatedBy(), rootItem.getCreatedBy(), rootItem.getContainerName());
+        log.info("Executing evaluator. Test was created by {} at {}. Container: {}", rootItem.getCreatedBy(), rootItem.getCreatedBy(), rootItem.getContainerName());
         List<ScoredItem<?>> scoredItems = new ArrayList<>();
 
+        StopWatch watch = new StopWatch();
+        watch.start();
         rootItem.getItems()
                 .forEach(item -> evaluateItem(scoredItems, item));
+
+        watch.stop();
 
         Score score = Score.builder()
                 .scoredItems(scoredItems)
                 .build();
 
         StringBuilder message = new StringBuilder();
-        scoredItems.forEach(scoredItem -> {
-            if (scoredItem.getItem() instanceof TypeItem) {
-                message.append(System.lineSeparator());
-            }
-            message.append(String.format("\r %.2f/%.2f - %s %s %s",
-                scoredItem.getScore(), (double) scoredItem.getMaxScore(), scoredItem.identifier(),
-                scoredItem.getUnsuccessfulChecks().isEmpty() ? "" : "Failed checks: " + scoredItem.getUnsuccessfulChecks(), System.lineSeparator()));
-            }
-        );
+        scoredItems.stream()
+                .map(this::printScoredItem)
+                .forEach(message::append);
 
-        // TODO export message to file to output folder
-        if (log.isInfoEnabled()) {
-            log.info("Evaluation result: {} {} {}/{} ({}%)", message, System.lineSeparator(), score.getScore(), score.getMaxScore(),
-                    String.format("%.0f", score.getPercentage() * 100));
+        String percentage = String.format("%.0f", score.getPercentage() * 100) + "%";
+        message.append("------------------")
+                .append(lineSeparator())
+                .append(String.format("Evaluation result %.2f/%.2f (%s)", score.getScore(), score.getMaxScore(), percentage))
+                .append(lineSeparator())
+                .append("Evaluation time: ").append(watch.getTime()).append("ms");
+
+        log.info("Evaluation result: {} {} {}/{} ({}%)", message, lineSeparator(), score.getScore(), score.getMaxScore(),
+                percentage);
+
+        if (argument.getTaskType() == TaskType.EXAM_EVALUATOR) {
+            try (PrintWriter printWriter = new PrintWriter(
+                    new FileWriter(argument.getOutputFolder() + File.separator + "exam_result"))) {
+                printWriter.write(message.toString());
+            }
+            try (PrintWriter printWriter = new PrintWriter(
+                    new FileWriter(argument.getOutputFolder() + File.separator + "score"))) {
+                printWriter.write(String.valueOf(score.getScore()));
+            }
         }
-
-        // TODO print out score to a file.
 
         return score;
     }
@@ -72,4 +92,16 @@ public class ExamEvaluator implements Task<Score> {
             itemContainer.getItems().forEach(childItem -> evaluateItem(scoredItems, childItem));
         }
     }
+
+    private String printScoredItem(ScoredItem<?> scoredItem) {
+        StringBuilder message = new StringBuilder();
+        if (scoredItem.getItem() instanceof TypeItem) {
+            message.append(lineSeparator());
+        }
+        message.append(String.format("\r %.2f/%.2f - %s%s%s",
+                scoredItem.getScore(), (double) scoredItem.getMaxScore(), scoredItem.identifier(),
+                scoredItem.getUnsuccessfulChecks().isEmpty() ? "" : ", Failed checks: " + scoredItem.getUnsuccessfulChecks(), lineSeparator()));
+        return message.toString();
+    }
+
 }
