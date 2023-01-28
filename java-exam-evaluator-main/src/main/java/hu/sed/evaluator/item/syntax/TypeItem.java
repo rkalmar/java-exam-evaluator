@@ -20,7 +20,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class TypeItem extends ScorableSyntaxItem implements ItemContainer {
 
-    List<Item> items;
+    List<? extends Item> items;
 
     boolean checkParentClazz;
 

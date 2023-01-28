@@ -1,6 +1,7 @@
 package hu.sed.evaluator.exam.sample;
 
 import hu.sed.evaluator.annotation.semantic.CustomTest;
+import hu.sed.evaluator.annotation.syntax.FieldCheck;
 import hu.sed.evaluator.annotation.syntax.MethodCheck;
 import hu.sed.evaluator.annotation.syntax.TypeCheck;
 import test.hu.sed.evaluator.exam.sample.Tests2;
@@ -125,5 +126,11 @@ public final class Autopalya implements Interface {
         } catch (FileNotFoundException e) {
             return false;
         }
+    }
+
+    @TypeCheck
+    static class Rendorseg {
+        @FieldCheck
+        String whatEver;
     }
 }

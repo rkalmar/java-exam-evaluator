@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface ItemContainer extends Item {
 
-    void setItems(List<Item> items);
+    void setItems(List<? extends Item> items);
 
-    List<Item> getItems();
+    List<? extends Item> getItems();
 
     boolean isEmpty();
 }

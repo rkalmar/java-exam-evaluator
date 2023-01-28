@@ -22,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,12 +50,9 @@ class ExamItemCollector implements Task<RootItem> {
         log.info("Executing item collector for package: {}", argument.getExamPackage());
         List<? extends Class<?>> examClasses = ReflectionUtils.getClassesOfPackage(argument.getExamPackage());
 
-        List<Item> items = examClasses.stream()
+        List<ItemContainer> items = examClasses.stream()
                 .map(this::getExamItem)
-                .filter(item ->
-                        item instanceof ScorableItem ||
-                                !(item instanceof ItemContainer itemContainer) || !itemContainer.isEmpty()
-                )
+                .filter(item -> item instanceof ScorableItem || !item.isEmpty())
                 .toList();
 
         return RootItem.builder()
@@ -65,7 +63,7 @@ class ExamItemCollector implements Task<RootItem> {
                 .build();
     }
 
-    private Item getExamItem(Class<?> clazz) {
+    private ItemContainer getExamItem(Class<?> clazz) {
         Optional<TypeCheck> annotation = ReflectionUtils.getAnnotation(TypeCheck.class, clazz);
 
         ItemContainer item;
@@ -107,7 +105,11 @@ class ExamItemCollector implements Task<RootItem> {
                 customTestItemCollector.collectItems(clazz)
         );
 
-        // todo implement subclass.. + enums
+        subItems.addAll(Arrays.stream(clazz.getDeclaredClasses())
+                .map(this::getExamItem)
+                .filter(innerClassItem -> !innerClassItem.isEmpty())
+                .toList());
+
         item.setItems(subItems);
 
         return item;

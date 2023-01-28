@@ -21,7 +21,7 @@ public class ListItemContainer implements ItemContainer, Item {
 
     String containerName;
 
-    List<Item> items;
+    List<? extends Item> items;
 
     @JsonIgnore
     public boolean isEmpty() {
