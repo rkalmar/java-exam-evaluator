@@ -9,7 +9,15 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
-import hu.sed.evaluator.task.TaskExecutor;
+import hu.sed.evaluator.args.ArgumentsUtil;
+import hu.sed.evaluator.args.InvalidArgumentException;
+import hu.sed.evaluator.args.MissingArgumentsException;
+import hu.sed.evaluator.item.container.RootItem;
+import hu.sed.evaluator.task.ExamEvaluator;
+import hu.sed.evaluator.task.ExamExporter;
+import hu.sed.evaluator.task.ExamItemLoader;
+import hu.sed.evaluator.task.ExamValidator;
+import hu.sed.evaluator.task.Task;
 import hu.sed.evaluator.task.argument.TaskArgument;
 import hu.sed.evaluator.task.argument.TaskType;
 import lombok.AccessLevel;
@@ -26,17 +34,40 @@ import lombok.extern.slf4j.Slf4j;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class MainModule extends AbstractModule {
 
-    public static void main(String[] args) {
-        TaskArgument taskArgument = TaskArgument.builder()
-                .taskType(TaskType.EXAM_EVALUATOR)
-                .examPackage("hu.sed.evaluator.exam.sample")
-                .examItemOutputFile("c:\\Users\\rkalmar\\Desktop\\szte\\diplomamunka\\examfile")
-                .examItemFile("c:\\Users\\rkalmar\\Desktop\\szte\\diplomamunka\\examfile")
-                .examDocOutputFolder("c:\\Users\\rkalmar\\Desktop\\szte\\diplomamunka")
-                .build();
+    TaskArgument taskArgument;
+
+    public static void main(String[] args) throws InvalidArgumentException, MissingArgumentsException {
+        TaskArgument taskArgument = ArgumentsUtil.parseArguments(args);
+
+        taskArgument.setTaskType(TaskType.EXAM_EVALUATOR);
+
         log.info("Initializing.. arguments: {}", taskArgument);
-        Injector injector = Guice.createInjector(new MainModule());
-        injector.getInstance(TaskExecutor.class).execute(taskArgument);
+        Injector injector = Guice.createInjector(new MainModule(taskArgument));
+        injector.getInstance(Task.class).execute();
+    }
+
+    @Provides
+    @Singleton
+    @SuppressWarnings("rawtypes")
+    public Task getTask(Injector injector) {
+        return switch (taskArgument.getTaskType()) {
+            case EXAM_VALIDATOR -> injector.getInstance(ExamValidator.class);
+            case EXPORT_EXAM -> injector.getInstance(ExamExporter.class);
+            case EXAM_EVALUATOR -> injector.getInstance(ExamEvaluator.class);
+            default -> throw new IllegalArgumentException(taskArgument.getTaskType().name());
+        };
+    }
+
+    @Provides
+    @Singleton
+    public RootItem getRootExamItem(ExamItemLoader examItemLoader) {
+        return examItemLoader.execute();
+    }
+
+    @Provides
+    @Singleton
+    public TaskArgument getTaskArgument() {
+        return taskArgument;
     }
 
     @Provides

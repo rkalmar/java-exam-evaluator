@@ -12,11 +12,12 @@ public class TaskArgument {
 
     TaskType taskType;
 
+    // required for all the taskType
     String examPackage;
 
-    String examItemOutputFile;
+    // only for export
+    String outputFolder;
 
-    String examDocOutputFolder;
-
+    // only for evaluation
     String examItemFile;
 }

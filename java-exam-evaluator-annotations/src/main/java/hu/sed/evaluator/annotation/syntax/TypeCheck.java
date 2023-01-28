@@ -15,11 +15,10 @@ import java.lang.annotation.Target;
  *
  * Example:
  *
- * @TypeCheck(checkParentClazz = true,
+ * \@TypeCheck(checkParentClazz = true,
  *      checkInterfaces = true,
  *      checkModifiers = true,
  *      score = 4)
- * @EClass
  * public abstract class MyClass extends ClassBase implements IClass {......}
  * <p>
  * Check will calculate in the following way:

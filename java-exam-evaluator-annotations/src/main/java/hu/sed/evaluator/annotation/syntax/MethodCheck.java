@@ -18,11 +18,11 @@ import java.lang.annotation.Target;
  * <p>
  * Example:
  *
- * @MethodCheck(checkModifiers = true,
+ * \@MethodCheck(checkModifiers = true,
  * checkOverride = true,
  * checkExceptions = true,
  * score = 1)
- * @Override public static void doSomething() throws IllegalArgumentException {....}
+ * \@Override public static void doSomething() throws IllegalArgumentException {....}
  * <p>
  * Check will calculate in the following way:
  * - if return type, method name and args types are correct: +1 score

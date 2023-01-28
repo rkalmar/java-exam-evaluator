@@ -18,8 +18,8 @@ import java.lang.annotation.Target;
  * <p>
  * Example:
  *
- * @FieldCheck(checkModifiers = true, score = 2)
- * @Getter private final String testField;
+ * \@FieldCheck(checkModifiers = true, score = 2)
+ * \@Getter private final String testField;
  * <p>
  * Check will calculate in the following way:
  * - if field name and type is correct: +1 score

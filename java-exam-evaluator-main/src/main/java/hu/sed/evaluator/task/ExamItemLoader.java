@@ -20,21 +20,23 @@ import java.util.Base64;
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor(onConstructor = @__(@Inject))
-public class ExamItemLoader implements Task<RootItem, TaskArgument> {
+public class ExamItemLoader implements Task<RootItem> {
 
     ExamItemCollector examItemCollector;
 
     JsonMapper jsonMapper;
 
+    TaskArgument argument;
+
     @Override
-    public RootItem execute(TaskArgument argument) {
+    public RootItem execute() {
         try {
             RootItem rootItem;
             if (argument.getTaskType() == TaskType.EXAM_EVALUATOR) {
                 String encoded = Files.readString(Path.of(argument.getExamItemFile()));
                 rootItem = jsonMapper.readValue(Base64.getDecoder().decode(encoded), RootItem.class);
             } else {
-                rootItem = examItemCollector.execute(argument);
+                rootItem = examItemCollector.execute();
             }
             return rootItem;
         } catch (Exception e) {

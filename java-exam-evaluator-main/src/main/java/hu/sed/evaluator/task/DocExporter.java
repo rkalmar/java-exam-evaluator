@@ -22,18 +22,20 @@ import java.nio.charset.StandardCharsets;
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor(onConstructor = @__(@Inject))
-public class DocExporter implements Task<Void, TaskArgument> {
+class DocExporter implements Task<Void> {
+
+    TaskArgument argument;
 
     @Override
-    public Void execute(TaskArgument argument) {
+    public Void execute() {
         log.debug("Executing document generator..");
 
         UmlRepresentation umlRepresentation = UmlUtility.createUmlRepresentation(argument.getExamPackage());
 
         SourceStringReader reader = new SourceStringReader(umlRepresentation.represent());
 
-        exportUmlToPng(reader, argument.getExamDocOutputFolder());
-        exportUmlToSvg(reader, argument.getExamDocOutputFolder());
+        exportUmlToPng(reader, argument.getOutputFolder());
+        exportUmlToSvg(reader, argument.getOutputFolder());
         return null;
     }
 

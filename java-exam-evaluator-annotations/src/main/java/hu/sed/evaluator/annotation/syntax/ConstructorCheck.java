@@ -2,7 +2,6 @@ package hu.sed.evaluator.annotation.syntax;
 
 import hu.sed.evaluator.annotation.syntax.repeatable.RepeatableConstructorCheck;
 
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;

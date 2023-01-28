@@ -12,17 +12,14 @@
         <module>java-exam-evaluator-annotations</module>
         <module>java-exams</module>
         <module>java-exam-evaluator-main</module>
+        <module>java-exam-test-solution</module>
     </modules>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-        <maven.checkstyle.plugin.version>6.1.1</maven.checkstyle.plugin.version>
+        <maven.checkstyle.plugin.version>3.2.1</maven.checkstyle.plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.sevntu.checkstyle.plugin.version>1.42.0</maven.sevntu.checkstyle.plugin.version>
-        <maven.sevntu-checkstyle-check.checkstyle.version>
-            10.0
-        </maven.sevntu-checkstyle-check.checkstyle.version>
         <junit-jupiter-version>5.8.2</junit-jupiter-version>
         <lombok-version>1.18.24</lombok-version>
         <reflections-version>0.10.2</reflections-version>
@@ -143,7 +140,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>2.17</version>
+                <version>${maven.checkstyle.plugin.version}</version>
                 <configuration>
                     <configLocation>conf/checkstyle.xml</configLocation>
                     <encoding>UTF-8</encoding>

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import hu.sed.evaluator.item.container.RootItem;
+import hu.sed.evaluator.task.exception.ExamValidationException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -14,26 +15,33 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor(onConstructor = @__(@Inject))
-public class ExamValidator implements Task<Void, RootItem> {
-
-    ExamItemCollector examItemCollector;
+public class ExamValidator implements Task<Void> {
 
     ExamEvaluator evaluator;
 
     JsonMapper jsonMapper;
 
+    RootItem rootItem;
+
     @Override
-    public Void execute(RootItem rootItem) {
+    public Void execute() {
         log.debug("Executing validator..");
 
         try {
             String jsonString = jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(rootItem);
-            log.error(jsonString);
+            log.trace(jsonString);
+            jsonMapper.readValue(jsonString, RootItem.class);
         } catch (JsonProcessingException e) {
-            // TODO
+            throw new ExamValidationException("Failed to serialize/deserialize exam json...", e);
         }
 
-        // TODO
+        Score score = evaluator.execute();
+
+        if (score.getMaxScore() == score.getScore()) {
+            log.info("Validation is successful..");
+        } else {
+            throw new ExamValidationException("Exam validation failed. One or more test has failed. Please check the validation result in the logs.");
+        }
 
         return null;
     }

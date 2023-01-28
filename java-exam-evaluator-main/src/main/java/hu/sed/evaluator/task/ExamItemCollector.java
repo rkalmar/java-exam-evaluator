@@ -29,7 +29,7 @@ import java.util.Optional;
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor(onConstructor = @__(@Inject))
-public class ExamItemCollector implements Task<RootItem, TaskArgument> {
+class ExamItemCollector implements Task<RootItem> {
 
     ItemFactory itemFactory;
 
@@ -41,9 +41,11 @@ public class ExamItemCollector implements Task<RootItem, TaskArgument> {
 
     CustomTestItemCollector customTestItemCollector;
 
+    TaskArgument argument;
+
     @SneakyThrows
     @Override
-    public RootItem execute(TaskArgument argument) {
+    public RootItem execute() {
         log.info("Executing item collector for package: {}", argument.getExamPackage());
         List<Class<?>> examClasses = ReflectionUtils.getClassesOfPackage(argument.getExamPackage());
 
@@ -51,7 +53,7 @@ public class ExamItemCollector implements Task<RootItem, TaskArgument> {
                 .map(this::getExamItem)
                 .filter(item ->
                         item instanceof ScorableItem ||
-                                !(item instanceof ItemContainer) || !((ItemContainer) item).isEmpty()
+                                !(item instanceof ItemContainer itemContainer) || !itemContainer.isEmpty()
                 )
                 .toList();
 
@@ -105,7 +107,7 @@ public class ExamItemCollector implements Task<RootItem, TaskArgument> {
                 customTestItemCollector.collectItems(clazz)
         );
 
-        // todo implement subclass..
+        // todo implement subclass.. + enums
         item.setItems(subItems);
 
         return item;

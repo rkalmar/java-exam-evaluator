@@ -1,6 +1,7 @@
 package hu.sed.evaluator.args;
 
 import hu.sed.evaluator.task.argument.TaskArgument;
+import hu.sed.evaluator.task.argument.TaskType;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.cli.CommandLine;
@@ -20,18 +21,20 @@ import java.util.Set;
 public class ArgumentsUtil {
 
     public static final String TASK_ARG = "task";
-    public static final String EVALUATE_ARG = "evaluateExam";
-    public static final String VALIDATE_ARG = "validateExam";
-    public static final String UML_ARG = "generateUml";
-    public static final String EXAM_CLASS_ARG = "examPackage";
-    public static final String SOLUTION_CLASS_ARG = "solutionPackage";
+    public static final String EVALUATE_TASK = "evaluateExam";
+    public static final String VALIDATE_TASK = "validateExam";
+    public static final String EXPORT_EXAM_TASK = "exportExam";
+
+    public static final String EXAM_PACKAGE_ARG = "examPackage";
+    public static final String OUTPUT_FOLDER_ARG = "outputFolder";
+    public static final String EXAM_ITEM_FILE_ARG = "examItemFile";
 
     static final Map<String, Set<String>> ARG_DEPENDENCIES = new HashMap<>();
 
     static {
-        ARG_DEPENDENCIES.put(EVALUATE_ARG, Set.of(EXAM_CLASS_ARG, SOLUTION_CLASS_ARG));
-        ARG_DEPENDENCIES.put(VALIDATE_ARG, Set.of(EXAM_CLASS_ARG));
-        ARG_DEPENDENCIES.put(UML_ARG, Set.of(EXAM_CLASS_ARG));
+        ARG_DEPENDENCIES.put(VALIDATE_TASK, Set.of(EXAM_PACKAGE_ARG));
+        ARG_DEPENDENCIES.put(EXPORT_EXAM_TASK, Set.of(EXAM_PACKAGE_ARG, OUTPUT_FOLDER_ARG));
+        ARG_DEPENDENCIES.put(EVALUATE_TASK, Set.of(EXAM_ITEM_FILE_ARG, OUTPUT_FOLDER_ARG));
     }
 
     public static TaskArgument parseArguments(String[] args) throws MissingArgumentsException, InvalidArgumentException {
@@ -55,8 +58,12 @@ public class ArgumentsUtil {
                 throw new MissingArgumentsException(String.format("Following arguments are required for task %s: %s", selectedTask, subArgs));
             }
 
-            //return new TaskArgument(TaskType.taskTypeByArg(VALIDATE_ARG)); // TODO packages
-            return null;
+            return TaskArgument.builder()
+                    .taskType(TaskType.taskTypeByArg(selectedTask))
+                    .examPackage(commandLine.getOptionValue(EXAM_PACKAGE_ARG))
+                    .examItemFile(commandLine.getOptionValue(EXAM_ITEM_FILE_ARG))
+                    .outputFolder(commandLine.getOptionValue(OUTPUT_FOLDER_ARG))
+                    .build();
 
         } catch (UnrecognizedOptionException e) {
             throw new InvalidArgumentException(e.getMessage());
@@ -73,22 +80,32 @@ public class ArgumentsUtil {
                 .hasArgs()
                 .required(false)
                 .build();
-        Option examClass = Option.builder(EXAM_CLASS_ARG)
+        Option examClass = Option.builder(EXAM_PACKAGE_ARG)
                 .desc("Exam classes root package.")
-                .longOpt(EXAM_CLASS_ARG)
+                .longOpt(EXAM_PACKAGE_ARG)
                 .hasArgs()
                 .required(false)
                 .build();
-        Option solutionClass = Option.builder(SOLUTION_CLASS_ARG)
-                .desc("Solution classes root package.")
-                .longOpt(SOLUTION_CLASS_ARG)
+
+        Option outputFolder = Option.builder(OUTPUT_FOLDER_ARG)
+                .desc("Output files will be written to this folder.")
+                .longOpt(OUTPUT_FOLDER_ARG)
                 .hasArgs()
                 .required(false)
                 .build();
+
+        Option examItemFile = Option.builder(EXAM_ITEM_FILE_ARG)
+                .desc("Exam item for executing evaluation.")
+                .longOpt(EXAM_ITEM_FILE_ARG)
+                .hasArgs()
+                .required(false)
+                .build();
+
         return new Options()
                 .addOption(taskType)
                 .addOption(examClass)
-                .addOption(solutionClass);
+                .addOption(outputFolder)
+                .addOption(examItemFile);
     }
 
 }

@@ -2,8 +2,6 @@ package hu.sed.evaluator.args;
 
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -63,12 +61,19 @@ public class ArgumentsUtilTest {
         assertThat(missingArgumentsException.getMessage(), containsString("Invalid argument"));
     }
 
-    @SneakyThrows
-    @ParameterizedTest
-    @ValueSource(strings = {"validateExam", "generateUml"})
-    public void testTaskParamsProvided(String task) {
+    @Test
+    public void testTaskParamProvidedForValidateExam() {
         // GIVEN
-        String[] args = {"--task", task, "-examPackage", "com.whatever"};
+
+        String[] args = {"--task", "validateExam", "-examPackage", "com.whatever"};
+        //WHEN
+        assertDoesNotThrow(() -> ArgumentsUtil.parseArguments(args));
+    }
+
+    @Test
+    public void testTaskParamProvidedForExportExam() {
+        // GIVEN
+        String[] args = {"--task", "exportExam", "-examPackage", "com.whatever", "-outputFolder", "~/"};
         //WHEN
         assertDoesNotThrow(() -> ArgumentsUtil.parseArguments(args));
     }
@@ -76,7 +81,7 @@ public class ArgumentsUtilTest {
     @Test
     public void testTaskParamsProvided() {
         // GIVEN
-        String[] args = {"--task", "evaluateExam", "-examPackage", "hu.whatever.exam", "-solutionPackage", "hu.whatever.solution"};
+        String[] args = {"--task", "evaluateExam", "-examItemFile", "~/examfile", "-outputFolder", "~/"};
         //WHEN
         assertDoesNotThrow(() -> ArgumentsUtil.parseArguments(args));
     }

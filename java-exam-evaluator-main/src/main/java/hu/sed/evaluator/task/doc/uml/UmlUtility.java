@@ -41,15 +41,15 @@ public class UmlUtility {
         for (int i = 0; i < classes.size(); i++) {
             for (int j = i + 1; j < classes.size(); j++) {
                 boolean reverseRelation = false;
-                Class<?> aClass = classes.get(i);
-                Class<?> bClass = classes.get(j);
-                Optional<ClassRelation> relation = getRelation(aClass, bClass);
+                Class<?> classA = classes.get(i);
+                Class<?> classB = classes.get(j);
+                Optional<ClassRelation> relation = getRelation(classA, classB);
                 if (relation.isEmpty()) {
-                    relation = getRelation(bClass, aClass);
+                    relation = getRelation(classB, classA);
                     reverseRelation = true;
                 }
                 if (relation.isPresent()) {
-                    classRelationRepresentations.add(ClassRelationRepresentation.of(aClass, bClass, relation.get(), reverseRelation));
+                    classRelationRepresentations.add(ClassRelationRepresentation.of(classA, classB, relation.get(), reverseRelation));
                 }
             }
         }
@@ -75,23 +75,23 @@ public class UmlUtility {
         );
     }
 
-    private Optional<ClassRelation> getRelation(Class<?> aClass, Class<?> bClass) {
-        if (hasAggregation(aClass, bClass)) {
-            if (hasComposition(aClass, bClass)) {
+    private Optional<ClassRelation> getRelation(Class<?> classA, Class<?> classB) {
+        if (hasAggregation(classA, classB)) {
+            if (hasComposition(classA, classB)) {
                 return Optional.of(ClassRelation.Composition);
             }
             return Optional.of(ClassRelation.Aggregation);
-        } else if (hasSpecialization(aClass, bClass)) {
+        } else if (hasSpecialization(classA, classB)) {
             return Optional.of(ClassRelation.Specialization);
-        } else if (hasAssociation(aClass, bClass)) {
+        } else if (hasAssociation(classA, classB)) {
             return Optional.of(ClassRelation.Association);
         }
         return Optional.empty();
     }
 
-    private boolean hasAssociation(Class<?> aClass, Class<?> bClass) {
-        return Arrays.stream(aClass.getDeclaredMethods())
-                .anyMatch(method -> hasAssociation(method, bClass));
+    private boolean hasAssociation(Class<?> classA, Class<?> classB) {
+        return Arrays.stream(classA.getDeclaredMethods())
+                .anyMatch(method -> hasAssociation(method, classB));
     }
 
     private boolean hasAssociation(Method method, Class<?> clazz) {
@@ -103,8 +103,8 @@ public class UmlUtility {
                     if (type.equals(clazz)) {
                         return true;
                     }
-                    if (type instanceof ParameterizedType) {
-                        for (Type actualTypeArgument : ((ParameterizedType) type).getActualTypeArguments()) {
+                    if (type instanceof ParameterizedType parameterizedType) {
+                        for (Type actualTypeArgument : parameterizedType.getActualTypeArguments()) {
                             if (actualTypeArgument.equals(clazz)) {
                                 return true;
                             }
@@ -115,18 +115,18 @@ public class UmlUtility {
         );
     }
 
-    private boolean hasSpecialization(Class<?> aClass, Class<?> bClass) {
-        return bClass.getSuperclass() != null && bClass.getSuperclass().equals(aClass);
+    private boolean hasSpecialization(Class<?> classA, Class<?> classB) {
+        return classB.getSuperclass() != null && classB.getSuperclass().equals(classA);
     }
 
     /*
-     * Composition only if aClass cannot be constructed without bClass..
+     * Composition only if classA cannot be constructed without classB..
      */
-    private boolean hasComposition(Class<?> aClass, Class<?> bClass) {
-        return Arrays.stream(aClass.getConstructors())
+    private boolean hasComposition(Class<?> classA, Class<?> classB) {
+        return Arrays.stream(classA.getConstructors())
                 .allMatch(constructor -> {
                     for (Type genericParameterType : constructor.getGenericParameterTypes()) {
-                        if (genericParameterType.equals(bClass)) {
+                        if (genericParameterType.equals(classB)) {
                             return true;
                         }
                     }
@@ -135,18 +135,18 @@ public class UmlUtility {
     }
 
     /*
-     * Aggregation if aClass is a container of bClass..
+     * Aggregation if classA is a container of classB..
      */
-    private boolean hasAggregation(Class<?> aClass, Class<?> bClass) {
-        for (Field declaredField : aClass.getDeclaredFields()) {
-            if (declaredField.getType().equals(bClass)) {
+    private boolean hasAggregation(Class<?> classA, Class<?> classB) {
+        for (Field declaredField : classA.getDeclaredFields()) {
+            if (declaredField.getType().equals(classB)) {
                 return true;
             }
-            if (declaredField.getGenericType() instanceof ParameterizedType &&
-                    (Collection.class.isAssignableFrom(declaredField.getType())
-                            || Map.class.isAssignableFrom(declaredField.getType()))) {
-                for (Type genericType : ((ParameterizedType) declaredField.getGenericType()).getActualTypeArguments()) {
-                    if (genericType.equals(bClass)) {
+            if (declaredField.getGenericType() instanceof ParameterizedType parameterizedType &&
+                    (Collection.class.isAssignableFrom(declaredField.getType()) ||
+                            Map.class.isAssignableFrom(declaredField.getType()))) {
+                for (Type genericType : parameterizedType.getActualTypeArguments()) {
+                    if (genericType.equals(classB)) {
                         return true;
                     }
                 }

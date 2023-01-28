@@ -8,10 +8,9 @@ import java.util.Optional;
 
 @AllArgsConstructor
 public enum TaskType {
-    EXAM_VALIDATOR(ArgumentsUtil.VALIDATE_ARG),
-    EXPORT_EXAM_ITEMS(ArgumentsUtil.EVALUATE_ARG),
-    EXPORT_DOC(ArgumentsUtil.UML_ARG),
-    EXAM_EVALUATOR(ArgumentsUtil.EVALUATE_ARG);
+    EXAM_VALIDATOR(ArgumentsUtil.VALIDATE_TASK),
+    EXPORT_EXAM(ArgumentsUtil.EXPORT_EXAM_TASK),
+    EXAM_EVALUATOR(ArgumentsUtil.EVALUATE_TASK);
 
     String argName;
 
