@@ -2,6 +2,7 @@ package hu.sed.evaluator.exam.sample;
 
 import hu.sed.evaluator.annotation.semantic.CustomTest;
 import hu.sed.evaluator.annotation.syntax.MethodCheck;
+import hu.sed.evaluator.annotation.syntax.TypeCheck;
 import test.hu.sed.evaluator.exam.sample.Tests2;
 
 import java.io.File;
@@ -11,7 +12,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
-public final class Autopalya {
+@TypeCheck
+public final class Autopalya implements Interface {
     public String nev;
     public List<Jarmu> jarmuvek;
 

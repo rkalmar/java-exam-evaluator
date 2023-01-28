@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>java-exam-test-solutions</artifactId>
+    <artifactId>java-exam-test-solution</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>

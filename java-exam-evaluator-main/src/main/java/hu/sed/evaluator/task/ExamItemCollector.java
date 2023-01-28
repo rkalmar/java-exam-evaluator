@@ -47,7 +47,7 @@ class ExamItemCollector implements Task<RootItem> {
     @Override
     public RootItem execute() {
         log.info("Executing item collector for package: {}", argument.getExamPackage());
-        List<Class<?>> examClasses = ReflectionUtils.getClassesOfPackage(argument.getExamPackage());
+        List<? extends Class<?>> examClasses = ReflectionUtils.getClassesOfPackage(argument.getExamPackage());
 
         List<Item> items = examClasses.stream()
                 .map(this::getExamItem)

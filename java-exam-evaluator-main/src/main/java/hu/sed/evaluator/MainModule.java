@@ -24,7 +24,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import net.sourceforge.plantuml.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -44,14 +44,14 @@ public class MainModule extends AbstractModule {
     public static void main(String[] args) throws InvalidArgumentException, MissingArgumentsException {
         TaskArgument taskArgument = ArgumentsUtil.parseArguments(args);
 
-        if (StringUtils.isNotEmpty(taskArgument.getOutputFolder())) {
+        if (StringUtils.isNotBlank(taskArgument.getOutputFolder())) {
             checkFileExistence(taskArgument.getOutputFolder());
         }
-        if (StringUtils.isNotEmpty(taskArgument.getExamItemFile())) {
+        if (StringUtils.isNotBlank(taskArgument.getExamItemFile())) {
             checkFileExistence(taskArgument.getOutputFolder());
         }
 
-        taskArgument.setTaskType(TaskType.EXAM_EVALUATOR);
+        taskArgument.setTaskType(TaskType.EXPORT_EXAM);
 
         log.info("Initializing.. arguments: {}", taskArgument);
         Injector injector = Guice.createInjector(new MainModule(taskArgument));

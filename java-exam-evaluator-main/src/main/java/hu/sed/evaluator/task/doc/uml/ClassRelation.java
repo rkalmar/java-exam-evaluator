@@ -6,8 +6,10 @@ import lombok.RequiredArgsConstructor;
 enum ClassRelation {
     Association("--"),
     Specialization(" <|-- "),
+    Implementation(" <|.. "),
     Aggregation("o--"),
-    Composition("*--");
+    Composition("*--"),
+    ThrowsException("..");
 
     final String sign;
 }

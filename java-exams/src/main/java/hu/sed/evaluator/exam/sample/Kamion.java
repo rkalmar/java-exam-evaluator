@@ -1,5 +1,8 @@
 package hu.sed.evaluator.exam.sample;
 
+import hu.sed.evaluator.annotation.syntax.TypeCheck;
+
+@TypeCheck
 public class Kamion extends Jarmu {
     private final int loero;
     private double rakomany;

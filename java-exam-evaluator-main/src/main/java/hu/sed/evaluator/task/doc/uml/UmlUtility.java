@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class UmlUtility {
 
     public UmlRepresentation createUmlRepresentation(String rootPackage) {
-        List<Class<?>> classes = ReflectionUtils.getClassesOfPackage(rootPackage);
+        List<? extends Class<?>> classes = ReflectionUtils.getClassesOfPackage(rootPackage);
 
         final Map<String, List<Class<?>>> examClassesPerPackage = classes.stream()
                 .filter(ReflectionUtils::notUmlSkipped)
@@ -81,12 +81,20 @@ public class UmlUtility {
                 return Optional.of(ClassRelation.Composition);
             }
             return Optional.of(ClassRelation.Aggregation);
-        } else if (hasSpecialization(classA, classB)) {
+        } else if (isSpecialization(classA, classB)) {
             return Optional.of(ClassRelation.Specialization);
+        } else if (isImplementation(classA, classB)) {
+            return Optional.of(ClassRelation.Implementation);
         } else if (hasAssociation(classA, classB)) {
             return Optional.of(ClassRelation.Association);
+        } else if (Throwable.class.isAssignableFrom(classB) && doesThrow(classA, classB)) {
+            return Optional.of(ClassRelation.ThrowsException);
         }
         return Optional.empty();
+    }
+
+    private static boolean isImplementation(Class<?> classA, Class<?> classB) {
+        return matchAnyType(Arrays.asList(classA.getGenericInterfaces()), classB);
     }
 
     private boolean hasAssociation(Class<?> classA, Class<?> classB) {
@@ -98,6 +106,19 @@ public class UmlUtility {
         List<Type> types = new ArrayList<>(Arrays.stream(method.getGenericParameterTypes()).toList());
         types.add(method.getGenericReturnType());
 
+        return matchAnyType(types, clazz);
+    }
+
+    private boolean doesThrow(Class<?> classA, Class<?> classB) {
+        return Arrays.stream(classA.getDeclaredMethods())
+                .anyMatch(method -> doesThrow(method, classB));
+    }
+
+    private boolean doesThrow(Method method, Class<?> clazz) {
+        return matchAnyType(Arrays.asList(method.getGenericExceptionTypes()), clazz);
+    }
+
+    private boolean matchAnyType(List<Type> types, Class<?> clazz) {
         return types.stream().anyMatch(
                 type -> {
                     if (type.equals(clazz)) {
@@ -115,7 +136,7 @@ public class UmlUtility {
         );
     }
 
-    private boolean hasSpecialization(Class<?> classA, Class<?> classB) {
+    private boolean isSpecialization(Class<?> classA, Class<?> classB) {
         return classB.getSuperclass() != null && classB.getSuperclass().equals(classA);
     }
 

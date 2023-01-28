@@ -36,6 +36,7 @@ class DocExporter implements Task<Void> {
 
         exportUmlToPng(reader, argument.getOutputFolder());
         exportUmlToSvg(reader, argument.getOutputFolder());
+        log.info("Document export has finished..");
         return null;
     }
 

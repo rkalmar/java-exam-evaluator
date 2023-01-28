@@ -22,6 +22,10 @@ class ClassRepresentation implements UmlRepresentation {
             clazzRepresentation.append("interface");
         } else if (Modifier.isAbstract(clazz.getModifiers())) {
             clazzRepresentation.append("abstract class");
+        } else if (Throwable.class.isAssignableFrom(clazz)) {
+            clazzRepresentation.append("exception");
+        } else if (clazz.isEnum()) {
+            clazzRepresentation.append("enum");
         } else {
             clazzRepresentation.append("class");
         }
@@ -29,8 +33,24 @@ class ClassRepresentation implements UmlRepresentation {
 
         clazzRepresentation.append(System.lineSeparator());
 
-        fieldRepresentations.forEach(fieldRepresentation -> clazzRepresentation.append(fieldRepresentation.represent()));
-        methodRepresentations.forEach(methodRepresentation -> clazzRepresentation.append(methodRepresentation.represent()));
+        if (clazz.isEnum()) {
+            fieldRepresentations.stream()
+                    .map(FieldRepresentation::represent)
+                    .filter(representation -> !representation.contains("$"))
+                    .forEach(clazzRepresentation::append);
+            methodRepresentations.stream()
+                    .map(MethodRepresentation::represent)
+                    .filter(representation -> !representation.contains("$"))
+                    .filter(representation -> !representation.contains("valueOf") && !representation.contains("values"))
+                    .forEach(clazzRepresentation::append);
+        } else {
+            fieldRepresentations.stream()
+                    .map(FieldRepresentation::represent)
+                    .forEach(clazzRepresentation::append);
+            methodRepresentations.stream()
+                    .map(MethodRepresentation::represent)
+                    .forEach(clazzRepresentation::append);
+        }
 
         clazzRepresentation.append("}")
                 .append(System.lineSeparator());

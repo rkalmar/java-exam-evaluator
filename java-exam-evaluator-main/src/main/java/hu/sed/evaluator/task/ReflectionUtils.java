@@ -9,6 +9,7 @@ import hu.sed.evaluator.annotation.syntax.SkipCheck;
 import hu.sed.evaluator.annotation.syntax.SyntaxCheck;
 import hu.sed.evaluator.annotation.uml.SkipFromUml;
 import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
 
@@ -23,12 +24,25 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @UtilityClass
 public class ReflectionUtils {
 
     public List<Class<?>> getClassesOfPackage(String packageName) {
         Reflections reflections = new Reflections(packageName, Scanners.SubTypes.filterResultsBy(s -> true));
-        return new ArrayList<>(reflections.getSubTypesOf(Object.class));
+        reflections.getSubTypesOf(Object.class);
+        List<String> classNames = reflections.getAll(Scanners.SubTypes)
+                .stream().filter(s -> s.startsWith(packageName)).toList();
+        List<Class<?>> result = new ArrayList<>();
+        for (String className : classNames) {
+            try {
+                result.add(Class.forName(className));
+            } catch (ClassNotFoundException e) {
+                log.error("Failed to load class {}", className);
+            }
+        }
+
+        return result;
     }
 
     public boolean hasSyntaxCheckAnnotation(AnnotatedElement accessibleObject) {
