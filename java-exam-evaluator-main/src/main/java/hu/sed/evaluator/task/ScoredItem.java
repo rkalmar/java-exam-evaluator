@@ -52,6 +52,10 @@ public abstract class ScoredItem<T> {
                 .collect(Collectors.toList());
     }
 
+    public boolean isSuccessful() {
+        return getScore() == getMaxScore();
+    }
+
     public String identifier() {
         return item.identifier();
     }

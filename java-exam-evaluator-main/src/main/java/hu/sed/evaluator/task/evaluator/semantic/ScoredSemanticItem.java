@@ -10,9 +10,4 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ScoredSemanticItem extends ScoredItem<String> {
-
-    @Override
-    public String identifier() {
-        return super.identifier();
-    }
 }

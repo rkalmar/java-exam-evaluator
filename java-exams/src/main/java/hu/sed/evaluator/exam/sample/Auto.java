@@ -10,7 +10,7 @@ import test.hu.sed.evaluator.exam.sample.Test3;
 import test.hu.sed.evaluator.exam.sample.Tests;
 import test.hu.sed.evaluator.exam.sample.Tests2;
 
-@CustomTest(testClass = Tests2.class, method = {"myThirdTest", "myFourthTest"}, score = 5)
+@CustomTest(testClass = Tests2.class, method = {"myThirdTest", "myFourthTest"}, score = 5, description = "mytestcases xxx")
 @TypeCheck(checkMethods = true,
         checkFields = true,
         score = 15)

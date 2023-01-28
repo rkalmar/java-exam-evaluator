@@ -54,25 +54,14 @@ public class ExamEvaluator implements Task<Score> {
                 .scoredItems(scoredItems)
                 .build();
 
-        StringBuilder message = new StringBuilder();
-        scoredItems.stream()
-                .map(this::printScoredItem)
-                .forEach(message::append);
+        String message = resultMessage(score, watch.getTime());
 
-        String percentage = String.format("%.0f", score.getPercentage() * 100) + "%";
-        message.append("------------------")
-                .append(lineSeparator())
-                .append(String.format("Evaluation result %.2f/%.2f (%s)", score.getScore(), score.getMaxScore(), percentage))
-                .append(lineSeparator())
-                .append("Evaluation time: ").append(watch.getTime()).append("ms");
-
-        log.info("Evaluation result: {} {} {}/{} ({}%)", message, lineSeparator(), score.getScore(), score.getMaxScore(),
-                percentage);
+        log.info("Evaluation result: {} ", message);
 
         if (argument.getTaskType() == TaskType.EXAM_EVALUATOR) {
             try (PrintWriter printWriter = new PrintWriter(
                     new FileWriter(argument.getOutputFolder() + File.separator + "exam_result"))) {
-                printWriter.write(message.toString());
+                printWriter.write(message);
             }
             try (PrintWriter printWriter = new PrintWriter(
                     new FileWriter(argument.getOutputFolder() + File.separator + "score"))) {
@@ -81,6 +70,30 @@ public class ExamEvaluator implements Task<Score> {
         }
 
         return score;
+    }
+
+    private String resultMessage(Score score, long evaluationTime) {
+        StringBuilder message = new StringBuilder("Successful items:");
+        message.append(lineSeparator());
+        score.getScoredItems().stream()
+                .filter(ScoredItem::isSuccessful)
+                .map(this::printScoredItem)
+                .forEach(message::append);
+
+        message.append("Unsuccessful items:")
+                .append(lineSeparator());
+        score.getScoredItems().stream()
+                .filter(scoredItem -> !scoredItem.isSuccessful())
+                .map(this::printScoredItem)
+                .forEach(message::append);
+
+        String percentage = String.format("%.0f", score.getPercentage() * 100) + "%";
+        message.append("------------------")
+                .append(lineSeparator())
+                .append(String.format("Evaluation result %.2f/%.2f (%s)", score.getScore(), score.getMaxScore(), percentage))
+                .append(lineSeparator())
+                .append("Evaluation time: ").append(evaluationTime).append("ms");
+        return message.toString();
     }
 
     private void evaluateItem(List<ScoredItem<?>> scoredItems, Item item) {
@@ -94,14 +107,9 @@ public class ExamEvaluator implements Task<Score> {
     }
 
     private String printScoredItem(ScoredItem<?> scoredItem) {
-        StringBuilder message = new StringBuilder();
-        if (scoredItem.getItem() instanceof TypeItem) {
-            message.append(lineSeparator());
-        }
-        message.append(String.format("\r %.2f/%.2f - %s%s%s",
+        return String.format("\r %.2f/%.2f - %s%s%s",
                 scoredItem.getScore(), (double) scoredItem.getMaxScore(), scoredItem.identifier(),
-                scoredItem.getUnsuccessfulChecks().isEmpty() ? "" : ", Failed checks: " + scoredItem.getUnsuccessfulChecks(), lineSeparator()));
-        return message.toString();
+                scoredItem.getUnsuccessfulChecks().isEmpty() ? "" : ", Failed checks: " + scoredItem.getUnsuccessfulChecks(), lineSeparator());
     }
 
 }

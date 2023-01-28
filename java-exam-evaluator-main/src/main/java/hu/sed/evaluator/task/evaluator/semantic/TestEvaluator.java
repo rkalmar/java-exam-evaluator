@@ -52,6 +52,10 @@ public class TestEvaluator implements Evaluator<TestItem, ScoredSemanticItem> {
         Object testObject = testObjectOpt.get();
         List<Method> testMethods = collectTestMethods(scoredItem, item, testClass);
 
+        if(item.getTestMethods().length > 0 &&
+                testMethods.isEmpty()) {
+            log.error("Failed to execute tests, failed to load configured method(s)");
+        }
         for (Method testMethod : testMethods) {
             boolean result = executeTestMethod(testObject, testMethod);
             String name = testMethod.getName();

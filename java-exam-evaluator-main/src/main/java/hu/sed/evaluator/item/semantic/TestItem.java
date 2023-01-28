@@ -33,6 +33,6 @@ public class TestItem extends ScorableItem {
 
     @Override
     public String identifier() {
-        return getClass().getSimpleName() + "-" + testClass + Arrays.toString(testMethods);
+        return getClass().getSimpleName() + "-" + testClass + Arrays.toString(testMethods) + " - " + description;
     }
 }

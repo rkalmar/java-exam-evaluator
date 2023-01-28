@@ -19,6 +19,7 @@ import hu.sed.evaluator.task.ExamItemLoader;
 import hu.sed.evaluator.task.ExamValidator;
 import hu.sed.evaluator.task.Task;
 import hu.sed.evaluator.task.argument.TaskArgument;
+import hu.sed.evaluator.task.argument.TaskType;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -50,7 +51,7 @@ public class MainModule extends AbstractModule {
             checkFileExistence(taskArgument.getOutputFolder());
         }
 
-//        taskArgument.setTaskType(TaskType.EXAM_VALIDATOR);
+        taskArgument.setTaskType(TaskType.EXAM_VALIDATOR);
 
         log.info("Initializing.. arguments: {}", taskArgument);
         Injector injector = Guice.createInjector(new MainModule(taskArgument));

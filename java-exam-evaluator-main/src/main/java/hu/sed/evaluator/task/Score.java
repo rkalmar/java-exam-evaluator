@@ -1,12 +1,14 @@
 package hu.sed.evaluator.task;
 
 import lombok.Builder;
+import lombok.Getter;
 
 import java.util.List;
 
 @Builder
 public final class Score {
 
+    @Getter
     List<ScoredItem<?>> scoredItems;
 
     public double getMaxScore() {
