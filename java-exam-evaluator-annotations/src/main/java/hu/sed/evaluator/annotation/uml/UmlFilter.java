@@ -5,10 +5,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**
- * Uml Generator will skip the annotated item.
- */
-@Target({ElementType.TYPE, ElementType.CONSTRUCTOR, ElementType.METHOD, ElementType.FIELD})
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface SkipFromUml {
+public @interface UmlFilter {
+
+    /**
+     * Methods startsWith any from the array will be filtered from UML
+     * @return array of filter strings
+     */
+    String[] methodPrefixes() default {};
 }

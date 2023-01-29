@@ -2,6 +2,9 @@ package hu.sed.evaluator.task.evaluator.semantic;
 
 import com.google.inject.Singleton;
 import hu.sed.evaluator.annotation.semantic.CustomTestContants;
+import hu.sed.evaluator.annotation.test.BeforeEach;
+import hu.sed.evaluator.annotation.test.Setup;
+import hu.sed.evaluator.annotation.test.Test;
 import hu.sed.evaluator.item.semantic.TestItem;
 import hu.sed.evaluator.task.evaluator.Evaluator;
 import lombok.AccessLevel;
@@ -9,6 +12,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -25,8 +29,6 @@ import java.util.stream.Stream;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class TestEvaluator implements Evaluator<TestItem, ScoredSemanticItem> {
 
-    public static final String SETUP_METHOD_NAME = "setup";
-    public static final String BEFORE_EACH_METHOD_NAME = "beforeEach";
 
     @Override
     public ScoredSemanticItem evaluate(TestItem item) {
@@ -59,7 +61,7 @@ public class TestEvaluator implements Evaluator<TestItem, ScoredSemanticItem> {
                 testMethods.isEmpty()) {
             log.error("Failed to execute tests, failed to load configured method(s)");
         }
-        Optional<Method> beforeEachMethod = getMethodByName(testClass, BEFORE_EACH_METHOD_NAME);
+        Optional<Method> beforeEachMethod = getMethodByAnnotation(testClass, BeforeEach.class);
         for (Method testMethod : testMethods) {
             boolean result = executeTestMethod(testObject, testMethod, beforeEachMethod);
             String name = testMethod.getName();
@@ -85,7 +87,7 @@ public class TestEvaluator implements Evaluator<TestItem, ScoredSemanticItem> {
                 log.error("There is no default constructor for testClass: {}", testClass);
             }
 
-            setupMethod = getMethodByName(testClass, SETUP_METHOD_NAME);
+            setupMethod = getMethodByAnnotation(testClass, Setup.class);
         } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
             log.error("Cannot evaluate tests, testClass cannot be instantiated or constructor cannot be invoked. " +
                     "Add default constructor or change it's visibility {}", testClass);
@@ -112,7 +114,7 @@ public class TestEvaluator implements Evaluator<TestItem, ScoredSemanticItem> {
         Stream<Method> methodStream = Arrays.stream(testClass.getDeclaredMethods())
                 .filter(method -> Modifier.isPublic(method.getModifiers()))
                 .filter(method -> method.getGenericParameterTypes().length == 0)
-                .filter(method -> !Arrays.asList(SETUP_METHOD_NAME, BEFORE_EACH_METHOD_NAME).contains(method.getName()));
+                .filter(method -> method.isAnnotationPresent(Test.class));
         if (testMethodNames.size() == 1 && CustomTestContants.ALL_TEST.equals(testMethodNames.get(0))) {
             List<Method> methods = methodStream.toList();
             item.setTestMethods(methods.stream().map(Method::getName).toArray(String[]::new));
@@ -134,9 +136,9 @@ public class TestEvaluator implements Evaluator<TestItem, ScoredSemanticItem> {
         return testMethods;
     }
 
-    private Optional<Method> getMethodByName(Class<?> testClass, String name) {
+    private Optional<Method> getMethodByAnnotation(Class<?> testClass, Class<? extends Annotation> annotation) {
         return Arrays.stream(testClass.getDeclaredMethods())
-                .filter(method -> name.equals(method.getName()))
+                .filter(method -> method.isAnnotationPresent(annotation))
                 .filter(method -> method.getGenericParameterTypes().length == 0)
                 .filter(method -> Modifier.isPublic(method.getModifiers()))
                 .findFirst();
@@ -146,7 +148,6 @@ public class TestEvaluator implements Evaluator<TestItem, ScoredSemanticItem> {
         if (beforeEachMethodOpt.isPresent()) {
             Method beforeEachMethod = beforeEachMethodOpt.get();
             try {
-                log.info("Calling beforeEach method {}", beforeEachMethod.getName());
                 beforeEachMethodOpt.get().invoke(testObject);
                 return executeTestMethod(testObject, testMethod);
             } catch (IllegalAccessException | InvocationTargetException e) {

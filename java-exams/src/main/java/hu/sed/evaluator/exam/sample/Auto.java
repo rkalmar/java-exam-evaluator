@@ -1,15 +1,15 @@
 package hu.sed.evaluator.exam.sample;
 
 import hu.sed.evaluator.annotation.syntax.TypeCheck;
-import hu.sed.evaluator.annotation.uml.SkipFromUml;
+import hu.sed.evaluator.annotation.uml.UmlFilter;
 
+@UmlFilter(methodPrefixes = {"is","get", "set", "toString"})
 @TypeCheck(checkFields = true, checkMethods = true, score = 4)
 public class Auto extends Jarmu {
 
     private final String marka;
 
     private boolean muszakis;
-
 
     public Auto(int gyartasiEv, int sebesseg, double fogyasztas, String marka) {
         super(gyartasiEv, sebesseg, fogyasztas);
@@ -66,7 +66,6 @@ public class Auto extends Jarmu {
         return marka;
     }
 
-    @SkipFromUml
     @Override
     public String toString() {
         return "Az auto markaja " + marka + ", gyartasi eve " + getGyartasiEv() + ", fogyasztasa " +

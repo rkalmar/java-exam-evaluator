@@ -1,7 +1,6 @@
 package hu.sed.evaluator.task.item;
 
 import hu.sed.evaluator.annotation.syntax.FieldCheck;
-import hu.sed.evaluator.annotation.syntax.TypeCheck;
 import hu.sed.evaluator.item.ItemFactory;
 import hu.sed.evaluator.item.element.TypeDefinition;
 import hu.sed.evaluator.item.syntax.FieldItem;

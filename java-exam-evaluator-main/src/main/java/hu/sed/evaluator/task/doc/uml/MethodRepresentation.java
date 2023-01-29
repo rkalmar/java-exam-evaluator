@@ -13,6 +13,11 @@ public class MethodRepresentation  implements UmlRepresentation {
     Method method;
 
     @Override
+    public String getName() {
+        return method.getName();
+    }
+
+    @Override
     public String represent() {
         return method.getName() + "()" + System.lineSeparator();
     }

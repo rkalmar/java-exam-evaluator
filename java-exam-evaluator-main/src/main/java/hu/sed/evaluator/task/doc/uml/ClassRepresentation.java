@@ -1,11 +1,14 @@
 package hu.sed.evaluator.task.doc.uml;
 
+import hu.sed.evaluator.annotation.uml.UmlFilter;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Modifier;
 import java.util.List;
+import java.util.function.Predicate;
 
 @RequiredArgsConstructor(staticName = "of")
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
@@ -33,21 +36,36 @@ class ClassRepresentation implements UmlRepresentation {
 
         clazzRepresentation.append(System.lineSeparator());
 
+        Predicate<MethodRepresentation> methodPredicate = (methodRepresentation) -> true;
+        if (clazz.isAnnotationPresent(UmlFilter.class)) {
+            UmlFilter umlFilter = clazz.getAnnotation(UmlFilter.class);
+            for (String filter : umlFilter.methodPrefixes()) {
+                if (StringUtils.isNotBlank(filter)) {
+                    methodPredicate = methodPredicate.and(methodRepresentation ->
+                        !methodRepresentation.getName().startsWith(filter)
+                    );
+                }
+            }
+        }
+
         if (clazz.isEnum()) {
             fieldRepresentations.stream()
+                    .filter(representation -> !representation.getName().contains("$"))
                     .map(FieldRepresentation::represent)
-                    .filter(representation -> !representation.contains("$"))
                     .forEach(clazzRepresentation::append);
             methodRepresentations.stream()
+                    .filter(representation -> !representation.getName().contains("$"))
+                    .filter(representation -> !representation.getName().contains("valueOf") &&
+                            !representation.getName().contains("values"))
+                    .filter(methodPredicate)
                     .map(MethodRepresentation::represent)
-                    .filter(representation -> !representation.contains("$"))
-                    .filter(representation -> !representation.contains("valueOf") && !representation.contains("values"))
                     .forEach(clazzRepresentation::append);
         } else {
             fieldRepresentations.stream()
                     .map(FieldRepresentation::represent)
                     .forEach(clazzRepresentation::append);
             methodRepresentations.stream()
+                    .filter(methodPredicate)
                     .map(MethodRepresentation::represent)
                     .forEach(clazzRepresentation::append);
         }

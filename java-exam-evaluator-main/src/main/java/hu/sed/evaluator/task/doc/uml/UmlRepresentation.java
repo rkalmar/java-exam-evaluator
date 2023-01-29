@@ -7,4 +7,8 @@ package hu.sed.evaluator.task.doc.uml;
 public interface UmlRepresentation {
 
     String represent();
+
+    default String getName() {
+        return null;
+    }
 }

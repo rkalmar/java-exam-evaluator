@@ -1,8 +1,9 @@
 package hu.sed.evaluator.exam.sample;
 
 import hu.sed.evaluator.annotation.syntax.TypeCheck;
-import hu.sed.evaluator.annotation.uml.SkipFromUml;
+import hu.sed.evaluator.annotation.uml.UmlFilter;
 
+@UmlFilter(methodPrefixes = {"is","get", "set", "toString"})
 @TypeCheck(checkFields = true, checkMethods = true, score = 4)
 public class Kamion extends Jarmu {
     private final int loero;
@@ -59,18 +60,15 @@ public class Kamion extends Jarmu {
         }
     }
 
-    @SkipFromUml
     @Override
     public String toString() {
         return "Ennek a kamionnak a gyartasi eve " + getGyartasiEv() + ", sebessege " + getSebesseg() + ", a rakomanya " + rakomany + " kg es " + loero + " loeros.";
     }
 
-    @SkipFromUml
     public double getRakomany() {
         return rakomany;
     }
 
-    @SkipFromUml
     public void setRakomany(double rakomany) {
         if (rakomany < 0) {
             this.rakomany = 0;
@@ -79,12 +77,10 @@ public class Kamion extends Jarmu {
         }
     }
 
-    @SkipFromUml
     public double getOsszTomeg() {
         return osszTomeg;
     }
 
-    @SkipFromUml
     public int getLoero() {
         return loero;
     }

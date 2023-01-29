@@ -13,6 +13,11 @@ public class FieldRepresentation implements UmlRepresentation {
     Field field;
 
     @Override
+    public String getName() {
+        return field.getName();
+    }
+
+    @Override
     public String represent() {
         return "-" + field.getName() + System.lineSeparator();
     }

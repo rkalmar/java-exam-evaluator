@@ -1,5 +1,6 @@
 package test.hu.sed.evaluator.exam;
 
+import hu.sed.evaluator.annotation.test.Setup;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -63,7 +64,7 @@ public abstract class ExamTestEvaluatorBase {
         Map<String, List<Method>> collectedMethods = Arrays.stream(testClass.getDeclaredMethods())
                 .filter(method -> Modifier.isPublic(method.getModifiers()))
                 .filter(method -> method.getGenericParameterTypes().length == 0)
-                .filter(method -> !Arrays.asList("setup", "beforeEach").contains(method.getName()))
+                .filter(method -> method.isAnnotationPresent(hu.sed.evaluator.annotation.test.Test.class))
                 .peek(method -> log.info("Test method found: {}", method.getName()))
                 .collect(groupingBy(Method::getName));
         collectedMethods.forEach((methodName, testMethods) -> {
@@ -92,7 +93,7 @@ public abstract class ExamTestEvaluatorBase {
 
     private void setupObject() {
         Optional<Method> setupMethod = Arrays.stream(testClass.getDeclaredMethods())
-                .filter(method -> "setup".equals(method.getName()))
+                .filter(method -> method.isAnnotationPresent(Setup.class))
                 .filter(method -> method.getGenericParameterTypes().length == 0)
                 .filter(method -> Modifier.isPublic(method.getModifiers()))
                 .findFirst();
@@ -110,7 +111,7 @@ public abstract class ExamTestEvaluatorBase {
 
     private void setupBeforeEachMethod() {
         this.beforeEachMethod = Arrays.stream(testClass.getDeclaredMethods())
-                .filter(method -> "beforeEach".equals(method.getName()))
+                .filter(method -> method.isAnnotationPresent(hu.sed.evaluator.annotation.test.BeforeEach.class))
                 .filter(method -> method.getGenericParameterTypes().length == 0)
                 .filter(method -> Modifier.isPublic(method.getModifiers()))
                 .findFirst();

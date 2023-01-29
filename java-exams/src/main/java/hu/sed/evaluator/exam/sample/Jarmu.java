@@ -1,8 +1,9 @@
 package hu.sed.evaluator.exam.sample;
 
 import hu.sed.evaluator.annotation.syntax.TypeCheck;
-import hu.sed.evaluator.annotation.uml.SkipFromUml;
+import hu.sed.evaluator.annotation.uml.UmlFilter;
 
+@UmlFilter(methodPrefixes = {"is","get", "set", "toString"})
 @TypeCheck(checkFields = true, checkMethods = true, score = 8)
 public abstract class Jarmu {
     private final int gyartasiEv;
@@ -64,7 +65,6 @@ public abstract class Jarmu {
 
     public abstract void lassit(int sebesseg);
 
-    @SkipFromUml
     @Override
     public String toString() {
         return "A jarmu gyartasi eve " + gyartasiEv + ", sebessege " + sebesseg + " kilometer/ora, fogyasztasa pedig " + fogyasztas + " liter 100 kilometeren.";
