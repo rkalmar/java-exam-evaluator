@@ -12,7 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
-@CustomTest(testClass = SampleAutopalyaTests.class, score = 5)
+@CustomTest(testClass = SampleAutopalyaTests.class, score = 10)
 @TypeCheck(checkFields = true, checkMethods = true, score = 8)
 public final class Autopalya {
     public String nev;

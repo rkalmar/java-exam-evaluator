@@ -49,7 +49,6 @@ public class MethodItemEvaluatorTest {
         when(evaluatorService.checkTypesInOrder(any(), any())).thenReturn(true);
         when(evaluatorService.checkTypesInAnyOrder(any(), any())).thenReturn(true);
         when(evaluatorService.checkModifiers(anyInt(), anyInt())).thenReturn(true);
-        when(evaluatorService.checkOverrideAnnotation(any())).thenReturn(true);
 
         // WHEN
         ScoredItem scoredItem = methodItemEvaluator.evaluate(methodItem);
@@ -59,11 +58,10 @@ public class MethodItemEvaluatorTest {
         assertThat(scoredItem.getItem()).isEqualTo(methodItem);
 
         Map<SyntaxElement, Boolean> checkedElements = scoredItem.getCheckedElements();
-        assertThat(checkedElements.keySet()).containsExactlyInAnyOrder(EXISTENCE, MODIFIERS, EXCEPTIONS, OVERRIDE_ANNOTATION);
+        assertThat(checkedElements.keySet()).containsExactlyInAnyOrder(EXISTENCE, MODIFIERS, EXCEPTIONS);
         assertTrue(checkedElements.get(EXISTENCE));
         assertTrue(checkedElements.get(MODIFIERS));
         assertTrue(checkedElements.get(EXCEPTIONS));
-        assertTrue(checkedElements.get(OVERRIDE_ANNOTATION));
     }
 
     @Test
@@ -74,7 +72,6 @@ public class MethodItemEvaluatorTest {
         when(evaluatorService.checkTypesInOrder(any(), any())).thenReturn(true);
         when(evaluatorService.checkTypesInAnyOrder(any(), any())).thenReturn(true);
         when(evaluatorService.checkModifiers(anyInt(), anyInt())).thenReturn(false);
-        when(evaluatorService.checkOverrideAnnotation(any())).thenReturn(false);
 
         // WHEN
         ScoredItem scoredItem = methodItemEvaluator.evaluate(methodItem);
@@ -84,11 +81,10 @@ public class MethodItemEvaluatorTest {
         assertThat(scoredItem.getItem()).isEqualTo(methodItem);
 
         Map<SyntaxElement, Boolean> checkedElements = scoredItem.getCheckedElements();
-        assertThat(checkedElements.keySet()).containsExactlyInAnyOrder(EXISTENCE, MODIFIERS, EXCEPTIONS, OVERRIDE_ANNOTATION);
+        assertThat(checkedElements.keySet()).containsExactlyInAnyOrder(EXISTENCE, MODIFIERS, EXCEPTIONS);
         assertTrue(checkedElements.get(EXISTENCE));
         assertFalse(checkedElements.get(MODIFIERS));
         assertTrue(checkedElements.get(EXCEPTIONS));
-        assertFalse(checkedElements.get(OVERRIDE_ANNOTATION));
     }
 
     @Test
@@ -124,7 +120,7 @@ public class MethodItemEvaluatorTest {
     }
 
     public static class TestClass extends Base {
-        @MethodCheck(checkOverrideAnnotation = true)
+        @MethodCheck
         @Override
         public void testMethod() {
         }

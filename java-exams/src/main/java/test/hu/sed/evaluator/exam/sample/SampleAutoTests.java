@@ -1,14 +1,15 @@
 package test.hu.sed.evaluator.exam.sample;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import hu.sed.evaluator.annotation.test.BeforeEach;
-import hu.sed.evaluator.annotation.test.Setup;
 import hu.sed.evaluator.annotation.test.ExamTest;
+import hu.sed.evaluator.annotation.test.Setup;
 import hu.sed.evaluator.exam.sample.Auto;
 import hu.sed.evaluator.exam.sample.TulNagySebesseg;
 import lombok.extern.slf4j.Slf4j;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 public class SampleAutoTests {

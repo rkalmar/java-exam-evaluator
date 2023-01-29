@@ -1,9 +1,12 @@
 package hu.sed.evaluator.exam.sample;
 
+import hu.sed.evaluator.annotation.semantic.CustomTest;
 import hu.sed.evaluator.annotation.syntax.TypeCheck;
 import hu.sed.evaluator.annotation.uml.UmlFilter;
+import test.hu.sed.evaluator.exam.sample.SampleKamionTests;
 
 @UmlFilter(methodPrefixes = {"is","get", "set", "toString"})
+@CustomTest(testClass = SampleKamionTests.class, score = 5)
 @TypeCheck(checkFields = true, checkMethods = true, score = 4)
 public class Kamion extends Jarmu {
     private final int loero;

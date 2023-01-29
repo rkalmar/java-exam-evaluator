@@ -1,15 +1,15 @@
 package test.hu.sed.evaluator.exam.sample;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import hu.sed.evaluator.annotation.test.BeforeEach;
-import hu.sed.evaluator.annotation.test.Setup;
 import hu.sed.evaluator.annotation.test.ExamTest;
+import hu.sed.evaluator.annotation.test.Setup;
 import hu.sed.evaluator.exam.sample.Auto;
 import hu.sed.evaluator.exam.sample.Autopalya;
 import hu.sed.evaluator.exam.sample.Jarmu;
 import hu.sed.evaluator.exam.sample.Kamion;
 import lombok.extern.slf4j.Slf4j;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 public class SampleAutopalyaTests  {
@@ -55,7 +55,7 @@ public class SampleAutopalyaTests  {
         autopalya.sebessegetNovel(10);
 
         for (Jarmu jarmu : autopalya.jarmuvek) {
-           assertThat(jarmu.getSebesseg()).isEqualTo(110);
+            assertThat(jarmu.getSebesseg()).isEqualTo(110);
         }
     }
 }

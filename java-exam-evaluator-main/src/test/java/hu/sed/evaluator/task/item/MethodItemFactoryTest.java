@@ -23,7 +23,7 @@ public class MethodItemFactoryTest {
 
     ItemFactory itemFactory = new ItemFactory();
 
-    @MethodCheck(checkExceptions = false, checkOverrideAnnotation = false, score = 8)
+    @MethodCheck(checkExceptions = false, score = 8)
     public static void testMethod(int x, Double z) {
         System.out.println(x + z);
     }
@@ -43,7 +43,6 @@ public class MethodItemFactoryTest {
         assertThat(methodItem.getReadableModifiers()).isEqualTo("public static");
         assertThat(methodItem.getName()).isEqualTo(methodName);
         assertThat(methodItem.isCheckModifiers()).isTrue();
-        assertThat(methodItem.isCheckOverrideAnnotation()).isFalse();
         assertThat(methodItem.isCheckExceptions()).isFalse();
         assertThat(methodItem.getScore()).isEqualTo(8);
         assertThat(methodItem.getContainerClass()).isEqualTo("hu.sed.evaluator.task.item.MethodItemFactoryTest");
@@ -83,7 +82,6 @@ public class MethodItemFactoryTest {
         assertThat(methodItem.getReadableModifiers()).isEqualTo("private final");
         assertThat(methodItem.getName()).isEqualTo(methodName);
         assertThat(methodItem.isCheckModifiers()).isTrue();
-        assertThat(methodItem.isCheckOverrideAnnotation()).isFalse();
         assertThat(methodItem.isCheckExceptions()).isTrue();
         assertThat(methodItem.getScore()).isEqualTo(1);
         assertThat(methodItem.getContainerClass()).isEqualTo("hu.sed.evaluator.task.item.MethodItemFactoryTest");
