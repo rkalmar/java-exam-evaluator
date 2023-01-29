@@ -95,10 +95,12 @@ public class TestEvaluatorTest {
 
 
     public static class TestClass {
+        @hu.sed.evaluator.annotation.test.Test
         public void simpleTestMethod() {
             System.out.println("This is just a simple test.");
         }
 
+        @hu.sed.evaluator.annotation.test.Test
         public void failedTestMethod() {
             assert false;
         }
