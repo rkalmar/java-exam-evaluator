@@ -22,8 +22,8 @@ public final class ConstructorItemCollector extends ItemCollector<ConstructorIte
     ItemFactory itemFactory;
 
     @Override
-    protected Function<Constructor<?>, ConstructorItem> defaultItemCreatorFunc(int score) {
-        return constructor -> itemFactory.createItem(DefaultConstructorCheck.defaultCheck(score), constructor);
+    protected Function<Constructor<?>, ConstructorItem> defaultItemCreatorFunc() {
+        return constructor -> itemFactory.createItem(DefaultConstructorCheck.defaultCheck(), constructor);
     }
 
     @Override

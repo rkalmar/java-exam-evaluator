@@ -9,6 +9,7 @@ import hu.sed.evaluator.item.ScorableItem;
 import hu.sed.evaluator.item.container.ItemContainer;
 import hu.sed.evaluator.item.container.ListItemContainer;
 import hu.sed.evaluator.item.container.RootItem;
+import hu.sed.evaluator.item.syntax.TypeItem;
 import hu.sed.evaluator.task.argument.TaskArgument;
 import hu.sed.evaluator.task.collector.ConstructorItemCollector;
 import hu.sed.evaluator.task.collector.CustomTestItemCollector;
@@ -23,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -67,37 +69,50 @@ class ExamItemCollector implements Task<RootItem> {
         Optional<TypeCheck> annotation = ReflectionUtils.getAnnotation(TypeCheck.class, clazz);
 
         ItemContainer item;
-        Optional<TypeCheck> typeCheck;
+        List<Item> subItems = new ArrayList<>();
 
         if (annotation.isEmpty() || ReflectionUtils.skipped(clazz)) {
             item = ListItemContainer.builder()
                     .containerName(clazz.getCanonicalName())
                     .build();
-            typeCheck = Optional.empty();
         } else {
-            TypeCheck typeCheckAnnotation = annotation.get();
-            item = itemFactory.createItem(typeCheckAnnotation, clazz);
-            typeCheck = Optional.of(typeCheckAnnotation);
+            TypeCheck typeCheck = annotation.get();
+            TypeItem typeItem = itemFactory.createItem(typeCheck, clazz);
+            boolean needUnannotatedFields = typeCheck.checkFields();
+            boolean needUnannotatedMethods = typeCheck.checkMethods();
+
+            List<ScorableItem> unannotatedItems = new ArrayList<>();
+            if (needUnannotatedFields) {
+                unannotatedItems.addAll(fieldItemCollector.collectUnannotatedItems(clazz));
+            }
+            if (needUnannotatedMethods) {
+                unannotatedItems.addAll(methodItemCollector.collectUnannotatedItems(clazz));
+                unannotatedItems.addAll(constructorItemCollector.collectUnannotatedItems(clazz));
+            }
+
+            // distributing typeCheck score among its items and itself
+            double scorePerElement = typeCheck.score() / (double) (unannotatedItems.size() + 1);
+            typeItem.setScore(scorePerElement);
+            for (ScorableItem unannotatedItem : unannotatedItems) {
+                unannotatedItem.setScore(scorePerElement);
+            }
+            subItems.addAll(unannotatedItems);
+            item = typeItem;
         }
 
-        boolean needUnannotatedFields = typeCheck.isPresent() && typeCheck.get().checkFields();
-        boolean needUnannotatedMethods = typeCheck.isPresent() && typeCheck.get().checkMethods();
-        int scorePerField = typeCheck.map(TypeCheck::scorePerField).orElse(-1);
-        int scorePerMethod = typeCheck.map(TypeCheck::scorePerMethod).orElse(-1);
-
         // add fields
-        List<Item> subItems = new ArrayList<>(
-                fieldItemCollector.collectItems(clazz, needUnannotatedFields, scorePerField)
+        subItems.addAll(
+                fieldItemCollector.collectItems(clazz)
         );
 
         // add constructors
         subItems.addAll(
-                constructorItemCollector.collectItems(clazz, needUnannotatedMethods, scorePerMethod)
+                constructorItemCollector.collectItems(clazz)
         );
 
         // add methods
         subItems.addAll(
-                methodItemCollector.collectItems(clazz, needUnannotatedMethods, scorePerMethod)
+                methodItemCollector.collectItems(clazz)
         );
 
         // add custom tests
@@ -105,10 +120,13 @@ class ExamItemCollector implements Task<RootItem> {
                 customTestItemCollector.collectItems(clazz)
         );
 
+        // add inner classes
         subItems.addAll(Arrays.stream(clazz.getDeclaredClasses())
                 .map(this::getExamItem)
                 .filter(innerClassItem -> !innerClassItem.isEmpty())
                 .toList());
+
+        subItems.sort(Comparator.comparing(o -> o.getClass().getName()));
 
         item.setItems(subItems);
 

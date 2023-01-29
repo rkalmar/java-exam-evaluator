@@ -6,7 +6,7 @@ public final class DefaultConstructorCheck {
     public static final boolean checkModifiers = true;
     public static final boolean checkExceptions = true;
 
-    public static ConstructorCheck defaultCheck(int score) {
+    public static ConstructorCheck defaultCheck() {
         return new ConstructorCheck() {
             @Override
             public boolean checkModifiers() {
@@ -19,8 +19,8 @@ public final class DefaultConstructorCheck {
             }
 
             @Override
-            public int score() {
-                return score;
+            public double score() {
+                return -1;
             }
 
             @Override

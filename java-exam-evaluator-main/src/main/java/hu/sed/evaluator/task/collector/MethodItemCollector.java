@@ -23,8 +23,8 @@ public final class MethodItemCollector extends ItemCollector<MethodItem, Method>
     ItemFactory itemFactory;
 
     @Override
-    protected Function<Method, MethodItem> defaultItemCreatorFunc(int score) {
-        return method -> itemFactory.createItem(DefaultMethodCheck.defaultCheck(score), method);
+    protected Function<Method, MethodItem> defaultItemCreatorFunc() {
+        return method -> itemFactory.createItem(DefaultMethodCheck.defaultCheck(), method);
     }
 
     @Override

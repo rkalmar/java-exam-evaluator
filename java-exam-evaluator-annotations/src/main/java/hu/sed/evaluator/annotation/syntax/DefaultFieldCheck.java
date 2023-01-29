@@ -5,7 +5,7 @@ import java.lang.annotation.Annotation;
 public final class DefaultFieldCheck {
     public static final boolean checkModifiers = true;
 
-    public static FieldCheck defaultCheck(int score) {
+    public static FieldCheck defaultCheck() {
         return new FieldCheck() {
             @Override
             public boolean checkModifiers() {
@@ -13,8 +13,8 @@ public final class DefaultFieldCheck {
             }
 
             @Override
-            public int score() {
-                return score;
+            public double score() {
+                return -1;
             }
 
             @Override

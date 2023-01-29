@@ -1,8 +1,12 @@
 package hu.sed.evaluator.exam.sample;
 
+import hu.sed.evaluator.annotation.semantic.CustomTest;
 import hu.sed.evaluator.annotation.syntax.TypeCheck;
+import test.hu.sed.evaluator.exam.sample.SampleTests;
 
-@TypeCheck
+@TypeCheck(checkMethods = true)
+@CustomTest(testClass = SampleTests.class, method = "checkDefaultConstructor",
+        description = "Check if there is no default constructor defined explicitly.")
 public class TulNagySebesseg extends Exception {
 
     public TulNagySebesseg(int sebesseg) {

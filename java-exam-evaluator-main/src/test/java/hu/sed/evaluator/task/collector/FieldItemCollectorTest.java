@@ -41,7 +41,7 @@ public class FieldItemCollectorTest {
     public void collectOnlyAnnotatedTest() {
         // WHEN
         List<FieldItem> items =
-                fieldItemCollector.collectItems(TestClass.class, false, -1);
+                fieldItemCollector.collectItems(TestClass.class);
 
         // THEN
         assertThat(items).hasSize(1);
@@ -52,7 +52,8 @@ public class FieldItemCollectorTest {
     public void collectAllTest() {
         // WHEN
         List<FieldItem> items =
-                fieldItemCollector.collectItems(TestClass.class, true, 5);
+                fieldItemCollector.collectItems(TestClass.class);
+        items.addAll(fieldItemCollector.collectUnannotatedItems(TestClass.class));
 
         // THEN
         assertThat(items).hasSize(2);

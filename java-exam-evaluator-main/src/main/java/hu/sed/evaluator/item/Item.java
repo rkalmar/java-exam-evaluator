@@ -18,13 +18,13 @@ import java.io.Serializable;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "itemType")
 @JsonSubTypes({
-    @Type(value = FieldItem.class, name = "field"),
-    @Type(value = MethodItem.class, name = "method"),
-    @Type(value = ConstructorItem.class, name = "constructor"),
-    @Type(value = TypeItem.class, name = "type"),
-    @Type(value = TestItem.class, name = "test"),
-    @Type(value = ListItemContainer.class, name = "container"),
-    @Type(value = RootItem.class, name = "root")}
+    @Type(value = FieldItem.class),
+    @Type(value = MethodItem.class),
+    @Type(value = ConstructorItem.class),
+    @Type(value = TypeItem.class),
+    @Type(value = TestItem.class),
+    @Type(value = ListItemContainer.class),
+    @Type(value = RootItem.class)}
 )
 public interface Item extends Serializable {
 

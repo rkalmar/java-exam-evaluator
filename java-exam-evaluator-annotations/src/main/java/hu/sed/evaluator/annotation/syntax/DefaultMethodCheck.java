@@ -7,7 +7,7 @@ public final class DefaultMethodCheck {
     public static final boolean checkOverride = false;
     public static final boolean checkExceptions = true;
 
-    public static MethodCheck defaultCheck(int score) {
+    public static MethodCheck defaultCheck() {
         return new MethodCheck() {
             @Override
             public boolean checkModifiers() {
@@ -25,8 +25,8 @@ public final class DefaultMethodCheck {
             }
 
             @Override
-            public int score() {
-                return score;
+            public double score() {
+                return -1;
             }
 
             @Override

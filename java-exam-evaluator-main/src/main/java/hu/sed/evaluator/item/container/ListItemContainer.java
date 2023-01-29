@@ -1,6 +1,7 @@
 package hu.sed.evaluator.item.container;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import hu.sed.evaluator.item.Item;
 import hu.sed.evaluator.item.ItemVisitor;
 import lombok.AccessLevel;
@@ -16,6 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @SuperBuilder
 @AllArgsConstructor
+@JsonTypeName(value = "container")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ListItemContainer implements ItemContainer, Item {
 

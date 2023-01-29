@@ -10,7 +10,6 @@ import lombok.experimental.SuperBuilder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Data
 @SuperBuilder
@@ -37,12 +36,16 @@ public abstract class ScoredItem<T> {
     public final double getScore() {
         if (checkedElements.size() == 0) {
             return 0;
+        } else if (isSuccessful()) {
+            return getMaxScore();
         }
-        long successfulCount = checkedElements.values().stream().filter(value -> value).count();
-        return ((double) getItem().getScore() / checkedElements.size()) * successfulCount;
+        double scorePerElement = getItem().getScore() / checkedElements.size();
+        double minusScore = scorePerElement * getUnsuccessfulChecks().size();
+        double earnedScore = getItem().getScore() - minusScore;
+        return Math.max(earnedScore, 0.0);
     }
 
-    public final int getMaxScore() {
+    public final double getMaxScore() {
         return item.getScore();
     }
 
@@ -53,7 +56,7 @@ public abstract class ScoredItem<T> {
     }
 
     public boolean isSuccessful() {
-        return getScore() == getMaxScore();
+        return getUnsuccessfulChecks().isEmpty();
     }
 
     public String identifier() {

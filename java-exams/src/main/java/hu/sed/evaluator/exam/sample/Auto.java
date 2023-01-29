@@ -1,30 +1,14 @@
 package hu.sed.evaluator.exam.sample;
 
-import hu.sed.evaluator.annotation.semantic.CustomTest;
-import hu.sed.evaluator.annotation.syntax.FieldCheck;
-import hu.sed.evaluator.annotation.syntax.MethodCheck;
-import hu.sed.evaluator.annotation.syntax.SkipCheck;
 import hu.sed.evaluator.annotation.syntax.TypeCheck;
 import hu.sed.evaluator.annotation.uml.SkipFromUml;
-import test.hu.sed.evaluator.exam.sample.Tests;
 
-@CustomTest(testClass = Tests.class, method = {"myThirdTest", "myFourthTest"}, score = 5, description = "mytestcases xxx")
-@TypeCheck(checkMethods = true,
-        checkFields = true,
-        score = 15)
-@CustomTest(testClass = Tests.class, method = {"xx", "yy"}, score = 8)
-@CustomTest(testClass = Tests.class)
+@TypeCheck(checkFields = true, checkMethods = true, score = 4)
 public class Auto extends Jarmu {
 
-    @FieldCheck
     private final String marka;
 
-    @FieldCheck(score = 2)
     private boolean muszakis;
-
-    @SkipCheck
-    @CustomTest(description = "Check Akarmi", testClass = Tests.class, method = {"xx", "yy"}, score = 8)
-    private String whatever;
 
 
     public Auto(int gyartasiEv, int sebesseg, double fogyasztas, String marka) {
@@ -33,7 +17,6 @@ public class Auto extends Jarmu {
         this.marka = marka;
     }
 
-    @MethodCheck
     @Override
     public boolean muszaki() {
         if (!muszakis) {
@@ -43,7 +26,6 @@ public class Auto extends Jarmu {
         return true;
     }
 
-    @CustomTest(testClass = Tests.class, method = {"myFirstTest", "mySecondTest"}, score = 5)
     @Override
     public void gyorsit(int sebesseg) throws TulNagySebesseg {
         if (!muszakis && getSebesseg() + sebesseg > 50) {
@@ -76,7 +58,6 @@ public class Auto extends Jarmu {
         return muszakis;
     }
 
-    @SkipCheck
     public boolean getMuszakis() {
         return muszakis;
     }

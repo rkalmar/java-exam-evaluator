@@ -1,5 +1,6 @@
 package hu.sed.evaluator.item.syntax;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import hu.sed.evaluator.item.Item;
 import hu.sed.evaluator.item.ItemVisitor;
 import hu.sed.evaluator.item.container.ItemContainer;
@@ -17,6 +18,7 @@ import java.util.List;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonTypeName(value = "type")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class TypeItem extends ScorableSyntaxItem implements ItemContainer {
 

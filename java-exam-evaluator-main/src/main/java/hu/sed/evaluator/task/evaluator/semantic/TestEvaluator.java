@@ -55,7 +55,7 @@ public class TestEvaluator implements Evaluator<TestItem, ScoredSemanticItem> {
         Object testObject = testObjectOpt.get();
         List<Method> testMethods = collectTestMethods(scoredItem, item, testClass);
 
-        if(item.getTestMethods().length > 0 &&
+        if (item.getTestMethods().length > 0 &&
                 testMethods.isEmpty()) {
             log.error("Failed to execute tests, failed to load configured method(s)");
         }
@@ -90,9 +90,9 @@ public class TestEvaluator implements Evaluator<TestItem, ScoredSemanticItem> {
             log.error("Cannot evaluate tests, testClass cannot be instantiated or constructor cannot be invoked. " +
                     "Add default constructor or change it's visibility {}", testClass);
         }
-        if (setupMethod.isPresent()) {
+        if (setupMethod.isPresent() && testObject.isPresent()) {
             try {
-                setupMethod.get().invoke(testObject);
+                setupMethod.get().invoke(testObject.get());
             } catch (IllegalAccessException | InvocationTargetException e) {
                 log.error("Failed to setup test object.", e);
                 testObject = Optional.empty();
@@ -143,11 +143,11 @@ public class TestEvaluator implements Evaluator<TestItem, ScoredSemanticItem> {
     }
 
     private boolean executeTestMethod(Object testObject, Method testMethod, Optional<Method> beforeEachMethodOpt) {
-        if(beforeEachMethodOpt.isPresent()) {
+        if (beforeEachMethodOpt.isPresent()) {
             Method beforeEachMethod = beforeEachMethodOpt.get();
             try {
                 log.info("Calling beforeEach method {}", beforeEachMethod.getName());
-                testMethod.invoke(beforeEachMethod);
+                beforeEachMethodOpt.get().invoke(testObject);
                 return executeTestMethod(testObject, testMethod);
             } catch (IllegalAccessException | InvocationTargetException e) {
                 log.error("Cannot execute beforeEach method: {}.{}", testObject.getClass().getName(), testMethod.getName(), e);

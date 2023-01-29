@@ -14,7 +14,7 @@ import lombok.experimental.SuperBuilder;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public abstract class ScorableItem implements Item {
 
-    int score;
+    double score;
 
     public abstract String identifier();
 }

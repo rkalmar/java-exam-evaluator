@@ -1,14 +1,12 @@
 package hu.sed.evaluator.exam.sample;
 
-import hu.sed.evaluator.annotation.syntax.MethodCheck;
 import hu.sed.evaluator.annotation.syntax.TypeCheck;
+import hu.sed.evaluator.annotation.uml.SkipFromUml;
 
-@TypeCheck(score = 5)
+@TypeCheck(checkFields = true, checkMethods = true, score = 8)
 public abstract class Jarmu {
-
     private final int gyartasiEv;
     private int sebesseg;
-
     private double fogyasztas;
 
     public Jarmu(int gyartasiEv, int sebesseg, double fogyasztas) {
@@ -46,7 +44,6 @@ public abstract class Jarmu {
         return min;
     }
 
-    @MethodCheck
     public boolean muszaki() {
         if (gyartasiEv >= 2000) {
             return true;
@@ -67,6 +64,7 @@ public abstract class Jarmu {
 
     public abstract void lassit(int sebesseg);
 
+    @SkipFromUml
     @Override
     public String toString() {
         return "A jarmu gyartasi eve " + gyartasiEv + ", sebessege " + sebesseg + " kilometer/ora, fogyasztasa pedig " + fogyasztas + " liter 100 kilometeren.";

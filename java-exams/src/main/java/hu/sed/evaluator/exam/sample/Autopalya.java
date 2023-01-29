@@ -1,10 +1,6 @@
 package hu.sed.evaluator.exam.sample;
 
-import hu.sed.evaluator.annotation.semantic.CustomTest;
-import hu.sed.evaluator.annotation.syntax.FieldCheck;
-import hu.sed.evaluator.annotation.syntax.MethodCheck;
 import hu.sed.evaluator.annotation.syntax.TypeCheck;
-import test.hu.sed.evaluator.exam.sample.Tests;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,18 +9,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
-@TypeCheck
-public final class Autopalya implements Interface {
+@TypeCheck(checkFields = true, checkMethods = true, score = 8)
+public final class Autopalya {
     public String nev;
     public List<Jarmu> jarmuvek;
 
-    @CustomTest(testClass = Tests.class)
     public Autopalya(String nev) {
         this.nev = nev;
         this.jarmuvek = new ArrayList<>();
     }
 
-    @MethodCheck
     public boolean felhajt(Jarmu jarmu) {
         if (jarmuvek.contains(jarmu) || jarmu.getSebesseg() < 90) {
             return false;
@@ -126,11 +120,5 @@ public final class Autopalya implements Interface {
         } catch (FileNotFoundException e) {
             return false;
         }
-    }
-
-    @TypeCheck
-    static class Rendorseg {
-        @FieldCheck
-        String whatEver;
     }
 }

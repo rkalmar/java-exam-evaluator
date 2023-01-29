@@ -39,5 +39,5 @@ public @interface CustomTest {
      *
      * @return maximum score
      */
-    int score() default 1;
+    double score() default 1;
 }

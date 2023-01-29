@@ -1,6 +1,8 @@
 package test.hu.sed.evaluator.exam;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -14,6 +16,7 @@ import java.util.Optional;
 
 import static java.util.stream.Collectors.groupingBy;
 
+@Slf4j
 public abstract class ExamTestEvaluatorBase {
 
     private final Class<?> testClass;
@@ -35,12 +38,17 @@ public abstract class ExamTestEvaluatorBase {
         setupBeforeEachMethod();
     }
 
+    @Test
+    public void testAll() {
+        this.callAllTestMethod();
+    }
+
     protected void callTestMethod(String testMethod) {
         try {
             if (beforeEachMethod.isPresent()) {
                 beforeEachMethod.get().invoke(testObject);
             }
-            System.out.println("Calling test method " + testMethod);
+            log.info("Calling test method {}", testMethod);
             testMethods.get(testMethod).invoke(testObject);
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException("Failed to run test: " + testMethod);
@@ -56,7 +64,7 @@ public abstract class ExamTestEvaluatorBase {
                 .filter(method -> Modifier.isPublic(method.getModifiers()))
                 .filter(method -> method.getGenericParameterTypes().length == 0)
                 .filter(method -> !Arrays.asList("setup", "beforeEach").contains(method.getName()))
-                .peek(method -> System.out.println("Test method found: " + method.getName()))
+                .peek(method -> log.info("Test method found: {}", method.getName()))
                 .collect(groupingBy(Method::getName));
         collectedMethods.forEach((methodName, testMethods) -> {
             if (!collectedMethods.get(methodName).isEmpty()) {
@@ -96,7 +104,7 @@ public abstract class ExamTestEvaluatorBase {
                 e.printStackTrace();
             }
         } else {
-            System.out.println("No setup method found..");
+            log.info("No setup method found..");
         }
     }
 
@@ -107,7 +115,7 @@ public abstract class ExamTestEvaluatorBase {
                 .filter(method -> Modifier.isPublic(method.getModifiers()))
                 .findFirst();
         if (beforeEachMethod.isEmpty()) {
-            System.out.println("No beforeEach method found..");
+            log.info("No beforeEach method found..");
         }
     }
 }

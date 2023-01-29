@@ -41,7 +41,7 @@ public class MethodItemCollectorTest {
     public void collectOnlyAnnotatedTest() {
         // WHEN
         List<MethodItem> items =
-                methodItemCollector.collectItems(TestClass.class, false, -1);
+                methodItemCollector.collectItems(TestClass.class);
 
         // THEN
         assertThat(items).hasSize(1);
@@ -52,7 +52,8 @@ public class MethodItemCollectorTest {
     public void collectAllTest() {
         // WHEN
         List<MethodItem> items =
-                methodItemCollector.collectItems(TestClass.class, true, 5);
+                methodItemCollector.collectItems(TestClass.class);
+        items.addAll(methodItemCollector.collectUnannotatedItems(TestClass.class));
 
         // THEN
         assertThat(items).hasSize(2);

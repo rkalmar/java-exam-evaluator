@@ -9,7 +9,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public enum TaskType {
     EXAM_VALIDATOR(ArgumentsUtil.VALIDATE_TASK),
-    EXPORT_EXAM(ArgumentsUtil.EXPORT_EXAM_TASK),
+    EXPORT_EXAM(ArgumentsUtil.EXPORT_TASK),
     EXAM_EVALUATOR(ArgumentsUtil.EVALUATE_TASK);
 
     String argName;

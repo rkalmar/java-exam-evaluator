@@ -1,5 +1,6 @@
 package hu.sed.evaluator.item.semantic;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import hu.sed.evaluator.item.ItemVisitor;
 import hu.sed.evaluator.item.ScorableItem;
 import lombok.AccessLevel;
@@ -15,6 +16,7 @@ import java.util.Arrays;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
+@JsonTypeName(value = "test")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class TestItem extends ScorableItem {
 

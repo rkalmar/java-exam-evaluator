@@ -23,7 +23,7 @@ public class ArgumentsUtil {
     public static final String TASK_ARG = "task";
     public static final String EVALUATE_TASK = "evaluateExam";
     public static final String VALIDATE_TASK = "validateExam";
-    public static final String EXPORT_EXAM_TASK = "exportExam";
+    public static final String EXPORT_TASK = "exportExam";
 
     public static final String EXAM_PACKAGE_ARG = "examPackage";
     public static final String OUTPUT_FOLDER_ARG = "outputFolder";
@@ -33,7 +33,7 @@ public class ArgumentsUtil {
 
     static {
         ARG_DEPENDENCIES.put(VALIDATE_TASK, Set.of(EXAM_PACKAGE_ARG));
-        ARG_DEPENDENCIES.put(EXPORT_EXAM_TASK, Set.of(EXAM_PACKAGE_ARG, OUTPUT_FOLDER_ARG));
+        ARG_DEPENDENCIES.put(EXPORT_TASK, Set.of(EXAM_PACKAGE_ARG, OUTPUT_FOLDER_ARG));
         ARG_DEPENDENCIES.put(EVALUATE_TASK, Set.of(EXAM_ITEM_FILE_ARG, OUTPUT_FOLDER_ARG));
     }
 

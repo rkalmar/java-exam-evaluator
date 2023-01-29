@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Checks if 'Type' is implemented correctly. Applicable on Classes/InnerClasses and on Interfaces too.
+ * Checks if 'Type' is implemented correctly. Applicable on Classes/InnerClasses/Interfaces/Enums too.
  * Checks parentClass, implementedInterfaces, modifiers, annotations.
  * Furthermore, it can validate all methods and fields defined in class.
  * Note:
@@ -31,12 +31,7 @@ import java.lang.annotation.Target;
  * In this case there is 4 checked items, so each item's value is calculated by the following formula:
  * itemScore = score / checkedItemCounts = 4 / 4 = 1
  *
- * Besides,
- *   - each method worth score defined by scorePerMethod and
- *   - each field worth score defined by scorePerField
- *
  * So if first three conditions are met, then the item worth 3, if score is 4.
- * + (properly implemented method * scorePerMethod) + (properly implemented fields * scorePerField)
  */
 @SyntaxCheck
 @Target(ElementType.TYPE)
@@ -73,13 +68,6 @@ public @interface TypeCheck {
     boolean checkMethods() default false;
 
     /**
-     * It defines score per method (if checkMethods is true) for methods which does not have specific MethodCheck
-     *
-     * @return maximum score per method
-     */
-    int scorePerMethod() default 1;
-
-    /**
      * If true, check will validate each class method one by one (including constructor methods)
      *
      * Note:
@@ -94,18 +82,11 @@ public @interface TypeCheck {
     boolean checkFields() default false;
 
     /**
-     * It defines score per field (if checkFields is true) for fields which does not have specific FieldCheck
-     *
-     * @return maximum score per method
-     */
-    int scorePerField() default 1;
-
-    /**
      * Defines the maximum possible score.
      * Note: this score can be obtained if all checked item is correct.
      * Each item has value of score distributed proportionally.
      *
      * @return maximum score
      */
-    int score() default 1;
+    double score() default 1;
 }

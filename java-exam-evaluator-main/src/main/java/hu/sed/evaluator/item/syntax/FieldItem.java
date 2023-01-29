@@ -1,5 +1,6 @@
 package hu.sed.evaluator.item.syntax;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import hu.sed.evaluator.item.ItemVisitor;
 import hu.sed.evaluator.item.element.TypeDefinition;
 import lombok.AccessLevel;
@@ -14,6 +15,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonTypeName(value = "field")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class FieldItem extends ScorableSyntaxItem {
 

@@ -8,7 +8,6 @@ import hu.sed.evaluator.item.Item;
 import hu.sed.evaluator.item.ScorableItem;
 import hu.sed.evaluator.item.container.ItemContainer;
 import hu.sed.evaluator.item.container.RootItem;
-import hu.sed.evaluator.item.syntax.TypeItem;
 import hu.sed.evaluator.task.argument.TaskArgument;
 import hu.sed.evaluator.task.argument.TaskType;
 import hu.sed.evaluator.task.evaluator.EvaluatorItemVisitor;
@@ -108,7 +107,7 @@ public class ExamEvaluator implements Task<Score> {
 
     private String printScoredItem(ScoredItem<?> scoredItem) {
         return String.format("\r %.2f/%.2f - %s%s%s",
-                scoredItem.getScore(), (double) scoredItem.getMaxScore(), scoredItem.identifier(),
+                scoredItem.getScore(), scoredItem.getMaxScore(), scoredItem.identifier(),
                 scoredItem.getUnsuccessfulChecks().isEmpty() ? "" : ", Failed checks: " + scoredItem.getUnsuccessfulChecks(), lineSeparator());
     }
 

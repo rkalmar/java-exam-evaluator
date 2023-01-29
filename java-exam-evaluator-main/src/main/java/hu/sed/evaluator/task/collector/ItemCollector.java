@@ -5,7 +5,6 @@ import hu.sed.evaluator.item.Item;
 import hu.sed.evaluator.task.ReflectionUtils;
 
 import java.lang.reflect.AccessibleObject;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -14,20 +13,14 @@ import java.util.function.Predicate;
 
 public abstract class ItemCollector<T extends Item, R extends AccessibleObject> {
 
-    public List<T> collectItems(Class<?> clazz, boolean needUnannotatedItems, int scorePerUnannotatedItem) {
-        R[] elements = getElements(clazz);
-        List<T> subItems = new ArrayList<>(this.getAnnotatedItems(elements));
-        if (needUnannotatedItems) {
-            subItems.addAll(
-                    this.getUnannotatedItems(elements, scorePerUnannotatedItem)
-            );
-        }
-        return subItems;
+    public List<T> collectItems(Class<?> clazz) {
+        return this.getAnnotatedItems(getElements(clazz));
     }
 
-    private final List<T> getUnannotatedItems(R[] elements, int scorePerItem) {
+    public List<T> collectUnannotatedItems(Class<?> clazz) {
+        R[] elements = getElements(clazz);
         return this.getItems(elements, Predicate.not(ReflectionUtils::hasSyntaxCheckAnnotation),
-            field -> Lists.newArrayList(defaultItemCreatorFunc(scorePerItem).apply(field))
+                field -> Lists.newArrayList(defaultItemCreatorFunc().apply(field))
         );
     }
 
@@ -45,7 +38,7 @@ public abstract class ItemCollector<T extends Item, R extends AccessibleObject> 
                 .toList();
     }
 
-    protected abstract Function<R, T> defaultItemCreatorFunc(int score);
+    protected abstract Function<R, T> defaultItemCreatorFunc();
 
     protected abstract Function<R, List<T>> itemCreatorFunc();
 

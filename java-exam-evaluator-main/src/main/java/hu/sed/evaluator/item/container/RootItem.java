@@ -1,5 +1,6 @@
 package hu.sed.evaluator.item.container;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
+@JsonTypeName(value = "root")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RootItem extends ListItemContainer {
 

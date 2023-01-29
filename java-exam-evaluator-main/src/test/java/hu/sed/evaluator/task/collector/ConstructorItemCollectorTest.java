@@ -41,7 +41,7 @@ public class ConstructorItemCollectorTest {
     public void collectOnlyAnnotatedTest() {
         // WHEN
         List<ConstructorItem> items =
-                constructorItemCollector.collectItems(TestClass.class, false, -1);
+                constructorItemCollector.collectItems(TestClass.class);
 
         // THEN
         assertThat(items).hasSize(1);
@@ -52,7 +52,8 @@ public class ConstructorItemCollectorTest {
     public void collectAllTest() {
         // WHEN
         List<ConstructorItem> items =
-                constructorItemCollector.collectItems(TestClass.class, true, 5);
+                constructorItemCollector.collectItems(TestClass.class);
+        items.addAll(constructorItemCollector.collectUnannotatedItems(TestClass.class));
 
         // THEN
         assertThat(items).hasSize(2);

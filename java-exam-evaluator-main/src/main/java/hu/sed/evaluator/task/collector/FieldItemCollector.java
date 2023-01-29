@@ -23,8 +23,8 @@ public final class FieldItemCollector extends ItemCollector<FieldItem, Field> {
     ItemFactory itemFactory;
 
     @Override
-    protected Function<Field, FieldItem> defaultItemCreatorFunc(int score) {
-        return field -> itemFactory.createItem(DefaultFieldCheck.defaultCheck(score), field);
+    protected Function<Field, FieldItem> defaultItemCreatorFunc() {
+        return field -> itemFactory.createItem(DefaultFieldCheck.defaultCheck(), field);
     }
 
     @Override
