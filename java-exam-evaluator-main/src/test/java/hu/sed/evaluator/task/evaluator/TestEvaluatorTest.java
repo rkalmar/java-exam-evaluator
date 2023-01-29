@@ -1,6 +1,7 @@
 package hu.sed.evaluator.task.evaluator;
 
 import hu.sed.evaluator.annotation.semantic.CustomTestContants;
+import hu.sed.evaluator.annotation.test.ExamTest;
 import hu.sed.evaluator.item.semantic.TestItem;
 import hu.sed.evaluator.task.evaluator.semantic.ScoredSemanticItem;
 import hu.sed.evaluator.task.evaluator.semantic.TestEvaluator;
@@ -95,12 +96,12 @@ public class TestEvaluatorTest {
 
 
     public static class TestClass {
-        @hu.sed.evaluator.annotation.test.Test
+        @ExamTest
         public void simpleTestMethod() {
             System.out.println("This is just a simple test.");
         }
 
-        @hu.sed.evaluator.annotation.test.Test
+        @ExamTest
         public void failedTestMethod() {
             assert false;
         }

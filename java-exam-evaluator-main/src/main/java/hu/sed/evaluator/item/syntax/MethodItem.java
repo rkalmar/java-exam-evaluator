@@ -17,8 +17,6 @@ public class MethodItem extends ExecutableItem {
 
     TypeDefinition returnType;
 
-    boolean checkOverrideAnnotation;
-
     @Override
     public <R> R accept(ItemVisitor<R> visitor) {
         return visitor.visit(this);

@@ -1,9 +1,13 @@
 package hu.sed.evaluator.exam.sample;
 
+import hu.sed.evaluator.annotation.semantic.CustomTest;
+import hu.sed.evaluator.annotation.syntax.MethodCheck;
 import hu.sed.evaluator.annotation.syntax.TypeCheck;
 import hu.sed.evaluator.annotation.uml.UmlFilter;
+import test.hu.sed.evaluator.exam.sample.SampleAutoTests;
 
 @UmlFilter(methodPrefixes = {"is","get", "set", "toString"})
+@CustomTest(testClass = SampleAutoTests.class, score = 5)
 @TypeCheck(checkFields = true, checkMethods = true, score = 4)
 public class Auto extends Jarmu {
 
@@ -17,6 +21,7 @@ public class Auto extends Jarmu {
         this.marka = marka;
     }
 
+    @MethodCheck
     @Override
     public boolean muszaki() {
         if (!muszakis) {
@@ -26,6 +31,7 @@ public class Auto extends Jarmu {
         return true;
     }
 
+    @MethodCheck
     @Override
     public void gyorsit(int sebesseg) throws TulNagySebesseg {
         if (!muszakis && getSebesseg() + sebesseg > 50) {
@@ -37,6 +43,7 @@ public class Auto extends Jarmu {
         }
     }
 
+    @MethodCheck
     @Override
     public void lassit(int sebesseg) {
         if (getSebesseg() - sebesseg >= 0) {

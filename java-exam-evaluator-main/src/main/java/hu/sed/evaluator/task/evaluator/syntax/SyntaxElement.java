@@ -4,7 +4,6 @@ public enum SyntaxElement {
     EXISTENCE,
     MODIFIERS,
     EXCEPTIONS,
-    OVERRIDE_ANNOTATION,
     PARENT_CLASS,
     INTERFACES
 }

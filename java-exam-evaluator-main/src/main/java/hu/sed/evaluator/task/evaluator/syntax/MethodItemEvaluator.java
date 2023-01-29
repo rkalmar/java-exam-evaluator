@@ -24,18 +24,6 @@ public class MethodItemEvaluator extends ExecutableItemEvaluator<Method, MethodI
     }
 
     @Override
-    protected void evaluate(Method method, ScoredSyntaxItem scoredItem) {
-        MethodItem item = getItem(scoredItem);
-        if (!Modifier.isStatic(method.getModifiers()) && item.isCheckOverrideAnnotation()) {
-            boolean checkResult = evaluatorService.checkOverrideAnnotation(method);
-            scoredItem.addCheck(SyntaxElement.OVERRIDE_ANNOTATION, checkResult);
-            if (!checkResult) {
-                log.info("{} -> Override annotation is not present.", item.identifier());
-            }
-        }
-    }
-
-    @Override
     protected Method findExecutableElement(MethodItem item) throws ClassNotFoundException, NoSuchMethodException {
         List<Method> methodsByName = ReflectionUtils.getMethodsByName(item.getContainerClass(), item.getName());
         for (Method method : methodsByName) {

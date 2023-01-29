@@ -1,9 +1,11 @@
 package test.hu.sed.evaluator.exam;
 
+import hu.sed.evaluator.annotation.test.ExamTest;
 import hu.sed.evaluator.annotation.test.Setup;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import test.hu.sed.evaluator.exception.AssertionException;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -51,8 +53,14 @@ public abstract class ExamTestEvaluatorBase {
             }
             log.info("Calling test method {}", testMethod);
             testMethods.get(testMethod).invoke(testObject);
-        } catch (IllegalAccessException | InvocationTargetException e) {
+        } catch (IllegalAccessException e) {
             throw new RuntimeException("Failed to run test: " + testMethod);
+        } catch (InvocationTargetException e) {
+            if (e.getCause() instanceof AssertionError assertionError) {
+                throw new AssertionException(assertionError);
+            } else {
+                throw new RuntimeException("Failed to run test: " + testMethod);
+            }
         }
     }
 
@@ -64,7 +72,7 @@ public abstract class ExamTestEvaluatorBase {
         Map<String, List<Method>> collectedMethods = Arrays.stream(testClass.getDeclaredMethods())
                 .filter(method -> Modifier.isPublic(method.getModifiers()))
                 .filter(method -> method.getGenericParameterTypes().length == 0)
-                .filter(method -> method.isAnnotationPresent(hu.sed.evaluator.annotation.test.Test.class))
+                .filter(method -> method.isAnnotationPresent(ExamTest.class))
                 .peek(method -> log.info("Test method found: {}", method.getName()))
                 .collect(groupingBy(Method::getName));
         collectedMethods.forEach((methodName, testMethods) -> {

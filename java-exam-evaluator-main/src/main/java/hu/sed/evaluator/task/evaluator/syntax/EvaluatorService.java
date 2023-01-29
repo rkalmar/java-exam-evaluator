@@ -57,8 +57,4 @@ public class EvaluatorService {
         }
         return true;
     }
-
-    public boolean checkOverrideAnnotation(Method method) {
-        return method.isAnnotationPresent(Override.class);
-    }
 }

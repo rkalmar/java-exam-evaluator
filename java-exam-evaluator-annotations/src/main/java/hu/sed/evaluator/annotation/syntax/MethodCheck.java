@@ -19,7 +19,6 @@ import java.lang.annotation.Target;
  * Example:
  *
  * \@MethodCheck(checkModifiers = true,
- * checkOverride = true,
  * checkExceptions = true,
  * score = 1)
  * \@Override public static void doSomething() throws IllegalArgumentException {....}
@@ -27,13 +26,12 @@ import java.lang.annotation.Target;
  * Check will calculate in the following way:
  * - if return type, method name and args types are correct: +1 score
  * - checkModifiers = true, so if modifiers (public, static) are added: +1 score
- * - checkOverride = true, so if method is a real override from an abstract class or an interface: +1 score
  * - checkExceptions = true, so if exception is added (@IllegalArgumentException): +1 score
  * <p>
- * In this case there is 4 checked items, so each item's value is calculated by the following formula:
- * itemScore = score / checkedItemCounts = 1 / 4 = 0.25
+ * In this case there is 3 checked items, so each item's value is calculated by the following formula:
+ * itemScore = score / checkedItemCounts = 1 / 3 = 0.33
  * <p>
- * So if first three conditions are met, then the item worth 0.75, if score is 1.
+ * So if first two conditions are met, then the item worth 0.66, if score is 1.
  */
 @SyntaxCheck
 @Target(ElementType.METHOD)
@@ -45,11 +43,6 @@ public @interface MethodCheck {
      * @return true if check needs to validate method modifiers
      */
     boolean checkModifiers() default DefaultMethodCheck.checkModifiers;
-
-    /**
-     * @return true if check needs to validate, if method has an o Override annotation
-     */
-    boolean checkOverrideAnnotation() default DefaultMethodCheck.checkOverride;
 
     /**
      * @return true if check needs to validate checked exceptions to be thrown

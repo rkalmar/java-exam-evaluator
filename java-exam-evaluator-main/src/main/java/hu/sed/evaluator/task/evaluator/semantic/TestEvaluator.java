@@ -4,7 +4,7 @@ import com.google.inject.Singleton;
 import hu.sed.evaluator.annotation.semantic.CustomTestContants;
 import hu.sed.evaluator.annotation.test.BeforeEach;
 import hu.sed.evaluator.annotation.test.Setup;
-import hu.sed.evaluator.annotation.test.Test;
+import hu.sed.evaluator.annotation.test.ExamTest;
 import hu.sed.evaluator.item.semantic.TestItem;
 import hu.sed.evaluator.task.evaluator.Evaluator;
 import lombok.AccessLevel;
@@ -114,7 +114,7 @@ public class TestEvaluator implements Evaluator<TestItem, ScoredSemanticItem> {
         Stream<Method> methodStream = Arrays.stream(testClass.getDeclaredMethods())
                 .filter(method -> Modifier.isPublic(method.getModifiers()))
                 .filter(method -> method.getGenericParameterTypes().length == 0)
-                .filter(method -> method.isAnnotationPresent(Test.class));
+                .filter(method -> method.isAnnotationPresent(ExamTest.class));
         if (testMethodNames.size() == 1 && CustomTestContants.ALL_TEST.equals(testMethodNames.get(0))) {
             List<Method> methods = methodStream.toList();
             item.setTestMethods(methods.stream().map(Method::getName).toArray(String[]::new));
@@ -146,7 +146,6 @@ public class TestEvaluator implements Evaluator<TestItem, ScoredSemanticItem> {
 
     private boolean executeTestMethod(Object testObject, Method testMethod, Optional<Method> beforeEachMethodOpt) {
         if (beforeEachMethodOpt.isPresent()) {
-            Method beforeEachMethod = beforeEachMethodOpt.get();
             try {
                 beforeEachMethodOpt.get().invoke(testObject);
                 return executeTestMethod(testObject, testMethod);
@@ -165,8 +164,14 @@ public class TestEvaluator implements Evaluator<TestItem, ScoredSemanticItem> {
         try {
             testMethod.invoke(testObject);
             return true;
-        } catch (IllegalAccessException | InvocationTargetException e) {
+        } catch (IllegalAccessException e) {
             log.error("Cannot execute test method: {}.{}", testObject.getClass().getName(), testMethod.getName(), e);
+        } catch (InvocationTargetException e) {
+            if (e.getCause() instanceof AssertionError assertionError) {
+                log.error("Test exception: {}", assertionError.getMessage());
+            } else {
+                log.error("Cannot execute test method: {}.{}", testObject.getClass().getName(), testMethod.getName(), e);
+            }
         } catch (Exception e) {
             log.info("Test exception: ", e);
         }

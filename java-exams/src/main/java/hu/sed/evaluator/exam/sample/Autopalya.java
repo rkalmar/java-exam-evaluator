@@ -1,6 +1,9 @@
 package hu.sed.evaluator.exam.sample;
 
+import hu.sed.evaluator.annotation.semantic.CustomTest;
+import hu.sed.evaluator.annotation.syntax.SkipCheck;
 import hu.sed.evaluator.annotation.syntax.TypeCheck;
+import test.hu.sed.evaluator.exam.sample.SampleAutopalyaTests;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -9,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
+@CustomTest(testClass = SampleAutopalyaTests.class, score = 5)
 @TypeCheck(checkFields = true, checkMethods = true, score = 8)
 public final class Autopalya {
     public String nev;
@@ -103,6 +107,7 @@ public final class Autopalya {
         return jarm;
     }
 
+    @SkipCheck
     public boolean betolt(String file) {
         try {
             Scanner sc = new Scanner(new File(file));
