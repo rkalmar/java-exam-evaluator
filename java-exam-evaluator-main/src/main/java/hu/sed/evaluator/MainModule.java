@@ -51,7 +51,7 @@ public class MainModule extends AbstractModule {
             checkFileExistence(taskArgument.getOutputFolder());
         }
 
-        taskArgument.setTaskType(TaskType.EXAM_EVALUATOR);
+        taskArgument.setTaskType(TaskType.EXAM_EVALUATOR); // TODO remove this
 
         log.info("Initializing.. arguments: {}", taskArgument);
         Injector injector = Guice.createInjector(new MainModule(taskArgument));
