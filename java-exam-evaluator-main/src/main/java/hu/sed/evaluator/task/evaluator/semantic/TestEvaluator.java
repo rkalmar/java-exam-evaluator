@@ -29,7 +29,6 @@ import java.util.stream.Stream;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class TestEvaluator implements Evaluator<TestItem, ScoredSemanticItem> {
 
-
     @Override
     public ScoredSemanticItem evaluate(TestItem item) {
         log.info("Evaluate item: {}", item.identifier());
@@ -43,7 +42,7 @@ public class TestEvaluator implements Evaluator<TestItem, ScoredSemanticItem> {
         Class<?> testClass;
         try {
             testClass = Class.forName(item.getTestClass());
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException | NoClassDefFoundError e) {
             log.error("Cannot evaluate tests, testClass is not found: {}", item.getTestClass());
             scoredItem.unsuccessfulCheck("TEST_CLASS_NOT_FOUND");
             return scoredItem;
@@ -96,7 +95,11 @@ public class TestEvaluator implements Evaluator<TestItem, ScoredSemanticItem> {
             try {
                 setupMethod.get().invoke(testObject.get());
             } catch (IllegalAccessException | InvocationTargetException e) {
-                log.error("Failed to setup test object.", e);
+                if (e.getCause() instanceof NoClassDefFoundError) {
+                    log.info("Cannot execute setup method, because class is not found {}", e.getCause().getMessage());
+                } else {
+                    log.error("Failed to setup test object.", e);
+                }
                 testObject = Optional.empty();
             }
         }
@@ -150,7 +153,11 @@ public class TestEvaluator implements Evaluator<TestItem, ScoredSemanticItem> {
                 beforeEachMethodOpt.get().invoke(testObject);
                 return executeTestMethod(testObject, testMethod);
             } catch (IllegalAccessException | InvocationTargetException e) {
-                log.error("Cannot execute beforeEach method: {}.{}", testObject.getClass().getName(), testMethod.getName(), e);
+                if (e.getCause() instanceof NoClassDefFoundError) {
+                    log.info("Cannot execute beforeEach, because class is not found {}", e.getCause().getMessage());
+                } else {
+                    log.error("Cannot execute beforeEach method: {}.{}", testObject.getClass().getName(), testMethod.getName(), e);
+                }
             } catch (Exception e) {
                 log.info("beforeEach exception: ", e);
             }
@@ -169,6 +176,8 @@ public class TestEvaluator implements Evaluator<TestItem, ScoredSemanticItem> {
         } catch (InvocationTargetException e) {
             if (e.getCause() instanceof AssertionError assertionError) {
                 log.error("Test exception: {}", assertionError.getMessage());
+            } else if (e.getCause() instanceof NoClassDefFoundError) {
+                log.info("Cannot execute test method {}, because class is not found {}", testMethod.getName(), e.getCause().getMessage());
             } else {
                 log.error("Cannot execute test method: {}.{}", testObject.getClass().getName(), testMethod.getName(), e);
             }

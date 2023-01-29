@@ -19,16 +19,22 @@ import hu.sed.evaluator.task.ExamItemLoader;
 import hu.sed.evaluator.task.ExamValidator;
 import hu.sed.evaluator.task.Task;
 import hu.sed.evaluator.task.argument.TaskArgument;
-import hu.sed.evaluator.task.argument.TaskType;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.File;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Enumeration;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 
 /**
@@ -44,6 +50,8 @@ public class MainModule extends AbstractModule {
     public static void main(String[] args) throws InvalidArgumentException, MissingArgumentsException {
         TaskArgument taskArgument = ArgumentsUtil.parseArguments(args);
 
+//        loadClass();
+
         if (StringUtils.isNotBlank(taskArgument.getOutputFolder())) {
             checkFileExistence(taskArgument.getOutputFolder());
         }
@@ -51,12 +59,37 @@ public class MainModule extends AbstractModule {
             checkFileExistence(taskArgument.getOutputFolder());
         }
 
-        taskArgument.setTaskType(TaskType.EXAM_EVALUATOR); // TODO remove this
-
         log.info("Initializing.. arguments: {}", taskArgument);
         Injector injector = Guice.createInjector(new MainModule(taskArgument));
         injector.getInstance(Task.class).execute();
     }
+
+//    @SneakyThrows
+//    private static void loadClass() {
+//        File file = new File("c:\\Users\\rkalmar\\" +
+//                "Desktop\\szte\\diplomamunka\\java-exam-evaluator\\" +
+//                "java-exam-test-solution\\target\\java-exam-test-solution-20230101-SNAPSHOT.jar");
+//        JarFile jar = new JarFile(file);
+//        URLClassLoader ucl = new URLClassLoader(new URL[]{file.toURI().toURL()});
+//        Enumeration<JarEntry> entries = jar.entries();
+//        while (entries.hasMoreElements()) {
+//            JarEntry entry = entries.nextElement();
+//
+//            if (!entry.getName().endsWith(".class")) {
+//                continue;
+//            }
+//
+//            Class<?> clazz;
+//            try {
+//                clazz = ucl.loadClass(entry.getName().replace("/", ".").replace(".class", ""));
+//            } catch (ClassNotFoundException e) {
+//                e.printStackTrace();
+//                continue;
+//            }
+//        }
+//        jar.close();
+//        ucl.close();
+//    }
 
     private static void checkFileExistence(String file) throws InvalidArgumentException {
         if (StringUtils.isNotEmpty(file)) {
