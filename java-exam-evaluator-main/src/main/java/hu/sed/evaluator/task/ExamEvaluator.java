@@ -79,7 +79,7 @@ public class ExamEvaluator implements Task<Score> {
                 .filter(ScoredItem::isSuccessful)
                 .map(this::printScoredItem)
                 .forEach(message::append);
-
+        message.append("------------------").append(lineSeparator());
         message.append("Unsuccessful items:")
                 .append(lineSeparator());
         score.getScoredItems().stream()

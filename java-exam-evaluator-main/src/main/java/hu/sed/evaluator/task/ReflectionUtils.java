@@ -109,7 +109,7 @@ public class ReflectionUtils {
     public List<Method> getMethodsByName(String containerClass, String methodName) throws ClassNotFoundException {
         return Arrays.stream(Class.forName(containerClass).getDeclaredMethods())
                 .filter(method -> method.getName().equals(methodName))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public List<Constructor<?>> getConstructorsByName(String containerClass) throws ClassNotFoundException {

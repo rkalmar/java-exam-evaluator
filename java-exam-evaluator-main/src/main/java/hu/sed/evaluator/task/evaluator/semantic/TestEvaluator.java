@@ -25,6 +25,9 @@ import java.util.stream.Stream;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class TestEvaluator implements Evaluator<TestItem, ScoredSemanticItem> {
 
+    public static final String SETUP_METHOD_NAME = "setup";
+    public static final String BEFORE_EACH_METHOD_NAME = "beforeEach";
+
     @Override
     public ScoredSemanticItem evaluate(TestItem item) {
         log.info("Evaluate item: {}", item.identifier());
@@ -56,8 +59,9 @@ public class TestEvaluator implements Evaluator<TestItem, ScoredSemanticItem> {
                 testMethods.isEmpty()) {
             log.error("Failed to execute tests, failed to load configured method(s)");
         }
+        Optional<Method> beforeEachMethod = getMethodByName(testClass, BEFORE_EACH_METHOD_NAME);
         for (Method testMethod : testMethods) {
-            boolean result = executeTestMethod(testObject, testMethod);
+            boolean result = executeTestMethod(testObject, testMethod, beforeEachMethod);
             String name = testMethod.getName();
             log.info("Test result {}. {}.{}", (result ? "successful" : "unsuccessful"),
                     testObject.getClass().getName(), name);
@@ -81,11 +85,7 @@ public class TestEvaluator implements Evaluator<TestItem, ScoredSemanticItem> {
                 log.error("There is no default constructor for testClass: {}", testClass);
             }
 
-            setupMethod = Arrays.stream(testClass.getDeclaredMethods())
-                    .filter(method -> "setup".equals(method.getName()))
-                    .filter(method -> method.getGenericParameterTypes().length == 0)
-                    .filter(method -> Modifier.isPublic(method.getModifiers()))
-                    .findFirst();
+            setupMethod = getMethodByName(testClass, SETUP_METHOD_NAME);
         } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
             log.error("Cannot evaluate tests, testClass cannot be instantiated or constructor cannot be invoked. " +
                     "Add default constructor or change it's visibility {}", testClass);
@@ -111,7 +111,8 @@ public class TestEvaluator implements Evaluator<TestItem, ScoredSemanticItem> {
         List<String> testMethodNames = Arrays.asList(item.getTestMethods());
         Stream<Method> methodStream = Arrays.stream(testClass.getDeclaredMethods())
                 .filter(method -> Modifier.isPublic(method.getModifiers()))
-                .filter(method -> method.getGenericParameterTypes().length == 0);
+                .filter(method -> method.getGenericParameterTypes().length == 0)
+                .filter(method -> !Arrays.asList(SETUP_METHOD_NAME, BEFORE_EACH_METHOD_NAME).contains(method.getName()));
         if (testMethodNames.size() == 1 && CustomTestContants.ALL_TEST.equals(testMethodNames.get(0))) {
             List<Method> methods = methodStream.toList();
             item.setTestMethods(methods.stream().map(Method::getName).toArray(String[]::new));
@@ -131,6 +132,32 @@ public class TestEvaluator implements Evaluator<TestItem, ScoredSemanticItem> {
 
         }
         return testMethods;
+    }
+
+    private Optional<Method> getMethodByName(Class<?> testClass, String name) {
+        return Arrays.stream(testClass.getDeclaredMethods())
+                .filter(method -> name.equals(method.getName()))
+                .filter(method -> method.getGenericParameterTypes().length == 0)
+                .filter(method -> Modifier.isPublic(method.getModifiers()))
+                .findFirst();
+    }
+
+    private boolean executeTestMethod(Object testObject, Method testMethod, Optional<Method> beforeEachMethodOpt) {
+        if(beforeEachMethodOpt.isPresent()) {
+            Method beforeEachMethod = beforeEachMethodOpt.get();
+            try {
+                log.info("Calling beforeEach method {}", beforeEachMethod.getName());
+                testMethod.invoke(beforeEachMethod);
+                return executeTestMethod(testObject, testMethod);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                log.error("Cannot execute beforeEach method: {}.{}", testObject.getClass().getName(), testMethod.getName(), e);
+            } catch (Exception e) {
+                log.info("beforeEach exception: ", e);
+            }
+            return false;
+        }
+
+        return executeTestMethod(testObject, testMethod);
     }
 
     private boolean executeTestMethod(Object testObject, Method testMethod) {

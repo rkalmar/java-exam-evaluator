@@ -4,7 +4,7 @@ import hu.sed.evaluator.annotation.semantic.CustomTest;
 import hu.sed.evaluator.annotation.syntax.FieldCheck;
 import hu.sed.evaluator.annotation.syntax.MethodCheck;
 import hu.sed.evaluator.annotation.syntax.TypeCheck;
-import test.hu.sed.evaluator.exam.sample.Tests2;
+import test.hu.sed.evaluator.exam.sample.Tests;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -18,7 +18,7 @@ public final class Autopalya implements Interface {
     public String nev;
     public List<Jarmu> jarmuvek;
 
-    @CustomTest(testClass = Tests2.class)
+    @CustomTest(testClass = Tests.class)
     public Autopalya(String nev) {
         this.nev = nev;
         this.jarmuvek = new ArrayList<>();

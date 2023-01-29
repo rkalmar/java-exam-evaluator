@@ -33,7 +33,7 @@ public class UmlUtility {
                         PackageRepresentation.of(packageName,
                                 classList.stream()
                                         .map(UmlUtility::toClassRepresentation)
-                                        .collect(Collectors.toList())
+                                        .toList()
                         )
                 ));
 
@@ -66,12 +66,12 @@ public class UmlUtility {
                         .filter(ReflectionUtils::notUmlSkipped)
                         .sorted(Comparator.comparing(Field::getName))
                         .map(FieldRepresentation::of)
-                        .collect(Collectors.toList()),
+                        .toList(),
                 Arrays.stream(clazz.getDeclaredMethods())
                         .filter(ReflectionUtils::notUmlSkipped)
                         .sorted(Comparator.comparing(Method::getName))
                         .map(MethodRepresentation::of)
-                        .collect(Collectors.toList())
+                        .toList()
         );
     }
 

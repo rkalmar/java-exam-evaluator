@@ -49,7 +49,7 @@ public abstract class ScoredItem<T> {
     public final List<T> getUnsuccessfulChecks() {
         return checkedElements.keySet().stream()
                 .filter(check -> !checkedElements.get(check))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public boolean isSuccessful() {
