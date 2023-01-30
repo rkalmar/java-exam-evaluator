@@ -1,5 +1,6 @@
 package hu.sed.evaluator.task.evaluator.semantic;
 import hu.sed.evaluator.annotation.syntax.TypeCheck;
+import hu.sed.evaluator.exam.sample.Kamion;
 import hu.sed.evaluator.item.ItemFactory;
 import hu.sed.evaluator.item.syntax.TypeItem;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,14 +21,9 @@ public class JavaCodeServiceTest {
     @Test
     void name() {
         // WHEN
-        TypeItem typeItem = itemFactory.createItem(Akarmi.class.getAnnotation(TypeCheck.class), Akarmi.class);
-        typeItem.setName("hu.sed.evaluator.generated.NewClass");
+        TypeItem typeItem = itemFactory.createItem(Kamion.class.getAnnotation(TypeCheck.class), Kamion.class);
+        typeItem.setName(Kamion.class.getPackageName() + ".NewKamion");
 
         javaCodeService.addClass(typeItem);
-    }
-
-    @TypeCheck
-    public static class Akarmi {
-
     }
 }

@@ -46,10 +46,12 @@ public class JavaCodeService extends ClassLoader implements Opcodes {
         // https://github.com/miho/asm-playground/blob/master/ASMSample01/jars/asm-4.0/examples/helloworld/src/Helloworld.java
         ClassWriter classWriter = new ClassWriter(0);
         String[] parts = typeItem.getName().split("\\.");
-        String className = parts[parts.length -1];
+        String className = parts[parts.length - 1];
         String packageName = typeItem.getName().replace("." + className, "")
                 .replace(".", "/");
-        classWriter.visit(V1_1, ACC_PUBLIC, packageName + "/" + className, null, "java/lang/Object", null);
+        String parentClass = typeItem.getParentClazz().getType().replace(".", "/");
+        classWriter.visit(V1_1, ACC_PUBLIC, packageName + "/" + className, null,
+                parentClass, null);
 
         byte[] code = classWriter.toByteArray();
 
@@ -57,8 +59,7 @@ public class JavaCodeService extends ClassLoader implements Opcodes {
         fos.write(code);
         fos.close();
 
-        JavaCodeService loader = new JavaCodeService();
-        Class<?> exampleClass = loader.defineClass(typeItem.getName(), code, 0, code.length);
+        Class<?> exampleClass = this.defineClass(typeItem.getName(), code, 0, code.length);
         System.out.println(exampleClass.getName());
     }
 
