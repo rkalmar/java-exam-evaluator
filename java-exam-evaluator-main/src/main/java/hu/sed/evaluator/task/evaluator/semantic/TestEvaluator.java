@@ -165,9 +165,9 @@ public class TestEvaluator implements Evaluator<TestItem, ScoredSemanticItem> {
             log.error("Cannot execute method: {}.{}", testObject.getClass().getName(), method.getName(), e);
         } catch (InvocationTargetException e) {
             Throwable cause = e.getCause();
-            log.error("Failed to execute method: {}, {}", cause.getClass().getSimpleName(), cause.getMessage());
+            log.error("Failed to execute method: {}, {} - {}", method.getName(), cause.getClass().getSimpleName(), cause.getMessage());
         } catch (Throwable e) {
-            log.info("Exception: ", e);
+            log.info("Exception, while executing method: {} ", method.getName(), e);
         }
         return false;
     }

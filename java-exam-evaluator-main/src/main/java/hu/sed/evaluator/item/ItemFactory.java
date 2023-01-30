@@ -37,6 +37,7 @@ public class ItemFactory {
                 .parentClazz(checkParentClazz ? createTypeDef(clazz.getGenericSuperclass()) : null)
                 .checkInterfaces(check.checkInterfaces())
                 .implementedInterfaces(createTypeDefForImplementedInterfaces(clazz))
+                .containerClass(clazz.getDeclaringClass() == null ? null : clazz.getDeclaringClass().getName())
                 .score(check.score())
                 .build();
     }

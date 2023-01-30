@@ -11,4 +11,8 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ScoredSyntaxItem extends ScoredItem<SyntaxElement> {
+
+    public boolean itemExists() {
+        return !getUnsuccessfulChecks().contains(SyntaxElement.EXISTENCE);
+    }
 }
