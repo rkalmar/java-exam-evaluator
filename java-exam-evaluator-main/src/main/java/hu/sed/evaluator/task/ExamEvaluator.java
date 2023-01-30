@@ -13,6 +13,7 @@ import hu.sed.evaluator.item.syntax.TypeItem;
 import hu.sed.evaluator.task.argument.TaskArgument;
 import hu.sed.evaluator.task.argument.TaskType;
 import hu.sed.evaluator.task.evaluator.EvaluatorItemVisitor;
+import hu.sed.evaluator.task.evaluator.semantic.JavaCodeService;
 import hu.sed.evaluator.task.evaluator.syntax.ScoredSyntaxItem;
 import hu.sed.evaluator.task.evaluator.syntax.SyntaxElement;
 import lombok.AccessLevel;
@@ -42,7 +43,8 @@ public class ExamEvaluator implements Task<Score> {
 
     TaskArgument argument;
 
-    @SneakyThrows
+    JavaCodeService javaCodeService;
+
     @Override
     public Score execute() {
         log.info("Executing evaluator. Test was created by {} at {}. Container: {}",
@@ -55,14 +57,7 @@ public class ExamEvaluator implements Task<Score> {
         rootItem.getItems()
                 .forEach(item -> evaluateSyntaxItems(scoredItems, item));
 
-        // inject missing classes to classloader to make semantic test classes properly loadable
-        List<TypeItem> typeItems = scoredItems.stream()
-                .filter(scoredItem -> scoredItem.getItem() instanceof TypeItem typeItem &&
-                        StringUtils.isEmpty(typeItem.getContainerClass()))
-                .filter(scoredItem -> !((ScoredSyntaxItem) scoredItem).itemExists())
-                .map(scoredItem -> (TypeItem) scoredItem.getItem())
-                .toList();
-        typeItems.forEach(item -> log.info("Missing typeItems {}", item.identifier()));
+        injectMissingClasses(scoredItems);
 
         // execute semantic items
         rootItem.getItems()
@@ -77,7 +72,13 @@ public class ExamEvaluator implements Task<Score> {
         String message = resultMessage(score, watch.getTime());
 
         log.info("Evaluation result: {} ", message);
+        exportResult(score, message);
 
+        return score;
+    }
+
+    @SneakyThrows
+    private void exportResult(Score score, String message) {
         if (argument.getTaskType() == TaskType.EXAM_EVALUATOR) {
             try (PrintWriter printWriter = new PrintWriter(
                     new FileWriter(argument.getOutputFolder() + File.separator + "exam_result"))) {
@@ -88,8 +89,18 @@ public class ExamEvaluator implements Task<Score> {
                 printWriter.write(roundedScore(score));
             }
         }
+    }
 
-        return score;
+    private void injectMissingClasses(List<ScoredItem<?>> scoredItems) {
+        // inject missing classes to classloader to make semantic test classes properly loadable
+        List<TypeItem> typeItems = scoredItems.stream()
+                .filter(scoredItem -> scoredItem.getItem() instanceof TypeItem typeItem &&
+                        StringUtils.isEmpty(typeItem.getContainerClass()))
+                .filter(scoredItem -> !((ScoredSyntaxItem) scoredItem).itemExists())
+                .map(scoredItem -> (TypeItem) scoredItem.getItem())
+                .toList();
+        typeItems.forEach(item -> log.info("Missing typeItems {}", item.identifier()));
+        javaCodeService.addClasses(typeItems);
     }
 
     private String resultMessage(Score score, long evaluationTime) {
