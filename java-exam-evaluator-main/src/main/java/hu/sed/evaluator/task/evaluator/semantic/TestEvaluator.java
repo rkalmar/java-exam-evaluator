@@ -7,8 +7,6 @@ import hu.sed.evaluator.annotation.test.ExamTest;
 import hu.sed.evaluator.annotation.test.Setup;
 import hu.sed.evaluator.item.semantic.TestItem;
 import hu.sed.evaluator.task.evaluator.Evaluator;
-import lombok.AccessLevel;
-import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -26,7 +24,6 @@ import java.util.stream.Stream;
 
 @Slf4j
 @Singleton
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class TestEvaluator implements Evaluator<TestItem, ScoredSemanticItem> {
 
     @Override
