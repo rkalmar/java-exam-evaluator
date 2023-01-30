@@ -21,9 +21,9 @@ import java.util.Set;
 public class ArgumentsUtil {
 
     public static final String TASK_ARG = "task";
-    public static final String EVALUATE_TASK = "evaluateExam";
-    public static final String VALIDATE_TASK = "validateExam";
-    public static final String EXPORT_TASK = "exportExam";
+    public static final String EVALUATE_TASK = "evaluate";
+    public static final String VALIDATE_TASK = "validate";
+    public static final String EXPORT_TASK = "export";
 
     public static final String EXAM_PACKAGE_ARG = "examPackage";
     public static final String OUTPUT_FOLDER_ARG = "outputFolder";

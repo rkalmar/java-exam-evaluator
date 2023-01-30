@@ -43,7 +43,7 @@ public class ArgumentsUtilTest {
     @Test
     public void testTaskValid() {
         // GIVEN
-        String[] args = {"-task", "evaluateExam"};
+        String[] args = {"-task", "evaluate"};
         // WHEN
         MissingArgumentsException missingArgumentsException = assertThrows(MissingArgumentsException.class, () -> ArgumentsUtil.parseArguments(args));
         // THEN
@@ -65,7 +65,7 @@ public class ArgumentsUtilTest {
     public void testTaskParamProvidedForValidateExam() {
         // GIVEN
 
-        String[] args = {"--task", "validateExam", "-examPackage", "com.whatever"};
+        String[] args = {"--task", "validate", "-examPackage", "com.whatever"};
         //WHEN
         assertDoesNotThrow(() -> ArgumentsUtil.parseArguments(args));
     }
@@ -73,7 +73,7 @@ public class ArgumentsUtilTest {
     @Test
     public void testTaskParamProvidedForExportExam() {
         // GIVEN
-        String[] args = {"--task", "exportExam", "-examPackage", "com.whatever", "-outputFolder", "~/"};
+        String[] args = {"--task", "export", "-examPackage", "com.whatever", "-outputFolder", "~/"};
         //WHEN
         assertDoesNotThrow(() -> ArgumentsUtil.parseArguments(args));
     }
@@ -81,7 +81,7 @@ public class ArgumentsUtilTest {
     @Test
     public void testTaskParamsProvided() {
         // GIVEN
-        String[] args = {"--task", "evaluateExam", "-examItemFile", "~/examfile", "-outputFolder", "~/"};
+        String[] args = {"--task", "evaluate", "-examItemFile", "~/examfile", "-outputFolder", "~/"};
         //WHEN
         assertDoesNotThrow(() -> ArgumentsUtil.parseArguments(args));
     }

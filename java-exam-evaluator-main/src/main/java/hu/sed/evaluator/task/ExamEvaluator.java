@@ -39,7 +39,7 @@ public class ExamEvaluator implements Task<Score> {
     @SneakyThrows
     @Override
     public Score execute() {
-        log.info("Executing evaluator. Test was created by {} at {}. Container: {}", rootItem.getCreatedBy(), rootItem.getCreatedBy(), rootItem.getContainerName());
+        log.info("Executing evaluator. Test was created by {} at {}. Container: {}", rootItem.getCreatedBy(), rootItem.getCreationTime(), rootItem.getContainerName());
         List<ScoredItem<?>> scoredItems = new ArrayList<>();
 
         StopWatch watch = new StopWatch();
