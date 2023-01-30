@@ -42,9 +42,9 @@ public class TestEvaluator implements Evaluator<TestItem, ScoredSemanticItem> {
         Class<?> testClass;
         try {
             testClass = Class.forName(item.getTestClass());
-        } catch (ClassNotFoundException | NoClassDefFoundError e) {
-            log.error("Cannot evaluate tests, testClass is not found: {}", item.getTestClass());
-            scoredItem.unsuccessfulCheck("TEST_CLASS_NOT_FOUND");
+        } catch (ReflectiveOperationException | LinkageError e) {
+            log.error("Cannot evaluate tests, because test class has issues. {}", e.getMessage(), e.getCause());
+            scoredItem.unsuccessfulCheck("TEST_CLASS_FAILURE");
             return scoredItem;
         }
 
@@ -59,10 +59,12 @@ public class TestEvaluator implements Evaluator<TestItem, ScoredSemanticItem> {
         if (item.getTestMethods().length > 0 &&
                 testMethods.isEmpty()) {
             log.error("Failed to execute tests, failed to load configured method(s)");
+            return scoredItem;
         }
+
         Optional<Method> beforeEachMethod = getMethodByAnnotation(testClass, BeforeEach.class);
         for (Method testMethod : testMethods) {
-            boolean result = executeTestMethod(testObject, testMethod, beforeEachMethod);
+            boolean result = executeMethod(testObject, testMethod, beforeEachMethod);
             String name = testMethod.getName();
             log.info("Test result {}. {}.{}", (result ? "successful" : "unsuccessful"),
                     testObject.getClass().getName(), name);
@@ -87,19 +89,15 @@ public class TestEvaluator implements Evaluator<TestItem, ScoredSemanticItem> {
             }
 
             setupMethod = getMethodByAnnotation(testClass, Setup.class);
-        } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
+        } catch (ReflectiveOperationException e) {
             log.error("Cannot evaluate tests, testClass cannot be instantiated or constructor cannot be invoked. " +
-                    "Add default constructor or change it's visibility {}", testClass);
+                    "Add default constructor or change it's visibility {}", testClass, e);
         }
         if (setupMethod.isPresent() && testObject.isPresent()) {
             try {
                 setupMethod.get().invoke(testObject.get());
-            } catch (IllegalAccessException | InvocationTargetException e) {
-                if (e.getCause() instanceof NoClassDefFoundError) {
-                    log.info("Cannot execute setup method, because class is not found {}", e.getCause().getMessage());
-                } else {
-                    log.error("Failed to setup test object.", e);
-                }
+            } catch (ReflectiveOperationException e) {
+                log.error("Failed to setup test object.", e);
                 testObject = Optional.empty();
             }
         }
@@ -147,42 +145,29 @@ public class TestEvaluator implements Evaluator<TestItem, ScoredSemanticItem> {
                 .findFirst();
     }
 
-    private boolean executeTestMethod(Object testObject, Method testMethod, Optional<Method> beforeEachMethodOpt) {
+    private boolean executeMethod(Object testObject, Method testMethod, Optional<Method> beforeEachMethodOpt) {
         if (beforeEachMethodOpt.isPresent()) {
-            try {
-                beforeEachMethodOpt.get().invoke(testObject);
-                return executeTestMethod(testObject, testMethod);
-            } catch (IllegalAccessException | InvocationTargetException e) {
-                if (e.getCause() instanceof NoClassDefFoundError) {
-                    log.info("Cannot execute beforeEach, because class is not found {}", e.getCause().getMessage());
-                } else {
-                    log.error("Cannot execute beforeEach method: {}.{}", testObject.getClass().getName(), testMethod.getName(), e);
-                }
-            } catch (Exception e) {
-                log.info("beforeEach exception: ", e);
+            if (executeMethod(testObject, beforeEachMethodOpt.get())) {
+                return executeMethod(testObject, testMethod);
             }
+
             return false;
         }
 
-        return executeTestMethod(testObject, testMethod);
+        return executeMethod(testObject, testMethod);
     }
 
-    private boolean executeTestMethod(Object testObject, Method testMethod) {
+    private boolean executeMethod(Object testObject, Method method) {
         try {
-            testMethod.invoke(testObject);
+            method.invoke(testObject);
             return true;
         } catch (IllegalAccessException e) {
-            log.error("Cannot execute test method: {}.{}", testObject.getClass().getName(), testMethod.getName(), e);
+            log.error("Cannot execute method: {}.{}", testObject.getClass().getName(), method.getName(), e);
         } catch (InvocationTargetException e) {
-            if (e.getCause() instanceof AssertionError assertionError) {
-                log.error("Test exception: {}", assertionError.getMessage());
-            } else if (e.getCause() instanceof NoClassDefFoundError) {
-                log.info("Cannot execute test method {}, because class is not found {}", testMethod.getName(), e.getCause().getMessage());
-            } else {
-                log.error("Cannot execute test method: {}.{}", testObject.getClass().getName(), testMethod.getName(), e);
-            }
-        } catch (Exception e) {
-            log.info("Test exception: ", e);
+            Throwable cause = e.getCause();
+            log.error("Failed to execute method: {}, {}", cause.getClass().getSimpleName(), cause.getMessage());
+        } catch (Throwable e) {
+            log.info("Exception: ", e);
         }
         return false;
     }

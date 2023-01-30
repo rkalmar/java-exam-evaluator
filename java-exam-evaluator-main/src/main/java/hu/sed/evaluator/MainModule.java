@@ -43,8 +43,6 @@ public class MainModule extends AbstractModule {
     public static void main(String[] args) throws InvalidArgumentException, MissingArgumentsException {
         TaskArgument taskArgument = ArgumentsUtil.parseArguments(args);
 
-//        loadClass();
-
         if (StringUtils.isNotBlank(taskArgument.getOutputFolder())) {
             checkFileExistence(taskArgument.getOutputFolder());
         }
