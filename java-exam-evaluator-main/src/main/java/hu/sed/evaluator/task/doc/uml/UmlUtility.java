@@ -60,7 +60,7 @@ public class UmlUtility {
                 .build();
     }
 
-    private static ClassRepresentation toClassRepresentation(Class<?> clazz) {
+    private ClassRepresentation toClassRepresentation(Class<?> clazz) {
         return ClassRepresentation.of(clazz,
                 Arrays.stream(clazz.getDeclaredFields())
                         .filter(ReflectionUtils::notUmlSkipped)
@@ -93,8 +93,8 @@ public class UmlUtility {
         return Optional.empty();
     }
 
-    private static boolean isImplementation(Class<?> classA, Class<?> classB) {
-        return matchAnyType(Arrays.asList(classA.getGenericInterfaces()), classB);
+    private boolean isImplementation(Class<?> classA, Class<?> classB) {
+        return matchAnyType(Arrays.asList(classB.getGenericInterfaces()), classA);
     }
 
     private boolean hasAssociation(Class<?> classA, Class<?> classB) {
