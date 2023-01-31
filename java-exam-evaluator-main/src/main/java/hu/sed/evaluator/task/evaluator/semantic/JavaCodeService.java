@@ -21,7 +21,6 @@ public class JavaCodeService implements Opcodes {
 
     @SneakyThrows
     public void addClass(TypeItem typeItem) {
-        // https://github.com/miho/asm-playground/blob/master/ASMSample01/jars/asm-4.0/examples/helloworld/src/Helloworld.java
         ClassWriter classWriter = new ClassWriter(0);
         String[] parts = typeItem.getName().split("\\.");
         String className = parts[parts.length - 1];

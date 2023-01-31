@@ -1,9 +1,12 @@
 package hu.sed.evaluator.exam.sample;
 
+import hu.sed.evaluator.annotation.semantic.CustomTest;
 import hu.sed.evaluator.annotation.syntax.TypeCheck;
 import hu.sed.evaluator.annotation.uml.UmlFilter;
+import test.hu.sed.evaluator.exam.sample.SampleJarmuTests;
 
 @UmlFilter(methodPrefixes = {"is","get", "set", "toString"})
+@CustomTest(testClass = SampleJarmuTests.class, score = 2)
 @TypeCheck(checkFields = true, checkMethods = true, score = 8)
 public abstract class Jarmu {
     private final int gyartasiEv;
