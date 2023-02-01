@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 
 import java.util.List;
@@ -25,11 +26,21 @@ public class JavaCodeService {
 
     public void addClass(TypeItem typeItem) {
         try {
-            new ByteBuddy()
-                    .subclass(Class.forName(typeItem.getParentClazz().getType()))
-                    .name(typeItem.getName())
-                    .make()
-                    .load(getClass().getClassLoader(), ClassLoadingStrategy.Default.INJECTION)
+            DynamicType.Unloaded<?> dynamicType;
+            if (typeItem.isEnumeration()) {
+                dynamicType = new ByteBuddy().makeEnumeration("NO_VALUE")
+                        .name(typeItem.getName())
+                        .modifiers(typeItem.getModifiers())
+                        .make();
+
+            } else {
+                dynamicType = new ByteBuddy()
+                        .subclass(Class.forName(typeItem.getParentClazz().getType()))
+                        .modifiers(typeItem.getModifiers())
+                        .name(typeItem.getName())
+                        .make();
+            }
+            dynamicType.load(getClass().getClassLoader(), ClassLoadingStrategy.Default.INJECTION)
                     .getLoaded();
         } catch (Exception e) {
             log.warn("Failed to inject class to classLoader: {}", typeItem.getName());
