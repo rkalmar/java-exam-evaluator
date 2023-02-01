@@ -1,13 +1,13 @@
 package test.hu.sed.evaluator.exam.sample;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import hu.sed.evaluator.annotation.test.BeforeEach;
 import hu.sed.evaluator.annotation.test.ExamTest;
 import hu.sed.evaluator.annotation.test.Setup;
 import hu.sed.evaluator.exam.sample.Jarmu;
 import lombok.extern.slf4j.Slf4j;
 import test.hu.sed.evaluator.TestUtils;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 public class SampleJarmuTests {

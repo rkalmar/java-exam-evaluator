@@ -7,7 +7,7 @@ cd "$(dirname "$0")"
 # debug  -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5050
 
 # evaluate
-# D:\Tools\jdk-17.0.4.1\bin\java.exe --add-opens java.base/java.lang=ALL-UNNAMED -cp "evaluate_test\*" hu.sed.evaluator.MainModule
+# D:\Tools\jdk-17.0.4.1\bin\java.exe -cp "evaluate_test\*" hu.sed.evaluator.MainModule
 #   --task evaluate
 #   --examItemFile c:\Users\rkalmar\Desktop\szte\diplomamunka\outputs\examfile
 #   --outputFolder c:\Users\rkalmar\Desktop\szte\diplomamunka\outputs

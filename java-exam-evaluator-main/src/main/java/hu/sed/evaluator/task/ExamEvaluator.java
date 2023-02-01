@@ -98,6 +98,7 @@ public class ExamEvaluator implements Task<Score> {
                         StringUtils.isEmpty(typeItem.getContainerClass()))
                 .filter(scoredItem -> !((ScoredSyntaxItem) scoredItem).itemExists())
                 .map(scoredItem -> (TypeItem) scoredItem.getItem())
+                .filter(item -> !item.isInterfaze() && !item.isEnumeration())
                 .toList();
         typeItems.forEach(item -> log.info("Missing typeItems {}", item.identifier()));
         javaCodeService.addClasses(typeItems);
