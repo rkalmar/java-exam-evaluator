@@ -11,6 +11,7 @@ cd "$(dirname "$0")"
 #   --task evaluate
 #   --examItemFile c:\Users\rkalmar\Desktop\szte\diplomamunka\outputs\examfile
 #   --outputFolder c:\Users\rkalmar\Desktop\szte\diplomamunka\outputs
+#   --enableByteCodeManipulation
 
 # validate
 #D:\Tools\jdk-17.0.4.1\bin\java.exe -cp "evaluate_test\validator\*" hu.sed.evaluator.MainModule

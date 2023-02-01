@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,25 +34,39 @@ public abstract class ScoredItem<T> {
         checkedElements.put(checkedElement, checkResult);
     }
 
-    public final double getScore() {
-        if (checkedElements.size() == 0) {
-            return 0;
+    public final BigDecimal getScore() {
+        int checkedElementCount = checkedElements.size();
+        if (checkedElementCount == 0 || getSuccessfulChecks().isEmpty()) {
+            return BigDecimal.ZERO;
         } else if (isSuccessful()) {
             return getMaxScore();
         }
-        double scorePerElement = getItem().getScore() / checkedElements.size();
-        double minusScore = scorePerElement * getUnsuccessfulChecks().size();
-        double earnedScore = getItem().getScore() - minusScore;
-        return Math.max(earnedScore, 0.0);
+
+        CalculationUtils.DistributedScore distributedScore = CalculationUtils.distributeScore(getItem().getScore(), checkedElementCount);
+
+        BigDecimal result = getMaxScore();
+        int unsuccessfulCheckCount = getUnsuccessfulChecks().size();
+
+        while ((unsuccessfulCheckCount--) > 0) {
+            result = result.subtract(distributedScore.subScore);
+        }
+
+        return result;
     }
 
-    public final double getMaxScore() {
-        return item.getScore();
+    public final BigDecimal getMaxScore() {
+        return BigDecimal.valueOf(item.getScore());
     }
 
     public final List<T> getUnsuccessfulChecks() {
         return checkedElements.keySet().stream()
                 .filter(check -> !checkedElements.get(check))
+                .toList();
+    }
+
+    public final List<T> getSuccessfulChecks() {
+        return checkedElements.keySet().stream()
+                .filter(check -> checkedElements.get(check))
                 .toList();
     }
 

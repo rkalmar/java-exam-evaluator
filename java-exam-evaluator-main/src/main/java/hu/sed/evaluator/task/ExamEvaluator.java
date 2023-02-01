@@ -167,7 +167,7 @@ public class ExamEvaluator implements Task<Score> {
 
     private String printScoredItem(ScoredItem<?> scoredItem) {
         return String.format("\r %.2f/%.2f - %s%s%s",
-                scoredItem.getScore(), scoredItem.getMaxScore(), scoredItem.identifier(),
+                scoredItem.getScore().doubleValue(), scoredItem.getMaxScore().doubleValue(), scoredItem.identifier(),
                 scoredItem.getUnsuccessfulChecks().isEmpty() ? "" : ", Failed checks: " + scoredItem.getUnsuccessfulChecks(), lineSeparator());
     }
 

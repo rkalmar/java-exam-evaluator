@@ -37,11 +37,11 @@ public class ExamValidator implements Task<Void> {
 
         Score score = evaluator.execute();
 
-        if (score.getMaxScore() <= 0) {
+        if (score.getMaxScore().doubleValue() <= 0.0) {
             throw new ExamValidationException("No exam item was registered.");
         }
 
-        if (score.getMaxScore() == score.getScore()) {
+        if (score.getMaxScore().equals(score.getScore())) {
             log.info("Validation is successful..");
         } else {
             throw new ExamValidationException("Exam validation failed. One or more test has failed. Please check the validation result in the logs.");

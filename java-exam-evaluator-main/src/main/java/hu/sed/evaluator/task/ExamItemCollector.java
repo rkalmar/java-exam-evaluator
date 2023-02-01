@@ -90,11 +90,17 @@ class ExamItemCollector implements Task<RootItem> {
                 unannotatedItems.addAll(constructorItemCollector.collectUnannotatedItems(clazz));
             }
 
-            // distributing typeCheck score among its items and itself
-            double scorePerElement = typeCheck.score() / (double) (unannotatedItems.size() + 1);
-            typeItem.setScore(scorePerElement);
+            CalculationUtils.DistributedScore distributedScore =
+                    CalculationUtils.distributeScore(typeCheck.score(), unannotatedItems.size() + 1);
+
+            if (!distributedScore.isProperlyDistributed()) {
+                log.warn("Score {}, cannot be distributed properly among {} items. Consider to change score of typeItem: {}",
+                        typeCheck.score(), unannotatedItems.size() + 1, typeItem.identifier());
+            }
+
+            typeItem.setScore(distributedScore.mainScore());
             for (ScorableItem unannotatedItem : unannotatedItems) {
-                unannotatedItem.setScore(scorePerElement);
+                unannotatedItem.setScore(distributedScore.subScore());
             }
             subItems.addAll(unannotatedItems);
             item = typeItem;
