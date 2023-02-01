@@ -1,12 +1,15 @@
 package hu.sed.evaluator.args;
 
+import hu.sed.evaluator.task.argument.TaskArgument;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ArgumentsUtilTest {
 
@@ -78,11 +81,25 @@ public class ArgumentsUtilTest {
         assertDoesNotThrow(() -> ArgumentsUtil.parseArguments(args));
     }
 
+    @SneakyThrows
     @Test
     public void testTaskParamsProvided() {
         // GIVEN
         String[] args = {"--task", "evaluate", "-examItemFile", "~/examfile", "-outputFolder", "~/"};
         //WHEN
         assertDoesNotThrow(() -> ArgumentsUtil.parseArguments(args));
+        TaskArgument taskArgument = ArgumentsUtil.parseArguments(args);
+        assertFalse(taskArgument.isEnableByteCodeManipulation());
+    }
+
+    @SneakyThrows
+    @Test
+    public void testEvaluateWithByteCodeManipulationProvided() {
+        // GIVEN
+        String[] args = {"--task", "evaluate", "-examItemFile", "~/examfile", "-outputFolder", "~/", "--enableByteCodeManipulation"};
+        //WHEN
+        assertDoesNotThrow(() -> ArgumentsUtil.parseArguments(args));
+        TaskArgument taskArgument = ArgumentsUtil.parseArguments(args);
+        assertTrue(taskArgument.isEnableByteCodeManipulation());
     }
 }

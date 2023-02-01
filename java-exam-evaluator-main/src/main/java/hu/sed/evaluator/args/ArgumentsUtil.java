@@ -29,6 +29,8 @@ public class ArgumentsUtil {
     public static final String OUTPUT_FOLDER_ARG = "outputFolder";
     public static final String EXAM_ITEM_FILE_ARG = "examItemFile";
 
+    public static final String ENABLE_BYTECODE_MANIPULATION = "enableByteCodeManipulation";
+
     static final Map<String, Set<String>> ARG_DEPENDENCIES = new HashMap<>();
 
     static {
@@ -63,6 +65,7 @@ public class ArgumentsUtil {
                     .examPackage(commandLine.getOptionValue(EXAM_PACKAGE_ARG))
                     .examItemFile(commandLine.getOptionValue(EXAM_ITEM_FILE_ARG))
                     .outputFolder(commandLine.getOptionValue(OUTPUT_FOLDER_ARG))
+                    .enableByteCodeManipulation(commandLine.hasOption(ENABLE_BYTECODE_MANIPULATION))
                     .build();
 
         } catch (UnrecognizedOptionException e) {
@@ -101,11 +104,19 @@ public class ArgumentsUtil {
                 .required(false)
                 .build();
 
+        Option byteCodeManipulation = Option.builder(ENABLE_BYTECODE_MANIPULATION)
+                .desc("Enables byteCode manipulation in order to make tests work with missing classes.")
+                .longOpt(ENABLE_BYTECODE_MANIPULATION)
+                .hasArg(false)
+                .required(false)
+                .build();
+
         return new Options()
                 .addOption(taskType)
                 .addOption(examClass)
                 .addOption(outputFolder)
-                .addOption(examItemFile);
+                .addOption(examItemFile)
+                .addOption(byteCodeManipulation);
     }
 
 }

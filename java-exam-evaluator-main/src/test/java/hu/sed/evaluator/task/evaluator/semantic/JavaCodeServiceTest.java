@@ -16,13 +16,13 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 public class JavaCodeServiceTest {
 
-    JavaCodeService javaCodeService;
+    ByteCodeManipulatorService javaCodeService;
 
     ItemFactory itemFactory;
 
     @BeforeEach
     public void setup() {
-        javaCodeService = new JavaCodeService();
+        javaCodeService = new ByteCodeManipulatorService();
         itemFactory = new ItemFactory();
     }
 

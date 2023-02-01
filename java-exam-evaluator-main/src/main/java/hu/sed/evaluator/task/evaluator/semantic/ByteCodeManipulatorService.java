@@ -1,7 +1,6 @@
 package hu.sed.evaluator.task.evaluator.semantic;
 
 import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import hu.sed.evaluator.item.element.TypeDefinition;
 import hu.sed.evaluator.item.syntax.TypeItem;
 import lombok.AccessLevel;
@@ -18,14 +17,15 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Singleton
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor(onConstructor = @__(@Inject))
-public class JavaCodeService {
+public class ByteCodeManipulatorService implements ByteCodeManipulator {
 
+    @Override
     public void addClass(TypeItem typeItem) {
         try {
+            log.info("Injecting missing typeItem to classLoader: {}", typeItem.identifier());
             DynamicType.Unloaded<?> dynamicType;
             if (typeItem.isEnumeration()) {
                 dynamicType = new ByteBuddy().makeEnumeration("NO_VALUE")
@@ -47,6 +47,7 @@ public class JavaCodeService {
         }
     }
 
+    @Override
     public void addClasses(List<TypeItem> typeItems) {
         Map<TypeDefinition, List<TypeItem>> classesByParentClass
                 = typeItems.stream().collect(Collectors.groupingBy(TypeItem::getParentClazz));

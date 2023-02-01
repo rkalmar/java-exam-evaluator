@@ -19,6 +19,9 @@ import hu.sed.evaluator.task.ExamItemLoader;
 import hu.sed.evaluator.task.ExamValidator;
 import hu.sed.evaluator.task.Task;
 import hu.sed.evaluator.task.argument.TaskArgument;
+import hu.sed.evaluator.task.evaluator.semantic.ByteCodeManipulator;
+import hu.sed.evaluator.task.evaluator.semantic.ByteCodeManipulatorService;
+import hu.sed.evaluator.task.evaluator.semantic.NoopByteCodeManipulator;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -96,5 +99,14 @@ public class MainModule extends AbstractModule {
                 .addModule(new JavaTimeModule())
                 .configure(JsonGenerator.Feature.IGNORE_UNKNOWN, true)
                 .build();
+    }
+
+    @Provides
+    @Singleton
+    public ByteCodeManipulator getByteCodeManipulator() {
+        if (this.taskArgument.isEnableByteCodeManipulation()) {
+            return new ByteCodeManipulatorService();
+        }
+        return new NoopByteCodeManipulator();
     }
 }

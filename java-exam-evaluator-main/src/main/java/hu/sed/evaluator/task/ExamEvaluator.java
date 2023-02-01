@@ -13,7 +13,7 @@ import hu.sed.evaluator.item.syntax.TypeItem;
 import hu.sed.evaluator.task.argument.TaskArgument;
 import hu.sed.evaluator.task.argument.TaskType;
 import hu.sed.evaluator.task.evaluator.EvaluatorItemVisitor;
-import hu.sed.evaluator.task.evaluator.semantic.JavaCodeService;
+import hu.sed.evaluator.task.evaluator.semantic.ByteCodeManipulator;
 import hu.sed.evaluator.task.evaluator.syntax.ScoredSyntaxItem;
 import hu.sed.evaluator.task.evaluator.syntax.SyntaxElement;
 import lombok.AccessLevel;
@@ -43,7 +43,7 @@ public class ExamEvaluator implements Task<Score> {
 
     TaskArgument argument;
 
-    JavaCodeService javaCodeService;
+    ByteCodeManipulator javaCodeService;
 
     @Override
     public Score execute() {
