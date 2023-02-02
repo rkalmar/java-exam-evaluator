@@ -15,6 +15,9 @@ public class NoopByteCodeManipulator implements ByteCodeManipulator {
 
     @Override
     public void addClasses(List<TypeItem> typeItems) {
+        if (!typeItems.isEmpty()) {
+            return;
+        }
         log.info("Type code manipulation is not enabled. Following items are skipped: ");
         typeItems.forEach(typeItem -> log.info("- {}", typeItem.identifier()));
     }

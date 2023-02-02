@@ -29,8 +29,9 @@ public final class Score {
     }
 
     public double getPercentage() {
-        return CalculationUtils.divide(getScore(), getMaxScore()).doubleValue();
+        if (getMaxScore().doubleValue() > 0) {
+            return CalculationUtils.divide(getScore(), getMaxScore()).doubleValue();
+        }
+        return 0.0;
     }
-
-
 }

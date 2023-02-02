@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -eu
+set -uo pipefail
 
 : ${JAVA_HOME:?}
 
@@ -26,8 +27,6 @@ function info() {
   printf "${GREEN}%s\n${NO_COLOR}" "$1"
 }
 
-"${JAVA_HOME}/bin/java" -version 2>&1 >/dev/null || error "Java not found" || exit 1
-
 TASK_PARAM=""
 OUTPUT_FOLDER_PARAM=""
 EXAM_PACKAGE_PARAM=""
@@ -41,23 +40,13 @@ function usage() {
 }
 
 evaluate-exam() {
-  JAR="${JAVA_EXAM_EVALUATOR_JAR:-''}"
-  if [[ ! -f "$JAR" ]] ; then
-    error "Jar file not found, please export JAVA_EXAM_EVALUATOR_JAR variable"
-  fi
-
   COMMAND=("${JAVA_HOME}/bin/java" "${DEBUG}" \
-   -cp "$JAR;${SOLUTION_CLASSPATH_DIR_PARAM}/*" hu.sed.evaluator.MainModule \
+   -cp "\"$JAVA_EXAM_EVALUATOR_JAR:${SOLUTION_CLASSPATH_DIR_PARAM}/*\"" "hu.sed.evaluator.MainModule" \
    --task "${TASK_PARAM}" --examItemFile "${EXAM_ITEM_FILE_PARAM}" --outputFolder "${OUTPUT_FOLDER_PARAM}")
 }
 
 validate-export-exam() {
-  JAR="${JAVA_EXAM_EVALUATOR_JAR:-''}"
-  if [[ ! -f "$JAR" ]] ; then
-    error "Jar file not found, please export JAVA_EXAM_EVALUATOR_JAR variable"
-  fi
-
-  COMMAND=("${JAVA_HOME}/bin/java" "${DEBUG}" -jar $JAR \
+  COMMAND=("${JAVA_HOME}/bin/java" "${DEBUG}" -jar "${JAVA_EXAM_VALIDATOR_JAR}" \
   --task "${TASK_PARAM}" --examPackage "${EXAM_PACKAGE_PARAM}" --outputFolder "${OUTPUT_FOLDER_PARAM}" "${ENABLE_BYTECODE_MANIPULATION_PARAM}")
 }
 
