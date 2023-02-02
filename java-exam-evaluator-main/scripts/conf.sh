@@ -1,0 +1,6 @@
+APPLICATION_VERSION="20230101-SNAPSHOT"
+ROOT_FOLDER="~/java-exam-evaluator"
+export JAVA_EXAM_EVALUATOR_JAR="${ROOT_FOLDER}/java-exam-evaluator-${APPLICATION_VERSION}.jar"
+export JAVA_EXAM_VALIDATOR_JAR="${ROOT_FOLDER}/java-exam-validator-${APPLICATION_VERSION}.jar"
+export SOLUTION_CLASSPATH_PARAM="~/java-exam-evaluator/solutions"
+export JAVA_HOME="/d/Tools/jdk-17.0.4.1"
