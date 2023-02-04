@@ -1,5 +1,6 @@
 package hu.sed.evaluator.task;
 
+import static hu.sed.evaluator.task.evaluator.classloader.ClassLoaderUtils.executeInClassLoaderContext;
 import static java.lang.System.lineSeparator;
 
 import com.google.inject.Inject;
@@ -13,6 +14,7 @@ import hu.sed.evaluator.item.syntax.TypeItem;
 import hu.sed.evaluator.task.argument.TaskArgument;
 import hu.sed.evaluator.task.argument.TaskType;
 import hu.sed.evaluator.task.evaluator.EvaluatorItemVisitor;
+import hu.sed.evaluator.task.evaluator.classloader.ClassLoaderProvider;
 import hu.sed.evaluator.task.evaluator.semantic.ByteCodeManipulator;
 import hu.sed.evaluator.task.evaluator.syntax.ScoredSyntaxItem;
 import hu.sed.evaluator.task.evaluator.syntax.SyntaxElement;
@@ -43,7 +45,9 @@ public class ExamEvaluator implements Task<Score> {
 
     TaskArgument argument;
 
-    ByteCodeManipulator javaCodeService;
+    ByteCodeManipulator byteCodeManipulator;
+
+    ClassLoaderProvider classLoaderProvider;
 
     @Override
     public Score execute() {
@@ -53,15 +57,17 @@ public class ExamEvaluator implements Task<Score> {
 
         StopWatch watch = new StopWatch();
         watch.start();
-        // execute syntax items first
-        rootItem.getItems()
-                .forEach(item -> evaluateSyntaxItems(scoredItems, item));
+        executeInClassLoaderContext(
+                classLoaderProvider.get(),
+                () -> rootItem.getItems().forEach(item -> evaluateSyntaxItems(scoredItems, item))
+        );
 
-        injectMissingClasses(scoredItems);
+        List<TypeItem> missingTypes = getMissingTypes(scoredItems);
+        List<TypeItem> incorrectTypes = getIncorrectTypes(scoredItems);
+        missingTypes.forEach(typeItem -> log.info("Missing typeItem: {}", typeItem.identifier()));
+        incorrectTypes.forEach(typeItem -> log.info("Type with incorrect superClass: {}", typeItem.identifier()));
 
-        // execute semantic items
-        rootItem.getItems()
-                .forEach(item -> evaluateSemanticItems(scoredItems, item));
+        rootItem.getItems().forEach(item -> evaluateSemanticItems(scoredItems, item, missingTypes, incorrectTypes));
 
         watch.stop();
 
@@ -91,18 +97,28 @@ public class ExamEvaluator implements Task<Score> {
         }
     }
 
-    private void injectMissingClasses(List<ScoredItem<?>> scoredItems) {
-        // inject missing classes to classloader to make semantic test classes properly loadable
-        List<TypeItem> typeItems = scoredItems.stream()
+    private List<TypeItem> getMissingTypes(List<ScoredItem<?>> scoredItems) {
+        return scoredItems.stream()
+                .map(scoredItem -> (ScoredSyntaxItem) scoredItem)
                 .filter(scoredItem -> scoredItem.getItem() instanceof TypeItem typeItem &&
                         StringUtils.isEmpty(typeItem.getContainerClass()))
-                .filter(scoredItem -> !((ScoredSyntaxItem) scoredItem).itemExists())
+                .filter(scoredItem -> !scoredItem.itemExists())
                 .map(scoredItem -> (TypeItem) scoredItem.getItem())
                 .filter(item -> !item.isInterfaze())
                 .toList();
-        typeItems.forEach(item -> log.info("Missing typeItems {}", item.identifier()));
-        javaCodeService.addClasses(typeItems);
     }
+
+    private List<TypeItem> getIncorrectTypes(List<ScoredItem<?>> scoredItems) {
+        return scoredItems.stream()
+                .map(scoredItem -> (ScoredSyntaxItem) scoredItem)
+                .filter(scoredItem -> scoredItem.getItem() instanceof TypeItem typeItem &&
+                        StringUtils.isEmpty(typeItem.getContainerClass()))
+                .filter(scoredItem -> scoredItem.itemExists() && !scoredItem.isSuccessful(SyntaxElement.PARENT_CLASS))
+                .map(scoredItem -> (TypeItem) scoredItem.getItem())
+                .filter(item -> !item.isInterfaze())
+                .toList();
+    }
+
 
     private String resultMessage(Score score, long evaluationTime) {
         StringBuilder message = new StringBuilder("Successful items:");
@@ -128,13 +144,22 @@ public class ExamEvaluator implements Task<Score> {
         return message.toString();
     }
 
-    private void evaluateSemanticItems(List<ScoredItem<?>> scoredItems, Item item) {
-        if (item instanceof TestItem) {
-            ScoredItem<?> scoredItem = item.accept(evaluatorItemVisitor);
-            scoredItems.add(scoredItem);
+    private void evaluateSemanticItems(List<ScoredItem<?>> scoredItems, Item item, List<TypeItem> missingTypes, List<TypeItem> incorrectTypes) {
+        if (item instanceof TestItem testItem) {
+            executeInClassLoaderContext(
+                    classLoaderProvider.get(), () -> {
+                        // add missing classes
+                        byteCodeManipulator.addClasses(missingTypes);
+                        byteCodeManipulator.addClasses(incorrectTypes.stream()
+                                .filter(typeItem -> !typeItem.getName().equals(testItem.getTestOfClass())).toList());
+
+                        ScoredItem<?> scoredItem = testItem.accept(evaluatorItemVisitor);
+                        scoredItems.add(scoredItem);
+                    }
+            );
         }
         if (item instanceof ItemContainer itemContainer) {
-            itemContainer.getItems().forEach(childItem -> evaluateSemanticItems(scoredItems, childItem));
+            itemContainer.getItems().forEach(childItem -> evaluateSemanticItems(scoredItems, childItem, missingTypes, incorrectTypes));
         }
     }
 

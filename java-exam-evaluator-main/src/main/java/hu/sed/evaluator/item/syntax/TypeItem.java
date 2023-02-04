@@ -24,8 +24,6 @@ public class TypeItem extends ScorableSyntaxItem implements ItemContainer {
 
     List<? extends Item> items;
 
-    boolean checkParentClazz;
-
     /**
      * Fully qualified name of class
      */

@@ -14,15 +14,15 @@ import java.util.Arrays;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-public class JavaCodeServiceTest {
+public class ByteCodeManipulatorTest {
 
-    ByteCodeManipulatorService javaCodeService;
+    ByteCodeManipulatorService byteCodeManipulator;
 
     ItemFactory itemFactory;
 
     @BeforeEach
     public void setup() {
-        javaCodeService = new ByteCodeManipulatorService();
+        byteCodeManipulator = new ByteCodeManipulatorService();
         itemFactory = new ItemFactory();
     }
 
@@ -35,7 +35,7 @@ public class JavaCodeServiceTest {
         typeItem.setName(className);
 
         // WHEN
-        javaCodeService.addClass(typeItem);
+        byteCodeManipulator.addClass(typeItem);
 
         // THEN
         assertDoesNotThrow(() -> Class.forName(className));
@@ -52,7 +52,7 @@ public class JavaCodeServiceTest {
         typeItem.setName(enumName);
 
         // WHEN
-        javaCodeService.addClass(typeItem);
+        byteCodeManipulator.addClass(typeItem);
 
         // THEN
         assertDoesNotThrow(() -> Class.forName(enumName));
@@ -69,7 +69,7 @@ public class JavaCodeServiceTest {
         typeItem.setName(className);
 
         // WHEN
-        javaCodeService.addClass(typeItem);
+        byteCodeManipulator.addClass(typeItem);
 
         // THEN
         assertDoesNotThrow(() -> Class.forName(className));
@@ -95,11 +95,15 @@ public class JavaCodeServiceTest {
         subItem.setContainerClass(null);
 
         // WHEN
-        javaCodeService.addClasses(Arrays.asList(subItem, missingItem));
+        byteCodeManipulator.addClasses(Arrays.asList(subItem, missingItem));
 
         // THEN
         assertDoesNotThrow(() -> Class.forName(missingItemClassName));
         assertDoesNotThrow(() -> Class.forName(missingSubItemClassName));
+    }
+
+    @TypeCheck
+    public enum MyEnum {
     }
 
     @TypeCheck
@@ -109,9 +113,5 @@ public class JavaCodeServiceTest {
     @TypeCheck
     public class SubClass extends BaseClass {
 
-    }
-
-    @TypeCheck
-    public enum MyEnum {
     }
 }

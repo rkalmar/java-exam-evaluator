@@ -15,15 +15,14 @@ import java.lang.annotation.Target;
  *
  * Example:
  *
- * \@TypeCheck(checkParentClazz = true,
- *      checkInterfaces = true,
+ * \@TypeCheck(checkInterfaces = true,
  *      checkModifiers = true,
  *      score = 4)
  * public abstract class MyClass extends ClassBase implements IClass {......}
  * <p>
  * Check will calculate in the following way:
  * - if class name and package is correct: +1 score
- * - checkParentClazz = true, so if class extends ClassBase: +1 score
+ * - if class extends ClassBase: +1 score
  * - checkInterfaces = true, so if class implements IClass: +1 score
  * - checkModifiers = true, so if modifiers (public, abstract) are added: +1 score
  *
@@ -37,11 +36,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface TypeCheck {
-
-    /**
-     * @return true if check needs to validate parent class
-     */
-    boolean checkParentClazz() default true;
 
     /**
      * @return true if check needs to validate parent class

@@ -8,8 +8,6 @@ set -uo pipefail
 cd "$(dirname "$0")"
 source conf.sh
 
-echo "${JAVA_EXAM_VALIDATOR_JAR}"
-
 COMMAND=""
 DEFAULT_DEBUG_PORT=5050
 DEBUG_COMMAND="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address="
@@ -40,14 +38,14 @@ function usage() {
 }
 
 evaluate-exam() {
-  COMMAND=("${JAVA_HOME}/bin/java" "${DEBUG}" \
-   -cp "\"$JAVA_EXAM_EVALUATOR_JAR:${SOLUTION_CLASSPATH_DIR_PARAM}/*\"" "hu.sed.evaluator.MainModule" \
-   --task "${TASK_PARAM}" --examItemFile "${EXAM_ITEM_FILE_PARAM}" --outputFolder "${OUTPUT_FOLDER_PARAM}")
+  COMMAND=("${JAVA_HOME}/bin/java" "${DEBUG}" -jar "${JAVA_EXAM_EVALUATOR_JAR}" \
+    --task "${TASK_PARAM}" --examItemFile "${EXAM_ITEM_FILE_PARAM}" --outputFolder "${OUTPUT_FOLDER_PARAM}" \
+    --solutionClassPath "${SOLUTION_CLASSPATH_DIR_PARAM}" "${ENABLE_BYTECODE_MANIPULATION_PARAM}")
 }
 
 validate-export-exam() {
   COMMAND=("${JAVA_HOME}/bin/java" "${DEBUG}" -jar "${JAVA_EXAM_VALIDATOR_JAR}" \
-  --task "${TASK_PARAM}" --examPackage "${EXAM_PACKAGE_PARAM}" --outputFolder "${OUTPUT_FOLDER_PARAM}" "${ENABLE_BYTECODE_MANIPULATION_PARAM}")
+  --task "${TASK_PARAM}" --examPackage "${EXAM_PACKAGE_PARAM}" --outputFolder "${OUTPUT_FOLDER_PARAM}")
 }
 
 for i in "$@"; do

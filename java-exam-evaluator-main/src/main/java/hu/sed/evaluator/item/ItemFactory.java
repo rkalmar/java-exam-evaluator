@@ -26,15 +26,13 @@ import java.util.List;
 public class ItemFactory {
 
     public TypeItem createItem(TypeCheck check, Class<?> clazz) {
-        boolean checkParentClazz = !clazz.isInterface() && check.checkParentClazz();
         return TypeItem.builder()
                 .checkModifiers(check.checkModifiers())
                 .modifiers(clazz.getModifiers())
                 .name(clazz.getName())
-                .checkParentClazz(checkParentClazz)
                 .interfaze(clazz.isInterface())
                 .enumeration(clazz.isEnum())
-                .parentClazz(checkParentClazz ? createTypeDef(clazz.getGenericSuperclass()) : null)
+                .parentClazz(!clazz.isInterface() ? createTypeDef(clazz.getGenericSuperclass()) : null)
                 .checkInterfaces(check.checkInterfaces())
                 .implementedInterfaces(createTypeDefForImplementedInterfaces(clazz))
                 .containerClass(clazz.getDeclaringClass() == null ? null : clazz.getDeclaringClass().getName())
@@ -106,12 +104,13 @@ public class ItemFactory {
                 .build();
     }
 
-    public TestItem createTestItem(CustomTest customTest) {
+    public TestItem createTestItem(CustomTest customTest, Class<?> clazz) {
         return TestItem.builder()
                 .testClass(customTest.testClass().getName())
                 .testMethods(customTest.method())
                 .description(customTest.description())
                 .score(customTest.score())
+                .testOfClass(clazz.getName())
                 .build();
     }
 

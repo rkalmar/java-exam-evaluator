@@ -19,6 +19,10 @@ import hu.sed.evaluator.task.ExamItemLoader;
 import hu.sed.evaluator.task.ExamValidator;
 import hu.sed.evaluator.task.Task;
 import hu.sed.evaluator.task.argument.TaskArgument;
+import hu.sed.evaluator.task.argument.TaskType;
+import hu.sed.evaluator.task.evaluator.classloader.ApplicationClassLoaderProvider;
+import hu.sed.evaluator.task.evaluator.classloader.ClassLoaderProvider;
+import hu.sed.evaluator.task.evaluator.classloader.SolutionClassLoaderProvider;
 import hu.sed.evaluator.task.evaluator.semantic.ByteCodeManipulator;
 import hu.sed.evaluator.task.evaluator.semantic.ByteCodeManipulatorService;
 import hu.sed.evaluator.task.evaluator.semantic.NoopByteCodeManipulator;
@@ -108,5 +112,12 @@ public class MainModule extends AbstractModule {
             return new ByteCodeManipulatorService();
         }
         return new NoopByteCodeManipulator();
+    }
+
+    @Provides
+    @Singleton
+    public ClassLoaderProvider examClassLoader() {
+        return this.taskArgument.getTaskType() == TaskType.EXAM_EVALUATOR ?
+                new SolutionClassLoaderProvider(taskArgument.getSolutionClassPath()) : new ApplicationClassLoaderProvider();
     }
 }

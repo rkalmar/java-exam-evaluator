@@ -8,6 +8,7 @@ import hu.sed.evaluator.annotation.syntax.MethodCheck;
 import hu.sed.evaluator.annotation.syntax.SkipCheck;
 import hu.sed.evaluator.annotation.syntax.SyntaxCheck;
 import hu.sed.evaluator.annotation.uml.UmlSkipped;
+import hu.sed.evaluator.task.evaluator.classloader.ClassLoaderUtils;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.reflections.Reflections;
@@ -35,7 +36,7 @@ public class ReflectionUtils {
         List<Class<?>> result = new ArrayList<>();
         for (String className : classNames) {
             try {
-                result.add(Class.forName(className));
+                result.add(getClassByName(className));
             } catch (ClassNotFoundException e) {
                 log.error("Failed to load class {}", className);
             }
@@ -102,20 +103,25 @@ public class ReflectionUtils {
     }
 
     public Field getFieldByName(String containerClass, String fieldName) throws ClassNotFoundException, NoSuchFieldException {
-        return Class.forName(containerClass).getDeclaredField(fieldName);
+        return getClassByName(containerClass).getDeclaredField(fieldName);
     }
 
     public List<Method> getMethodsByName(String containerClass, String methodName) throws ClassNotFoundException {
-        return Arrays.stream(Class.forName(containerClass).getDeclaredMethods())
+        return Arrays.stream(getClassByName(containerClass).getDeclaredMethods())
                 .filter(method -> method.getName().equals(methodName))
                 .toList();
     }
 
     public List<Constructor<?>> getConstructorsByName(String containerClass) throws ClassNotFoundException {
-        return Arrays.asList(Class.forName(containerClass).getDeclaredConstructors());
+        return Arrays.asList(getClassByName(containerClass).getDeclaredConstructors());
     }
 
     public Class<?> getClassByName(String clazz) throws ClassNotFoundException {
-        return Class.forName(clazz);
+        Class<?> testClass = Thread.currentThread().getContextClassLoader().loadClass(clazz);
+        if (!testClass.getClassLoader().equals(Thread.currentThread().getContextClassLoader())) {
+            // always load everything to the current contextClassloader to make every class available for each other
+            return ClassLoaderUtils.injectClassToClassLoader(testClass, Thread.currentThread().getContextClassLoader());
+        }
+        return testClass;
     }
 }

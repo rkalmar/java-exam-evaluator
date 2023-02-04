@@ -23,7 +23,7 @@ public final class CustomTestItemCollector {
     public List<TestItem> collectItems(Class<?> clazz) {
         List<TestItem> testItems = new ArrayList<>(
                 ReflectionUtils.getAnnotations(clazz).stream()
-                        .map(itemFactory::createTestItem).toList()
+                        .map(customTest -> itemFactory.createTestItem(customTest, clazz)).toList()
         );
 
         testItems.addAll(ReflectionUtils.getClassMembers(clazz).stream()
@@ -31,7 +31,7 @@ public final class CustomTestItemCollector {
                 .filter(ReflectionUtils::notSkipped)
                 .map(ReflectionUtils::getAnnotations)
                 .flatMap(Collection::stream)
-                .map(itemFactory::createTestItem)
+                .map(customTest -> itemFactory.createTestItem(customTest, clazz))
                 .toList());
 
         return testItems;

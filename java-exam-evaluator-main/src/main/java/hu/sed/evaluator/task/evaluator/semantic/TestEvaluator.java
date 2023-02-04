@@ -6,6 +6,7 @@ import hu.sed.evaluator.annotation.test.BeforeEach;
 import hu.sed.evaluator.annotation.test.ExamTest;
 import hu.sed.evaluator.annotation.test.Setup;
 import hu.sed.evaluator.item.semantic.TestItem;
+import hu.sed.evaluator.task.ReflectionUtils;
 import hu.sed.evaluator.task.evaluator.Evaluator;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -38,7 +39,7 @@ public class TestEvaluator implements Evaluator<TestItem, ScoredSemanticItem> {
 
         Class<?> testClass;
         try {
-            testClass = Class.forName(item.getTestClass());
+            testClass = ReflectionUtils.getClassByName(item.getTestClass());
         } catch (ReflectiveOperationException | LinkageError e) {
             log.error("Cannot evaluate tests, because test class has issues. {}", e.getMessage(), e.getCause());
             scoredItem.unsuccessfulCheck("TEST_CLASS_FAILURE");
@@ -47,6 +48,8 @@ public class TestEvaluator implements Evaluator<TestItem, ScoredSemanticItem> {
 
         Optional<Object> testObjectOpt = getTestObject(testClass);
         if (testObjectOpt.isEmpty()) {
+            log.error("Could not instantiate test class: {}", testClass);
+            scoredItem.unsuccessfulCheck("TEST_CLASS_FAILURE");
             return scoredItem;
         }
 
@@ -86,7 +89,7 @@ public class TestEvaluator implements Evaluator<TestItem, ScoredSemanticItem> {
             }
 
             setupMethod = getMethodByAnnotation(testClass, Setup.class);
-        } catch (ReflectiveOperationException e) {
+        } catch (ReflectiveOperationException | LinkageError e) {
             log.error("Cannot evaluate tests, testClass cannot be instantiated or constructor cannot be invoked. " +
                     "Add default constructor or change it's visibility {}", testClass, e);
         }

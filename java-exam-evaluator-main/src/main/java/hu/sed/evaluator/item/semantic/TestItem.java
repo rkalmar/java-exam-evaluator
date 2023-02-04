@@ -28,6 +28,8 @@ public class TestItem extends ScorableItem {
 
     String description;
 
+    String testOfClass;
+
     @Override
     public <R> R accept(ItemVisitor<R> visitor) {
         return visitor.visit(this);

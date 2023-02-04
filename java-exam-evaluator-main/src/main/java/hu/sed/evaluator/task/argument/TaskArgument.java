@@ -21,5 +21,8 @@ public class TaskArgument {
     // only for evaluation
     String examItemFile;
 
+    // only for evaluation
+    String solutionClassPath;
+
     boolean enableByteCodeManipulation;
 }

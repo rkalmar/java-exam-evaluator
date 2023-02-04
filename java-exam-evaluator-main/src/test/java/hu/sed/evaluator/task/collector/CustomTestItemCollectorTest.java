@@ -17,6 +17,7 @@ import java.util.Random;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -46,7 +47,7 @@ public class CustomTestItemCollectorTest {
 
         // THEN
         assertThat(items).hasSize(1);
-        verify(itemFactory, times(1)).createTestItem(any());
+        verify(itemFactory, times(1)).createTestItem(any(), eq(TestClass.class));
     }
 
 

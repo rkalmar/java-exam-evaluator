@@ -29,7 +29,6 @@ public class TypeItemFactoryTest {
         assertThat(typeItem.getReadableModifiers()).isEqualTo("private static");
         assertThat(typeItem.isCheckModifiers()).isTrue();
         assertThat(typeItem.isCheckInterfaces()).isFalse();
-        assertThat(typeItem.isCheckParentClazz()).isTrue();
         assertThat(typeItem.getScore()).isEqualTo(5);
         TypeDefinition parentClazz = typeItem.getParentClazz();
         assertThat(parentClazz.getType()).isEqualTo("java.lang.Object");
@@ -51,7 +50,6 @@ public class TypeItemFactoryTest {
         assertThat(typeItem.getReadableModifiers()).isEqualTo("private abstract static");
         assertThat(typeItem.isCheckModifiers()).isTrue();
         assertThat(typeItem.isCheckInterfaces()).isTrue();
-        assertThat(typeItem.isCheckParentClazz()).isTrue();
         assertThat(typeItem.getScore()).isEqualTo(1);
         TypeDefinition parentClazz = typeItem.getParentClazz();
         assertThat(parentClazz.getType()).isEqualTo("java.lang.Object");
@@ -77,7 +75,6 @@ public class TypeItemFactoryTest {
         assertThat(typeItem.getReadableModifiers()).isEqualTo("private static");
         assertThat(typeItem.isCheckModifiers()).isTrue();
         assertThat(typeItem.isCheckInterfaces()).isTrue();
-        assertThat(typeItem.isCheckParentClazz()).isTrue();
         assertThat(typeItem.getScore()).isEqualTo(1);
         TypeDefinition parentClazz = typeItem.getParentClazz();
         assertThat(parentClazz.getType()).isEqualTo("hu.sed.evaluator.task.item.TypeItemFactoryTest$AbstractTestClass");
@@ -100,7 +97,6 @@ public class TypeItemFactoryTest {
         assertThat(typeItem.getReadableModifiers()).isEqualTo("private abstract static");
         assertThat(typeItem.isCheckModifiers()).isTrue();
         assertThat(typeItem.isCheckInterfaces()).isTrue();
-        assertThat(typeItem.isCheckParentClazz()).isTrue();
         assertThat(typeItem.getScore()).isEqualTo(1);
 
         TypeDefinition parentClazz = typeItem.getParentClazz();
@@ -131,7 +127,6 @@ public class TypeItemFactoryTest {
         assertThat(typeItem.getReadableModifiers()).isEqualTo("private abstract static");
         assertThat(typeItem.isCheckModifiers()).isTrue();
         assertThat(typeItem.isCheckInterfaces()).isTrue();
-        assertThat(typeItem.isCheckParentClazz()).isTrue();
         assertThat(typeItem.getScore()).isEqualTo(1);
 
         TypeDefinition parentClazz = typeItem.getParentClazz();
@@ -157,7 +152,6 @@ public class TypeItemFactoryTest {
 
         // THEN
         assertThat(typeItem.getReadableModifiers()).isEqualTo("private abstract static interface");
-        assertThat(typeItem.isCheckParentClazz()).isFalse();
         assertThat(typeItem.getImplementedInterfaces()).isEmpty();
         assertThat(typeItem.isInterfaze()).isTrue();
     }

@@ -28,6 +28,7 @@ public class ArgumentsUtil {
     public static final String EXAM_PACKAGE_ARG = "examPackage";
     public static final String OUTPUT_FOLDER_ARG = "outputFolder";
     public static final String EXAM_ITEM_FILE_ARG = "examItemFile";
+    public static final String SOLUTION_CLASS_PATH_ARG = "solutionClassPath";
 
     public static final String ENABLE_BYTECODE_MANIPULATION = "enableByteCodeManipulation";
 
@@ -36,7 +37,7 @@ public class ArgumentsUtil {
     static {
         ARG_DEPENDENCIES.put(VALIDATE_TASK, Set.of(EXAM_PACKAGE_ARG));
         ARG_DEPENDENCIES.put(EXPORT_TASK, Set.of(EXAM_PACKAGE_ARG, OUTPUT_FOLDER_ARG));
-        ARG_DEPENDENCIES.put(EVALUATE_TASK, Set.of(EXAM_ITEM_FILE_ARG, OUTPUT_FOLDER_ARG));
+        ARG_DEPENDENCIES.put(EVALUATE_TASK, Set.of(EXAM_ITEM_FILE_ARG, OUTPUT_FOLDER_ARG, SOLUTION_CLASS_PATH_ARG));
     }
 
     public static TaskArgument parseArguments(String[] args) throws MissingArgumentsException, InvalidArgumentException {
@@ -65,6 +66,7 @@ public class ArgumentsUtil {
                     .examPackage(commandLine.getOptionValue(EXAM_PACKAGE_ARG))
                     .examItemFile(commandLine.getOptionValue(EXAM_ITEM_FILE_ARG))
                     .outputFolder(commandLine.getOptionValue(OUTPUT_FOLDER_ARG))
+                    .solutionClassPath(commandLine.getOptionValue(SOLUTION_CLASS_PATH_ARG))
                     .enableByteCodeManipulation(commandLine.hasOption(ENABLE_BYTECODE_MANIPULATION))
                     .build();
 
@@ -104,6 +106,13 @@ public class ArgumentsUtil {
                 .required(false)
                 .build();
 
+        Option solutionClassPath = Option.builder(SOLUTION_CLASS_PATH_ARG)
+                .desc("Location of directory, where compiles solution classes can be found.")
+                .longOpt(SOLUTION_CLASS_PATH_ARG)
+                .hasArgs()
+                .required(false)
+                .build();
+
         Option byteCodeManipulation = Option.builder(ENABLE_BYTECODE_MANIPULATION)
                 .desc("Enables byteCode manipulation in order to make tests work with missing classes.")
                 .longOpt(ENABLE_BYTECODE_MANIPULATION)
@@ -116,6 +125,7 @@ public class ArgumentsUtil {
                 .addOption(examClass)
                 .addOption(outputFolder)
                 .addOption(examItemFile)
+                .addOption(solutionClassPath)
                 .addOption(byteCodeManipulation);
     }
 

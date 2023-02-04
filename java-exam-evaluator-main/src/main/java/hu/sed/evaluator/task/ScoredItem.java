@@ -74,6 +74,10 @@ public abstract class ScoredItem<T> {
         return getUnsuccessfulChecks().isEmpty();
     }
 
+    public boolean isSuccessful(T checkedElement) {
+        return checkedElements.getOrDefault(checkedElement, false);
+    }
+
     public String identifier() {
         return item.identifier();
     }

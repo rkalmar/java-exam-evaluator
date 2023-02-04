@@ -33,7 +33,7 @@ public class TestItemFactoryTest {
         Field field = TestItemFactoryTest.class.getDeclaredField(fieldName);
 
         // WHEN
-        TestItem testItem = itemFactory.createTestItem(field.getAnnotation(CustomTest.class));
+        TestItem testItem = itemFactory.createTestItem(field.getAnnotation(CustomTest.class), TestItemFactoryTest.class);
 
         // THEN
         assertThat(testItem.getScore()).isEqualTo(5);
@@ -42,6 +42,7 @@ public class TestItemFactoryTest {
         assertThat(testItem.getTestMethods().length).isEqualTo(1);
         assertThat(testItem.getTestMethods()[0]).isEqualTo("all");
         assertThat(testItem.getDescription()).isEqualTo(MY_DESC);
+        assertThat(testItem.getTestOfClass()).isEqualTo(TestItemFactoryTest.class.getName());
     }
 
     @Test
@@ -54,7 +55,7 @@ public class TestItemFactoryTest {
                 .orElseThrow();
 
         // WHEN
-        TestItem testItem = itemFactory.createTestItem(method.getAnnotation(CustomTest.class));
+        TestItem testItem = itemFactory.createTestItem(method.getAnnotation(CustomTest.class), TestItemFactoryTest.class);
 
         // THEN
         assertThat(testItem.getScore()).isEqualTo(1);
@@ -64,6 +65,7 @@ public class TestItemFactoryTest {
         assertThat(testItem.getTestMethods()[0]).isEqualTo(MY_TEST_METHOD);
         assertThat(testItem.getTestMethods()[1]).isEqualTo(MY_TEST_METHOD_2);
         assertThat(testItem.getDescription()).isEmpty();
+        assertThat(testItem.getTestOfClass()).isEqualTo(TestItemFactoryTest.class.getName());
     }
 
 }

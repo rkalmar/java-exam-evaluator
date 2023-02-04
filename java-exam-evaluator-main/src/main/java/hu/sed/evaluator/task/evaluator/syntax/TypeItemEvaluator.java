@@ -35,7 +35,7 @@ public class TypeItemEvaluator extends SyntaxItemEvaluator<TypeItem> {
 
         checkModifiers(scoredItem, clazz.getModifiers());
 
-        if (item.isCheckParentClazz()) {
+        if (!item.isInterfaze()) {
             TypeDefinition actualParentClazz = itemFactory.createTypeDef(clazz.getGenericSuperclass());
             boolean checkResult = evaluatorService.checkType(actualParentClazz, item.getParentClazz());
             scoredItem.addCheck(SyntaxElement.PARENT_CLASS, checkResult);
