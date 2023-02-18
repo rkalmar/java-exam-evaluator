@@ -1,0 +1,11 @@
+./run.sh -task=validate --examPackage="hu.sed.evaluator.exam.sample"
+
+./run.sh -task=export \
+ --examPackage="hu.sed.evaluator.exam.sample" \
+ --outputFolder="~\outputs"
+
+./run.sh -task=evaluate \
+ --examItemFile="hu.sed.evaluator.exam.sample" \
+ --outputFolder="~\outputs" \
+ --solutionClassDirPath="~\solutions"
+ --enableByteCodeManipulation
