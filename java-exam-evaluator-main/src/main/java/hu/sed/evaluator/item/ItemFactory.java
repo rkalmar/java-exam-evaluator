@@ -114,9 +114,9 @@ public class ItemFactory {
                 .build();
     }
 
-    public TypeDefinition[] buildParameterizedTypeFromList(java.lang.reflect.Type[] types) {
+    public TypeDefinition[] buildParameterizedTypeFromList(Type[] types) {
         List<TypeDefinition> result = new ArrayList<>();
-        for (java.lang.reflect.Type type : types) {
+        for (Type type : types) {
             result.add(TypeDefinition.builder()
                     .type(toTypeName(type))
                     .genericTypes(buildParameterizedType(type))
@@ -125,10 +125,10 @@ public class ItemFactory {
         return result.toArray(TypeDefinition[]::new);
     }
 
-    public TypeDefinition[] buildParameterizedType(java.lang.reflect.Type type) {
+    public TypeDefinition[] buildParameterizedType(Type type) {
         List<TypeDefinition> result = new ArrayList<>();
         if (type instanceof ParameterizedType parameterizedType) {
-            for (java.lang.reflect.Type typeArgument : parameterizedType.getActualTypeArguments()) {
+            for (Type typeArgument : parameterizedType.getActualTypeArguments()) {
                 result.add(TypeDefinition.builder()
                         .type(toTypeName(typeArgument))
                         .genericTypes(buildParameterizedType(typeArgument))
@@ -138,7 +138,7 @@ public class ItemFactory {
         return result.toArray(TypeDefinition[]::new);
     }
 
-    private String toTypeName(java.lang.reflect.Type type) {
+    private String toTypeName(Type type) {
         //noinspection rawtypes
         return type instanceof ParameterizedType parameterizedType ?
                 parameterizedType.getRawType().getTypeName() : ((Class) type).getName();
