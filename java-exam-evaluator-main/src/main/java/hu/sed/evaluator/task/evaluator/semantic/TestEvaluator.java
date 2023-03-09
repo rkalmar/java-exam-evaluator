@@ -66,7 +66,7 @@ public class TestEvaluator implements Evaluator<TestItem, ScoredSemanticItem> {
         for (Method testMethod : testMethods) {
             boolean result = executeMethod(testObject, testMethod, beforeEachMethod);
             String name = testMethod.getName();
-            log.info("Test result {}. {}.{}", (result ? "successful" : "unsuccessful"),
+            log.info("Test result {}. {}.{}", result ? "successful" : "unsuccessful",
                     testObject.getClass().getName(), name);
             scoredItem.addCheck(name, result);
         }

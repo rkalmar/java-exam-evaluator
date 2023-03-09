@@ -42,7 +42,7 @@ class DocExporter implements Task<Void> {
 
     @SneakyThrows
     private void exportUmlToSvg(SourceStringReader reader, String outputFolder) {
-        try (final ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+        try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
             reader.outputImage(os, new FileFormatOption(FileFormat.SVG));
 
             // The XML is stored into svg

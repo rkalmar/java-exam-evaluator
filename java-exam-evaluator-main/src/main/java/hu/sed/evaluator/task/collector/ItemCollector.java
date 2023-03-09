@@ -24,7 +24,7 @@ public abstract class ItemCollector<T extends Item, R extends AccessibleObject> 
         );
     }
 
-    private final List<T> getAnnotatedItems(R[] elements) {
+    private List<T> getAnnotatedItems(R[] elements) {
         return this.getItems(elements, ReflectionUtils::hasSyntaxCheckAnnotation,
             field -> itemCreatorFunc().apply(field));
     }
