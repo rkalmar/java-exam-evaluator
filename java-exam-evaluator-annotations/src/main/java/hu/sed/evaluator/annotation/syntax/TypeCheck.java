@@ -38,7 +38,7 @@ import java.lang.annotation.Target;
 public @interface TypeCheck {
 
     /**
-     * @return true if check needs to validate parent class
+     * @return true if check needs to validate implemented interfaces
      */
     boolean checkInterfaces() default true;
 

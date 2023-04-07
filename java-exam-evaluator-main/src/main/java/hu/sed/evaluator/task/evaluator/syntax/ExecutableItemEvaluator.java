@@ -37,11 +37,6 @@ public abstract class ExecutableItemEvaluator<T extends Executable, E extends Ex
         checkModifiers(scoredItem, executable.getModifiers());
 
         checkExceptions(scoredItem, executable.getGenericExceptionTypes());
-
-        evaluate(executable, scoredItem);
-    }
-
-    protected void evaluate(T executable, ScoredSyntaxItem scoredItem) {
     }
 
     protected abstract T findExecutableElement(E item) throws ClassNotFoundException, NoSuchMethodException;
