@@ -144,7 +144,7 @@ public class UmlUtility {
      * Composition only if classA cannot be constructed without classB..
      */
     private boolean hasComposition(Class<?> classA, Class<?> classB) {
-        return Arrays.stream(classA.getConstructors())
+        return classA.getConstructors().length > 0 && Arrays.stream(classA.getConstructors())
                 .allMatch(constructor -> {
                     for (Type genericParameterType : constructor.getGenericParameterTypes()) {
                         if (genericParameterType.equals(classB)) {
