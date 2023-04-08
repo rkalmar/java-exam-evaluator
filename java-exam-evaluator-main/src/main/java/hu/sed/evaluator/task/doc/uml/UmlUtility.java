@@ -20,10 +20,10 @@ import java.util.stream.Collectors;
 public class UmlUtility {
 
     public UmlRepresentation createUmlRepresentation(String rootPackage) {
-        List<? extends Class<?>> classes = ReflectionUtils.getClassesOfPackage(rootPackage);
+        List<? extends Class<?>> classes = ReflectionUtils.getClassesOfPackage(rootPackage).stream()
+                .filter(ReflectionUtils::notUmlSkipped).toList();
 
         final Map<String, List<Class<?>>> examClassesPerPackage = classes.stream()
-                .filter(ReflectionUtils::notUmlSkipped)
                 .collect(Collectors.groupingBy(Class::getPackageName));
 
         List<PackageRepresentation> packageRepresentations = new ArrayList<>();
@@ -144,7 +144,7 @@ public class UmlUtility {
      * Composition only if classA cannot be constructed without classB..
      */
     private boolean hasComposition(Class<?> classA, Class<?> classB) {
-        return Arrays.stream(classA.getConstructors())
+        return classA.getConstructors().length > 0 && Arrays.stream(classA.getConstructors())
                 .allMatch(constructor -> {
                     for (Type genericParameterType : constructor.getGenericParameterTypes()) {
                         if (genericParameterType.equals(classB)) {
