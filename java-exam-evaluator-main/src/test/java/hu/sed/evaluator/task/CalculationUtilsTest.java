@@ -15,7 +15,7 @@ public class CalculationUtilsTest {
 
     private static Stream<Arguments> distributionInputs() {
         return Stream.of(
-            of(10.0, 1), of(10.0, 2), of(10.0, 3),
+            of(10.0, 1), of(10.0, 2), of(10.0, 3),of(3.34, 4),
             of(11.0, 8), of(11.0, 3), of(11.0, 7), of(11.0, 11), of(11.0, 17), of(11.0, 23), of(11.0, 27),
             of(7.0, 8), of(7.0, 3), of(7.0, 8), of(7.0, 11), of(7.0, 17), of(7.0, 23), of(7.0, 27),
             of(3.7, 8), of(7.4, 3), of(6.1, 8), of(9.5, 11), of(6.12, 17), of(7.27, 23), of(9.57, 27)
@@ -31,8 +31,8 @@ public class CalculationUtilsTest {
         // THEN
         assertThat(distributedScore.isProperlyDistributed()).isTrue();
 
-        log.info("maxScore: {}, itemCount: {}, mainScore: {}, subScore: {}, difference {} ",
-                maxScore, itemCount, distributedScore.mainScore(),
+        log.info("maxScore: {}, itemCount: {}, simpleDiv: {}, mainScore: {}, subScore: {}, difference {} ",
+                maxScore, itemCount, maxScore / itemCount, distributedScore.mainScore(),
                 distributedScore.subScore(), distributedScore.mainScore.subtract(distributedScore.subScore));
     }
 }
