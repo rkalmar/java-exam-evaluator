@@ -7,6 +7,8 @@ import hu.sed.evaluator.task.evaluator.semantic.ScoredSemanticItem;
 import hu.sed.evaluator.task.evaluator.semantic.TestEvaluator;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
+
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
 public class TestEvaluatorTest {
@@ -21,7 +23,7 @@ public class TestEvaluatorTest {
         ScoredSemanticItem scoredItem = testEvaluator.evaluate(testItem);
 
         // THEN
-        assertThat(scoredItem.getScore()).isEqualTo(1);
+        assertThat(scoredItem.getScore()).isEqualTo(new BigDecimal("1.0"));
     }
 
     @Test
@@ -33,7 +35,7 @@ public class TestEvaluatorTest {
         ScoredSemanticItem scoredItem = testEvaluator.evaluate(testItem);
 
         // THEN
-        assertThat(scoredItem.getScore()).isEqualTo(0);
+        assertThat(scoredItem.getScore()).isEqualTo(new BigDecimal(0));
     }
 
     @Test
@@ -46,7 +48,7 @@ public class TestEvaluatorTest {
         ScoredSemanticItem scoredItem = testEvaluator.evaluate(testItem);
 
         // THEN
-        assertThat(scoredItem.getScore()).isEqualTo(0);
+        assertThat(scoredItem.getScore()).isEqualTo(new BigDecimal(0));
     }
 
     @Test
@@ -59,7 +61,7 @@ public class TestEvaluatorTest {
         ScoredSemanticItem scoredItem = testEvaluator.evaluate(testItem);
 
         // THEN
-        assertThat(scoredItem.getScore()).isEqualTo(0);
+        assertThat(scoredItem.getScore()).isEqualTo(new BigDecimal(0));
     }
 
     @Test
@@ -71,7 +73,7 @@ public class TestEvaluatorTest {
         ScoredSemanticItem scoredItem = testEvaluator.evaluate(testItem);
 
         // THEN
-        assertThat(scoredItem.getScore()).isEqualTo(0);
+        assertThat(scoredItem.getScore()).isEqualTo(new BigDecimal(0));
     }
 
     @Test
@@ -83,7 +85,7 @@ public class TestEvaluatorTest {
         ScoredSemanticItem scoredItem = testEvaluator.evaluate(testItem);
 
         // THEN
-        assertThat(scoredItem.getScore()).isEqualTo(0.5);
+        assertThat(scoredItem.getScore()).isEqualTo(new BigDecimal("0.50"));
     }
 
     private TestItem createTestItem(String... testMethods) {

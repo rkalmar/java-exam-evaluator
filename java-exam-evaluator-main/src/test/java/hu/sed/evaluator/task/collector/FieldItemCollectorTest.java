@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -52,7 +53,7 @@ public class FieldItemCollectorTest {
     public void collectAllTest() {
         // WHEN
         List<FieldItem> items =
-                fieldItemCollector.collectItems(TestClass.class);
+                new ArrayList<>(fieldItemCollector.collectItems(TestClass.class));
         items.addAll(fieldItemCollector.collectUnannotatedItems(TestClass.class));
 
         // THEN

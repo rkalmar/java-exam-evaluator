@@ -117,10 +117,16 @@ public class ReflectionUtils {
     }
 
     public Class<?> getClassByName(String clazz) throws ClassNotFoundException {
-        Class<?> testClass = Thread.currentThread().getContextClassLoader().loadClass(clazz);
-        if (!testClass.getClassLoader().equals(Thread.currentThread().getContextClassLoader())) {
+        ClassLoader currentClassLoader = Thread.currentThread().getContextClassLoader();
+        Class<?> testClass = currentClassLoader.loadClass(clazz);
+        if (!currentClassLoader.equals(testClass.getClassLoader())) {
             // always load everything to the current contextClassloader to make every class available for each other
-            return ClassLoaderUtils.injectClassToClassLoader(testClass, Thread.currentThread().getContextClassLoader());
+            try {
+                // if it's already loaded just return it
+                return currentClassLoader.loadClass(testClass.getName());
+            } catch (ClassNotFoundException exception) {
+                return ClassLoaderUtils.injectClassToClassLoader(testClass, currentClassLoader);
+            }
         }
         return testClass;
     }

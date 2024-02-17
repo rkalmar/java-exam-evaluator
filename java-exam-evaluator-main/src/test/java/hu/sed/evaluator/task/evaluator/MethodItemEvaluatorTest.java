@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -54,7 +55,7 @@ public class MethodItemEvaluatorTest {
         ScoredItem scoredItem = methodItemEvaluator.evaluate(methodItem);
 
         // THEN
-        assertThat(scoredItem.getScore()).isEqualTo(1.0);
+        assertThat(scoredItem.getScore()).isEqualTo(new BigDecimal("1.0"));
         assertThat(scoredItem.getItem()).isEqualTo(methodItem);
 
         Map<SyntaxElement, Boolean> checkedElements = scoredItem.getCheckedElements();
@@ -77,7 +78,7 @@ public class MethodItemEvaluatorTest {
         ScoredItem scoredItem = methodItemEvaluator.evaluate(methodItem);
 
         // THEN
-        assertThat(scoredItem.getScore()).isEqualTo(0.5);
+        assertThat(scoredItem.getScore()).isEqualTo(new BigDecimal("0.67"));
         assertThat(scoredItem.getItem()).isEqualTo(methodItem);
 
         Map<SyntaxElement, Boolean> checkedElements = scoredItem.getCheckedElements();
@@ -97,7 +98,7 @@ public class MethodItemEvaluatorTest {
         ScoredItem scoredItem = methodItemEvaluator.evaluate(methodItem);
 
         // THEN
-        assertThat(scoredItem.getScore()).isEqualTo(0.0);
+        assertThat(scoredItem.getScore()).isEqualTo(new BigDecimal("0"));
         assertThat(scoredItem.getItem()).isEqualTo(methodItem);
 
         Map<SyntaxElement, Boolean> checkedElements = scoredItem.getCheckedElements();

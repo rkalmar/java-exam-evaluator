@@ -85,7 +85,7 @@ public class ArgumentsUtilTest {
     @Test
     public void testTaskParamsProvided() {
         // GIVEN
-        String[] args = {"--task", "evaluate", "-examItemFile", "~/examfile", "-outputFolder", "~/"};
+        String[] args = {"--task", "evaluate", "-examItemFile", "~/examfile", "-outputFolder", "~/", "-solutionClassPath", "~/somewhere-over-the-rainbow"};
         //WHEN
         assertDoesNotThrow(() -> ArgumentsUtil.parseArguments(args));
         TaskArgument taskArgument = ArgumentsUtil.parseArguments(args);
@@ -96,7 +96,7 @@ public class ArgumentsUtilTest {
     @Test
     public void testEvaluateWithByteCodeManipulationProvided() {
         // GIVEN
-        String[] args = {"--task", "evaluate", "-examItemFile", "~/examfile", "-outputFolder", "~/", "--enableByteCodeManipulation"};
+        String[] args = {"--task", "evaluate", "-examItemFile", "~/examfile", "-outputFolder", "~/", "--enableByteCodeManipulation", "-solutionClassPath", "~/somewhere-over-the-rainbow"};
         //WHEN
         assertDoesNotThrow(() -> ArgumentsUtil.parseArguments(args));
         TaskArgument taskArgument = ArgumentsUtil.parseArguments(args);

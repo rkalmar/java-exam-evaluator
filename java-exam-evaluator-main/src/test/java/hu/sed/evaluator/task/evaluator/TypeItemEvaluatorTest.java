@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -51,7 +52,7 @@ public class TypeItemEvaluatorTest {
         ScoredItem scoredItem = typeItemEvaluator.evaluate(item);
 
         // THEN
-        assertThat(scoredItem.getScore()).isEqualTo(1.0);
+        assertThat(scoredItem.getScore()).isEqualTo(new BigDecimal("1.0"));
         assertThat(scoredItem.getItem()).isEqualTo(item);
 
         Map<SyntaxElement, Boolean> checkedElements = scoredItem.getCheckedElements();
@@ -73,7 +74,7 @@ public class TypeItemEvaluatorTest {
         ScoredItem scoredItem = typeItemEvaluator.evaluate(item);
 
         // THEN
-        assertThat(scoredItem.getScore()).isEqualTo(0.0);
+        assertThat(scoredItem.getScore()).isEqualTo(new BigDecimal("0"));
         assertThat(scoredItem.getItem()).isEqualTo(item);
 
         Map<SyntaxElement, Boolean> checkedElements = scoredItem.getCheckedElements();
@@ -92,7 +93,7 @@ public class TypeItemEvaluatorTest {
         ScoredItem scoredItem = typeItemEvaluator.evaluate(item);
 
         // THEN
-        assertThat(scoredItem.getScore()).isEqualTo(0.0);
+        assertThat(scoredItem.getScore()).isEqualTo(new BigDecimal(0));
         assertThat(scoredItem.getItem()).isEqualTo(item);
 
         Map<SyntaxElement, Boolean> checkedElements = scoredItem.getCheckedElements();
@@ -113,7 +114,7 @@ public class TypeItemEvaluatorTest {
         ScoredItem scoredItem = typeItemEvaluator.evaluate(item);
 
         // THEN
-        assertThat(scoredItem.getScore()).isEqualTo(0.25);
+        assertThat(scoredItem.getScore()).isEqualTo(new BigDecimal("0.25"));
         assertThat(scoredItem.getItem()).isEqualTo(item);
 
         Map<SyntaxElement, Boolean> checkedElements = scoredItem.getCheckedElements();

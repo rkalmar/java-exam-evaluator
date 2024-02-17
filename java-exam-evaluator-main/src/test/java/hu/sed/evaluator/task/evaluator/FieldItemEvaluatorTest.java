@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.util.Map;
 
 import static hu.sed.evaluator.task.evaluator.syntax.SyntaxElement.*;
@@ -51,7 +52,7 @@ public class FieldItemEvaluatorTest {
         ScoredItem scoredItem = fieldItemEvaluator.evaluate(fieldItem);
 
         // THEN
-        assertThat(scoredItem.getScore()).isEqualTo(1.0);
+        assertThat(scoredItem.getScore()).isEqualTo(new BigDecimal("1.0"));
 
         Map<SyntaxElement, Boolean> checkedElements = scoredItem.getCheckedElements();
         assertThat(checkedElements.keySet()).containsExactlyInAnyOrder(EXISTENCE, MODIFIERS);
@@ -70,7 +71,7 @@ public class FieldItemEvaluatorTest {
         ScoredItem scoredItem = fieldItemEvaluator.evaluate(fieldItem);
 
         // THEN
-        assertThat(scoredItem.getScore()).isEqualTo(0.0);
+        assertThat(scoredItem.getScore()).isEqualTo(new BigDecimal(0));
         assertThat(scoredItem.getItem()).isEqualTo(fieldItem);
 
         Map<SyntaxElement, Boolean> checkedElements = scoredItem.getCheckedElements();
@@ -90,7 +91,7 @@ public class FieldItemEvaluatorTest {
         ScoredItem scoredItem = fieldItemEvaluator.evaluate(fieldItem);
 
         // THEN
-        assertThat(scoredItem.getScore()).isEqualTo(5);
+        assertThat(scoredItem.getScore()).isEqualTo(new BigDecimal("5.00"));
         assertThat(scoredItem.getItem()).isEqualTo(fieldItem);
 
         Map<SyntaxElement, Boolean> checkedElements = scoredItem.getCheckedElements();

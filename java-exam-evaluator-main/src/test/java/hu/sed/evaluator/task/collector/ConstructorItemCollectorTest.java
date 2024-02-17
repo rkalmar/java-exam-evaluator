@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -52,7 +53,7 @@ public class ConstructorItemCollectorTest {
     public void collectAllTest() {
         // WHEN
         List<ConstructorItem> items =
-                constructorItemCollector.collectItems(TestClass.class);
+                new ArrayList<>(constructorItemCollector.collectItems(TestClass.class));
         items.addAll(constructorItemCollector.collectUnannotatedItems(TestClass.class));
 
         // THEN

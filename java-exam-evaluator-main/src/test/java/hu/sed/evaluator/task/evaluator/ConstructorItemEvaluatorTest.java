@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.lang.reflect.Constructor;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -55,7 +56,7 @@ public class ConstructorItemEvaluatorTest {
         ScoredItem scoredItem = constructorItemEvaluator.evaluate(constructorItem);
 
         // THEN
-        assertThat(scoredItem.getScore()).isEqualTo(1.0);
+        assertThat(scoredItem.getScore()).isEqualTo(new BigDecimal("1.0"));
         assertThat(scoredItem.getItem()).isEqualTo(constructorItem);
 
         Map<SyntaxElement, Boolean> checkedElements = scoredItem.getCheckedElements();
@@ -77,7 +78,7 @@ public class ConstructorItemEvaluatorTest {
         ScoredItem scoredItem = constructorItemEvaluator.evaluate(constructorItem);
 
         // THEN
-        assertThat(scoredItem.getScore()).isEqualTo((1.0 / 3) * 2);
+        assertThat(scoredItem.getScore()).isEqualTo(new BigDecimal("0.67"));
         assertThat(scoredItem.getItem()).isEqualTo(constructorItem);
 
         Map<SyntaxElement, Boolean> checkedElements = scoredItem.getCheckedElements();
@@ -97,7 +98,7 @@ public class ConstructorItemEvaluatorTest {
         ScoredItem scoredItem = constructorItemEvaluator.evaluate(constructorItem);
 
         // THEN
-        assertThat(scoredItem.getScore()).isEqualTo(0);
+        assertThat(scoredItem.getScore()).isEqualTo(new BigDecimal(0));
         assertThat(scoredItem.getItem()).isEqualTo(constructorItem);
 
         Map<SyntaxElement, Boolean> checkedElements = scoredItem.getCheckedElements();
@@ -117,7 +118,7 @@ public class ConstructorItemEvaluatorTest {
         ScoredItem scoredItem = constructorItemEvaluator.evaluate(constructorItem);
 
         // THEN
-        assertThat(scoredItem.getScore()).isEqualTo(1.0);
+        assertThat(scoredItem.getScore()).isEqualTo(new BigDecimal("1.0"));
         assertThat(scoredItem.getItem()).isEqualTo(constructorItem);
 
         Map<SyntaxElement, Boolean> checkedElements = scoredItem.getCheckedElements();
@@ -139,7 +140,7 @@ public class ConstructorItemEvaluatorTest {
         ScoredItem scoredItem = constructorItemEvaluator.evaluate(constructorItem);
 
         // THEN
-        assertThat(scoredItem.getScore()).isEqualTo((1.0 / 3) * 2);
+        assertThat(scoredItem.getScore()).isEqualTo(new BigDecimal("0.67"));
         assertThat(scoredItem.getItem()).isEqualTo(constructorItem);
 
         Map<SyntaxElement, Boolean> checkedElements = scoredItem.getCheckedElements();

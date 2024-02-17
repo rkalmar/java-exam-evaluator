@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -52,7 +53,7 @@ public class MethodItemCollectorTest {
     public void collectAllTest() {
         // WHEN
         List<MethodItem> items =
-                methodItemCollector.collectItems(TestClass.class);
+                new ArrayList<>(methodItemCollector.collectItems(TestClass.class));
         items.addAll(methodItemCollector.collectUnannotatedItems(TestClass.class));
 
         // THEN
