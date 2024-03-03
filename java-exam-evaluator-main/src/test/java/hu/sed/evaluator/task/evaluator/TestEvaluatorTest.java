@@ -1,6 +1,8 @@
 package hu.sed.evaluator.task.evaluator;
 
 import hu.sed.evaluator.annotation.semantic.CustomTestContants;
+import hu.sed.evaluator.annotation.test.AfterEach;
+import hu.sed.evaluator.annotation.test.BeforeEach;
 import hu.sed.evaluator.annotation.test.ExamTest;
 import hu.sed.evaluator.item.semantic.TestItem;
 import hu.sed.evaluator.task.evaluator.semantic.ScoredSemanticItem;
@@ -98,6 +100,17 @@ public class TestEvaluatorTest {
 
 
     public static class TestClass {
+
+        @BeforeEach
+        public void beforeEach() {
+            System.out.println("Executing before each method.");
+        }
+
+        @AfterEach
+        public void afterEach() {
+            System.out.println("Executing after each method.");
+        }
+
         @ExamTest
         public void simpleTestMethod() {
             System.out.println("This is just a simple test.");
