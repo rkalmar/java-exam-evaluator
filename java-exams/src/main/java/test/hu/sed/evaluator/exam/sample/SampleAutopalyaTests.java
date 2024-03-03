@@ -12,7 +12,7 @@ import hu.sed.evaluator.exam.sample.Kamion;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class SampleAutopalyaTests  {
+public class SampleAutopalyaTests {
 
     Autopalya autopalya;
 

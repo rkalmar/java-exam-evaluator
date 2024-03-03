@@ -2,6 +2,7 @@ package hu.sed.evaluator.task.evaluator.semantic;
 
 import com.google.inject.Singleton;
 import hu.sed.evaluator.annotation.semantic.CustomTestContants;
+import hu.sed.evaluator.annotation.test.AfterEach;
 import hu.sed.evaluator.annotation.test.BeforeEach;
 import hu.sed.evaluator.annotation.test.ExamTest;
 import hu.sed.evaluator.annotation.test.Setup;
@@ -10,6 +11,7 @@ import hu.sed.evaluator.task.ReflectionUtils;
 import hu.sed.evaluator.task.evaluator.Evaluator;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import test.hu.sed.evaluator.context.TestEvaluationContext;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -63,8 +65,15 @@ public class TestEvaluator implements Evaluator<TestItem, ScoredSemanticItem> {
         }
 
         Optional<Method> beforeEachMethod = getMethodByAnnotation(testClass, BeforeEach.class);
+        Optional<Method> afterEachMethod = getMethodByAnnotation(testClass, AfterEach.class);
         for (Method testMethod : testMethods) {
-            boolean result = executeMethod(testObject, testMethod, beforeEachMethod);
+            boolean result;
+            try (TestEvaluationContext context = TestEvaluationContext.createContext(testClass, testMethod, testObject)) {
+                beforeEachMethod.ifPresent(method -> context.setBeforeMethodResult(executeMethod(testObject, method)));
+                result = executeMethod(testObject, testMethod);
+                context.setTestMethodResult(result);
+                afterEachMethod.ifPresent(method -> executeMethod(testObject, method));
+            }
             String name = testMethod.getName();
             log.info("Test result {}. {}.{}", result ? "successful" : "unsuccessful",
                     testObject.getClass().getName(), name);
@@ -143,18 +152,6 @@ public class TestEvaluator implements Evaluator<TestItem, ScoredSemanticItem> {
                 .filter(method -> method.getGenericParameterTypes().length == 0)
                 .filter(method -> Modifier.isPublic(method.getModifiers()))
                 .findFirst();
-    }
-
-    private boolean executeMethod(Object testObject, Method testMethod, Optional<Method> beforeEachMethodOpt) {
-        if (beforeEachMethodOpt.isPresent()) {
-            if (executeMethod(testObject, beforeEachMethodOpt.get())) {
-                return executeMethod(testObject, testMethod);
-            }
-
-            return false;
-        }
-
-        return executeMethod(testObject, testMethod);
     }
 
     private boolean executeMethod(Object testObject, Method method) {

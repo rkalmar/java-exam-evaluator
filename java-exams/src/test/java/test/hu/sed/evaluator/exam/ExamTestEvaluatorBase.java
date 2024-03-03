@@ -5,8 +5,10 @@ import hu.sed.evaluator.annotation.test.Setup;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import test.hu.sed.evaluator.context.TestEvaluationContext;
 import test.hu.sed.evaluator.exception.AssertionException;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -26,11 +28,13 @@ public abstract class ExamTestEvaluatorBase {
     private Object testObject;
     private final Map<String, Method> testMethods;
     private Optional<Method> beforeEachMethod;
+    private Optional<Method> afterEachMethod;
 
     public ExamTestEvaluatorBase(Class<?> testClass) {
         this.testClass = testClass;
         testMethods = new HashMap<>();
         beforeEachMethod = Optional.empty();
+        afterEachMethod = Optional.empty();
     }
 
     @BeforeEach
@@ -39,6 +43,7 @@ public abstract class ExamTestEvaluatorBase {
         setupObject();
         findPotentialTestMethods();
         setupBeforeEachMethod();
+        setupAfterEachMethod();
     }
 
     @Test
@@ -46,20 +51,28 @@ public abstract class ExamTestEvaluatorBase {
         this.callAllTestMethod();
     }
 
-    protected void callTestMethod(String testMethod) {
-        try {
+    protected void callTestMethod(String testMethodName) {
+        Method method = testMethods.get(testMethodName);
+        try (TestEvaluationContext testEvaluationContext = TestEvaluationContext.createContext(testClass, method, testObject)) {
             if (beforeEachMethod.isPresent()) {
                 beforeEachMethod.get().invoke(testObject);
             }
-            log.info("Calling test method {}", testMethod);
-            testMethods.get(testMethod).invoke(testObject);
+            testEvaluationContext.setBeforeMethodResult(true);
+
+            log.info("Calling test method {}", testMethodName);
+            method.invoke(testObject);
+            testEvaluationContext.setTestMethodResult(true);
+
+            if (afterEachMethod.isPresent()) {
+                afterEachMethod.get().invoke(testObject);
+            }
         } catch (IllegalAccessException e) {
-            throw new RuntimeException("Failed to run test: " + testMethod);
+            throw new RuntimeException("Failed to run test: " + testMethodName);
         } catch (InvocationTargetException e) {
             if (e.getCause() instanceof AssertionError assertionError) {
                 throw new AssertionException(assertionError);
             } else {
-                throw new RuntimeException("Failed to run test: " + testMethod);
+                throw new RuntimeException("Failed to run test: " + testMethodName);
             }
         }
     }
@@ -118,13 +131,39 @@ public abstract class ExamTestEvaluatorBase {
     }
 
     private void setupBeforeEachMethod() {
-        this.beforeEachMethod = Arrays.stream(testClass.getDeclaredMethods())
-                .filter(method -> method.isAnnotationPresent(hu.sed.evaluator.annotation.test.BeforeEach.class))
-                .filter(method -> method.getGenericParameterTypes().length == 0)
-                .filter(method -> Modifier.isPublic(method.getModifiers()))
-                .findFirst();
+        this.beforeEachMethod = getMethod(hu.sed.evaluator.annotation.test.BeforeEach.class);
         if (beforeEachMethod.isEmpty()) {
             log.info("No beforeEach method found..");
         }
+    }
+
+    private void setupAfterEachMethod() {
+        this.afterEachMethod = getMethod(hu.sed.evaluator.annotation.test.AfterEach.class);
+        if (afterEachMethod.isEmpty()) {
+            log.info("No afterEach method found..");
+        }
+    }
+
+    private boolean executeMethod(Object testObject, Method method) {
+        try {
+            method.invoke(testObject);
+            return true;
+        } catch (IllegalAccessException e) {
+            log.error("Cannot execute method: {}.{}", testObject.getClass().getName(), method.getName(), e);
+        } catch (InvocationTargetException e) {
+            Throwable cause = e.getCause();
+            log.error("Failed to execute method: {}, {} - {}", method.getName(), cause.getClass().getSimpleName(), cause.getMessage());
+        } catch (Throwable e) {
+            log.info("Exception, while executing method: {} ", method.getName(), e);
+        }
+        return false;
+    }
+
+    private Optional<Method> getMethod(Class<? extends Annotation> annotation) {
+        return Arrays.stream(testClass.getDeclaredMethods())
+                .filter(method -> method.isAnnotationPresent(annotation))
+                .filter(method -> method.getGenericParameterTypes().length == 0)
+                .filter(method -> Modifier.isPublic(method.getModifiers()))
+                .findFirst();
     }
 }

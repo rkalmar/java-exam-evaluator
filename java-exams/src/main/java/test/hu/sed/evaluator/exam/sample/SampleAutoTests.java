@@ -4,12 +4,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import hu.sed.evaluator.annotation.test.AfterEach;
 import hu.sed.evaluator.annotation.test.BeforeEach;
 import hu.sed.evaluator.annotation.test.ExamTest;
 import hu.sed.evaluator.annotation.test.Setup;
 import hu.sed.evaluator.exam.sample.Auto;
 import hu.sed.evaluator.exam.sample.TulNagySebesseg;
 import lombok.extern.slf4j.Slf4j;
+import test.hu.sed.evaluator.context.TestEvaluationContext;
 
 @Slf4j
 public class SampleAutoTests {
@@ -25,6 +27,11 @@ public class SampleAutoTests {
     public void clearStateBeforeEach() {
         log.info("Clearing out previous test state..");
         auto = new Auto(2000, 100, 8, "toyota");
+    }
+
+    @AfterEach
+    public void afterEach() {
+        log.info("This is the afterEach method after exucuting {} method", TestEvaluationContext.getTestMethod().getName());
     }
 
     @ExamTest
